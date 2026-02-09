@@ -20,6 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         /* 外側の背景色（LP以外のエリア） */
         body {
@@ -764,16 +765,22 @@
         <div id="apply-modal" class="modal-overlay" role="dialog" aria-modal="true">
             <button class="self-end text-sm font-bold mb-8" onclick="closeModal('apply-modal')">CLOSE [×]</button>
             <div class="flex-1 overflow-y-auto">
-                <h2>お申し込みありがとうございます</h2>
+                <h2><i class="fas fa-heart text-red-500 mr-2"></i>ご興味をお持ちいただきありがとうございます</h2>
                 <section>
-                    <p class="text-lg font-bold mb-6">「BakuApo正規代理店」へのお申し込み、<br>誠にありがとうございます。</p>
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
-                        <h3 class="mb-4">📩 次のステップ</h3>
-                        <p class="leading-relaxed">まずは、<span class="marker-yellow text-black font-bold">本件ご紹介者様へご連絡</span>ください。<br>
-                        本事業の詳細説明や、お申込み方法などを<br>お伝えさせていただきます。</p>
+                    <p class="text-lg font-bold mb-8 leading-relaxed">「BakuApo正規代理店」に<br>ご興味をお持ちいただき、誠にありがとうございます。</p>
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg p-6 mb-8 shadow-sm">
+                        <h3 class="mb-4 flex items-center text-blue-900"><i class="fas fa-handshake mr-3 text-2xl text-blue-600"></i>次のステップ</h3>
+                        <p class="leading-relaxed text-gray-800 mb-4">まずは、<span class="marker-yellow text-black font-bold">本件ご紹介者様へご連絡</span>いただき、<br>詳しい内容をお聞きいただけますでしょうか。</p>
+                        <div class="bg-white rounded-md p-4 text-sm text-gray-700">
+                            <p class="flex items-start mb-2"><i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>本事業の詳細説明</p>
+                            <p class="flex items-start mb-2"><i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>お申込み方法のご案内</p>
+                            <p class="flex items-start"><i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>ご不明点への回答</p>
+                        </div>
                     </div>
-                    <p class="leading-relaxed text-gray-600 text-sm">引き続き、弊社の取り組みへの<br>ご支援を賜りましたら幸いです。</p>
-                    <p class="mt-8 font-black text-sm tracking-wider">BakuApo 運営事務局<br>株式会社CHAINSODA</p>
+                    <p class="leading-relaxed text-gray-600 text-sm mb-6">紹介者様から詳しいお話を聞いていただいた上で、<br>ご検討いただければ幸いです。</p>
+                    <div class="border-t border-gray-200 pt-6">
+                        <p class="font-black text-sm tracking-wider text-gray-800"><i class="fas fa-building mr-2 text-gray-600"></i>BakuApo 運営事務局<br><span class="text-xs font-normal text-gray-600 ml-6">株式会社CHAINSODA</span></p>
+                    </div>
                 </section>
             </div>
         </div>
