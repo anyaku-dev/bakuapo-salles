@@ -341,9 +341,9 @@
                 <a href="#qanda" class="drawer-link block text-base font-bold tracking-[0.3em] hover:opacity-50 transition-opacity">Q&A</a>
                 
                 <div class="pt-10">
-                    <a href="#apply" class="drawer-link btn-black block py-5 px-6 text-xs font-black tracking-widest">
+                    <button onclick="closeDrawerAndOpenModal()" class="drawer-link btn-black block w-full py-5 px-6 text-xs font-black tracking-widest cursor-pointer">
                         「BakuApo正規代理店」に申し込む
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="absolute bottom-10 left-0 w-full text-center">
@@ -388,9 +388,9 @@
                 </div>
                 <!-- Hero CTA Updated to match Bottom CTA style -->
                 <div class="w-full px-4">
-                    <a href="#apply" class="btn-black block px-4 py-8 text-[15px] font-black tracking-widest shadow-2xl transition-colors text-white">
+                    <button onclick="openModal('apply-modal')" class="btn-black block w-full px-4 py-8 text-[15px] font-black tracking-widest shadow-2xl transition-colors text-white cursor-pointer">
                         ＞ <span class="marker-yellow text-black px-1">今だけの特別条件</span>で<br>「BakuApo正規代理店」に申し込む
-                    </a>
+                    </button>
                  </div>
             </div>
         </section>
@@ -753,19 +753,28 @@
                     <p class="pt-10 font-black text-center tracking-tighter text-lg text-white">BakuApo 運営事務局</p>
                 </div>
                 <div class="w-full max-w-sm space-y-16 px-4">
-                    <a href="#" class="bg-white text-black px-4 py-8 text-[15px] font-black inline-block w-full tracking-widest hover:bg-gray-200 transition-colors shadow-2xl text-center">
+                    <button onclick="openModal('apply-modal')" class="bg-white text-black px-4 py-8 text-[15px] font-black w-full tracking-widest hover:bg-gray-200 transition-colors shadow-2xl text-center cursor-pointer">
                         ＞ <span class="marker-yellow text-black px-1">今だけの特別条件</span>で<br>「BakuApo正規代理店」に申し込む
-                    </a>
+                    </button>
                 </div>
             </div>
         </section>
 
-        <!-- Thank You Modal -->
-        <div id="thank-you-modal" class="modal-overlay hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div class="modal-content bg-white p-6 rounded-lg shadow-lg text-center">
-                <h2 class="text-2xl font-bold mb-4">お申し込みありがとうございます！</h2>
-                <p class="text-base mb-6">担当者より追ってご連絡いたします。</p>
-                <button id="close-thank-you-modal" class="btn-black px-4 py-2 text-sm font-bold tracking-widest">閉じる</button>
+        <!-- Apply Modal -->
+        <div id="apply-modal" class="modal-overlay" role="dialog" aria-modal="true">
+            <button class="self-end text-sm font-bold mb-8" onclick="closeModal('apply-modal')">CLOSE [×]</button>
+            <div class="flex-1 overflow-y-auto">
+                <h2>お申し込みありがとうございます</h2>
+                <section>
+                    <p class="text-lg font-bold mb-6">「BakuApo正規代理店」へのお申し込み、<br>誠にありがとうございます。</p>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">
+                        <h3 class="mb-4">📩 次のステップ</h3>
+                        <p class="leading-relaxed">まずは、<span class="marker-yellow text-black font-bold">本件ご紹介者様へご連絡</span>ください。<br>
+                        本事業の詳細説明や、お申込み方法などを<br>お伝えさせていただきます。</p>
+                    </div>
+                    <p class="leading-relaxed text-gray-600 text-sm">引き続き、弊社の取り組みへの<br>ご支援を賜りましたら幸いです。</p>
+                    <p class="mt-8 font-black text-sm tracking-wider">BakuApo 運営事務局<br>株式会社CHAINSODA</p>
+                </section>
             </div>
         </div>
 
@@ -903,15 +912,6 @@
             </div>
         </div>
 
-        <!-- Thank You Modal -->
-        <div id="thank-you-modal" class="modal-overlay hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div class="modal-content bg-white p-6 rounded-lg shadow-lg text-center">
-                <h2 class="text-2xl font-bold mb-4">お申し込みありがとうございます！</h2>
-                <p class="text-base mb-6">担当者より追ってご連絡いたします。</p>
-                <button id="close-thank-you-modal" class="btn-black px-4 py-2 text-sm font-bold tracking-widest">閉じる</button>
-            </div>
-        </div>
-
     </div>
 
     <script>
@@ -942,6 +942,14 @@
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
             document.body.style.overflow = 'auto';
+        }
+
+        // ドロワーを閉じてからモーダルを開く
+        function closeDrawerAndOpenModal() {
+            menuBtn.classList.remove('active');
+            drawer.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            setTimeout(() => openModal('apply-modal'), 300);
         }
 
         // スクロールフェードイン
