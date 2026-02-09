@@ -13,7 +13,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         /* 外側の背景色（LP以外のエリア） */
         body {
@@ -173,6 +173,49 @@
             transform: translateY(0);
         }
 
+        /* ヒーロー文字ブラーフェードイン */
+        .hero-blur-in {
+            opacity: 0;
+            filter: blur(12px);
+            transform: translateY(10px);
+            transition: opacity 0.8s ease-out, filter 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .hero-blur-in.active {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        /* カード左からスライドイン */
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .slide-in-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* タイプライター風アニメーション */
+        .typewriter-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(-8px);
+            filter: blur(4px);
+            transition: opacity 0.15s ease-out, transform 0.15s ease-out, filter 0.15s ease-out;
+        }
+        .typewriter-char.active {
+            opacity: 1;
+            transform: translateX(0);
+            filter: blur(0);
+        }
+        .typewriter-char.is-br {
+            display: block;
+            width: 0;
+            height: 0;
+        }
+
         .hero-section {
             min-height: 100svh;
         }
@@ -207,7 +250,7 @@
         <!-- Header -->
         <header>
             <div class="px-6 py-5 flex justify-between items-center">
-                <h1 class="text-xl font-black tracking-tighter uppercase">BakuApo <span class="text-[10px] font-medium tracking-widest block -mt-1 text-gray-400">Official Agency Recruitment</span></h1>
+                <h1><img src="./public/bakuapo-logo.svg" alt="BakuApo" class="h-8"></h1>
                 
                 <button id="menu-btn" class="nav-toggle space-y-1.5 focus:outline-none z-[110] relative p-2" aria-label="メニューを開閉">
                     <span></span>
@@ -219,14 +262,15 @@
         <!-- Drawer Menu -->
         <nav id="drawer" aria-label="ページ内ナビゲーション">
             <div class="space-y-8 text-center">
-                <a href="#top" class="drawer-link block text-base font-bold tracking-[0.3em] uppercase hover:opacity-50 transition-opacity">Top</a>
-                <a href="#mission" class="drawer-link block text-base font-bold tracking-[0.3em] uppercase hover:opacity-50 transition-opacity">Mission</a>
-                <a href="#profit" class="drawer-link block text-base font-bold tracking-[0.3em] uppercase hover:opacity-50 transition-opacity">Profit</a>
-                <a href="#mechanism" class="drawer-link block text-base font-bold tracking-[0.3em] uppercase hover:opacity-50 transition-opacity">Mechanism</a>
-                <a href="#weapons" class="drawer-link block text-base font-bold tracking-[0.3em] uppercase hover:opacity-50 transition-opacity">Support</a>
+                <a href="#top" class="drawer-link block text-base font-bold tracking-[0.3em] hover:opacity-50 transition-opacity">トップ</a>
+                <a href="#mission" class="drawer-link block text-base font-bold tracking-[0.3em] hover:opacity-50 transition-opacity">ミッション</a>
+                <a href="#about" class="drawer-link block text-base font-bold tracking-[0.3em] hover:opacity-50 transition-opacity">アバウト</a>
+                <a href="#profit" class="drawer-link block text-base font-bold tracking-[0.3em] hover:opacity-50 transition-opacity">商材の特徴</a>
+                <a href="#weapons" class="drawer-link block text-base font-bold tracking-[0.3em] hover:opacity-50 transition-opacity">特典・資料一覧</a>
+                <a href="#qanda" class="drawer-link block text-base font-bold tracking-[0.3em] hover:opacity-50 transition-opacity">Q&A</a>
                 
                 <div class="pt-10">
-                    <a href="#apply" class="drawer-link btn-black block py-5 px-6 text-xs font-black uppercase tracking-widest">
+                    <a href="#apply" class="drawer-link btn-black block py-5 px-6 text-xs font-black tracking-widest">
                         「BakuApo正規代理店」に申し込む
                     </a>
                 </div>
@@ -238,41 +282,58 @@
 
         <!-- Hero Section (FV) -->
         <section id="top" class="hero-section min-h-screen pt-32 pb-20 flex flex-col items-center relative overflow-hidden reveal">
-            <div class="w-full px-6 flex flex-col justify-between items-start mb-16">
+            <canvas id="neuron-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:0;"></canvas>
+            <div class="w-full px-6 flex flex-col justify-between items-start mb-16 relative" style="z-index:1;">
                 <div class="mb-12">
-                    <p class="text-[11px] font-bold tracking-widest text-gray-400 uppercase mb-4 italic">BakuApo Sales Partner</p>
+                    <p class="text-[11px] font-bold tracking-widest text-gray-400 mb-4 italic">BakuApo <span class="uppercase">Sales Partner</span></p>
                     <div class="h-16 border-l border-black"></div>
                 </div>
 
                 <div class="hero-stack flex flex-row-reverse items-start gap-5 mx-auto">
-                    <h2 class="hero-vertical vertical-text text-4xl font-black leading-none tracking-widest py-2">
-                        スキマ時間で、
+                    <h2 class="hero-vertical vertical-text text-4xl font-black leading-none tracking-widest py-2 hero-blur-in" style="transition-delay:0.3s;">
+                        月収＋１００万円を、
                     </h2>
-                    <h2 class="hero-vertical vertical-text text-4xl font-black leading-none tracking-widest py-2">
-                        月収＋１００万円を
+                    <h2 class="hero-vertical vertical-text text-4xl font-black leading-none tracking-widest py-2 hero-blur-in" style="transition-delay:0.6s;">
+                        スキマ時間で達成する。
                     </h2>
-                    <h2 class="hero-vertical vertical-text text-4xl font-black leading-none tracking-widest py-2">
-                        「確実」に作りませんか？
+                    <h2 class="hero-vertical vertical-text text-4xl font-black leading-none tracking-widest py-2 hero-blur-in" style="transition-delay:0.9s;">
+                        ただし、
+                    </h2>
+                    <h2 class="hero-vertical vertical-text text-4xl font-black leading-none tracking-widest py-2 hero-blur-in" style="transition-delay:1.2s;">
+                        全員向けではありません。
                     </h2>
                 </div>
             </div>
 
-            <div class="w-full px-6 text-center">
+            <div class="w-full px-6 text-center relative" style="z-index:1;">
                 <div class="line-vertical mb-10"></div>
                 <div class="max-w-2xl mx-auto mb-16">
                     <p class="text-base md:text-lg font-bold leading-loose mb-8">
                         ノルマ一切なし。在庫リスクなし。<br>
-                        たった1件の成約で<span class="marker-yellow text-black px-1">「報酬25万円」</span>があなたの口座に振り込まれます。<br>
-                        <span class="marker-yellow text-black px-1">「一生使い放題・送信数無制限」</span>の最強ツールだから、<br>
-                        営業未経験でも、学生でも、どんどん販売してきていただけている実績があります。
+                        50万円の商材を売るだけで、<span class="marker-yellow text-black px-1">驚異の還元率50%＝「報酬25万円」</span>があなたの口座に振り込まれます。<br><br>
+                        <span class="marker-yellow text-black px-1">「多くの企業にとって、欲しがらない人はいない」</span>の最強ツールだから、<br>
+                        営業未経験でも、学生でも、どんどん販売していただいている実績があります。
                     </p>
                 </div>
                 <!-- Hero CTA Updated to match Bottom CTA style -->
                 <div class="w-full px-4">
                     <a href="#apply" class="btn-black block px-4 py-8 text-[15px] font-black tracking-widest shadow-2xl transition-colors">
-                        ＞ <span class="marker-yellow text-black px-1">全額返金保証付き</span>で<br>「BakuApo正規代理店」に申し込む
+                        ＞ <span class="marker-yellow text-black px-1">今だけの特別条件</span>で<br>「BakuApo正規代理店」に申し込む
                     </a>
                     <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-4">※クレジットカードのみ対応</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust / Social Proof Section -->
+        <section class="bg-white px-6 py-12 reveal">
+            <div class="container mx-auto flex flex-col items-center gap-6">
+                <!-- 1段目：顧客満足度95%（中央） -->
+                <img src="./public/icon-satisfaction.svg" alt="顧客満足度 95%" class="w-full max-w-[200px]">
+                <!-- 2段目：2つ横並び -->
+                <div class="flex gap-4 w-full justify-center">
+                    <img src="./public/icon-members.svg" alt="代理店加盟 100名突破" class="w-1/2 max-w-[180px]">
+                    <img src="./public/icon-no-pressure.svg" alt="無理な営業等 一切無し" class="w-1/2 max-w-[180px]">
                 </div>
             </div>
         </section>
@@ -328,8 +389,8 @@
             <div class="container mx-auto text-center">
                 <p class="text-[11px] font-bold text-gray-400 tracking-widest mb-12 uppercase italic">Qualify</p>
                 <div class="max-w-2xl mx-auto">
-                    <h3 class="text-2xl font-black mb-16 leading-tight">
-                        あなたは今、<span class="border-b-4 border-black inline-block pb-1">「割に合わない副業」</span>を<br>続けていませんか？
+                    <h3 class="text-2xl font-black mb-16 leading-tight typewriter-text">
+                        あなたは今、<br><span class="border-b-4 border-black inline-block pb-1">「割に合わない副業」</span>を<br>続けていませんか？
                     </h3>
                     <p class="text-[15px] leading-loose font-medium text-gray-800 mb-8 text-left">
                         稼ごうと思って、いろいろ試してみた。<br>
@@ -342,15 +403,14 @@
                         <li>・他の営業代行をやってみたが、<span class="font-bold">報酬が少ない</span></li>
                     </ul>
                     <p class="text-[15px] leading-loose font-medium text-gray-800 mb-16 text-left">
-                        どれも、真面目に取り組む方ほど消耗しやすい副業です。<br>
-                        でも、それはあなたの努力不足でも、スキル不足でもありません。<br>
+                        どれも、真面目に取り組む方ほど消耗しやすい副業です。でも、それはあなたの努力不足でも、スキル不足でもありません。<br>
                         <span class="marker-yellow text-black px-1">「選んでいる副業の仕組み」が、割に合わないだけ</span>なのです。
                     </p>
                     <div class="line-vertical h-16 mb-16"></div>
                     <p class="text-xl font-bold leading-loose italic px-2">
                         では、もし……<br>
-                        「商品自体が勝手に売れていく」ほど魅力的で、<br>
-                        しかも<span class="marker-yellow text-black px-1 text-lg">「1件売るだけで25万円（会社員の月給並み）」</span>が手に入る。<br>
+                        「商品自体が勝手に売れていく」<br>ほど魅力的な商材</nav>で、<br>
+                        しかも<span class="marker-yellow text-black px-1 text-lg">「50万円の売上の50%＝25万円がそのままあなたの報酬」</span>になる。<br>
                         そんな「チート級の副業」があったとしたら、やってみたいと思いませんか？
                     </p>
                 </div>
@@ -358,12 +418,12 @@
         </section>
 
         <!-- Proposal -->
-        <section class="bg-gray-50 px-6 reveal">
+        <section id="about" class="bg-gray-50 px-6 reveal">
             <div class="container mx-auto text-center">
                 <p class="text-[11px] font-bold text-gray-400 tracking-widest mb-12 uppercase italic">Proposal</p>
                 <div class="max-w-3xl mx-auto">
-                    <h3 class="text-xl font-black mb-12 leading-tight">
-                        それが、今回募集する<br>「フォーム営業自動化ツール BakuApo（バクアポ）」の<br>正規代理店です。
+                    <h3 class="text-xl font-black mb-12 leading-tight typewriter-text">
+                        それが、今回募集する<br>「フォーム営業自動化ツール<br>BakuApo（バクアポ）」の<br>正規代理店です。
                     </h3>
 
                     <!-- BakuApo Screenshot Sample -->
@@ -384,24 +444,24 @@
             <div class="container mx-auto">
                 <div class="max-w-4xl mx-auto flex flex-col items-center gap-16">
                     <div class="w-full flex items-end justify-between border-b border-gray-100 pb-4">
-                        <p class="text-6xl font-thin leading-none">01</p>
+                        <p class="text-6xl font-thin leading-none" style="font-family:'Caveat',cursive">01</p>
                         <!-- Illustration: Profit -->
                         <div class="w-16 h-16 text-gray-300">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                         </div>
                     </div>
                     <div class="w-full text-left">
-                        <h4 class="text-2xl font-black mb-10 leading-relaxed">“これでいいの？”と思うくらい<br>稼げる効率がいい</h4>
-                        <p class="text-lg font-bold mb-8 text-gray-800 underline decoration-2 underline-offset-8 decoration-black">業界常識外れの報酬単価：1件25万円</p>
+                        <h4 class="text-2xl font-black mb-10 leading-relaxed">売上の半分があなたの報酬。<br><span class="marker-yellow text-black px-1">驚異の還元率50%</span></h4>
+                        <p class="text-lg font-bold mb-8 text-gray-800 underline decoration-2 underline-offset-8 decoration-black">50万円の商材 → 50%バック → 報酬25万円</p>
                         <div class="text-[15px] leading-loose font-medium text-gray-700 space-y-6">
                             <p>通常、代理店報酬は10％〜20％が相場です。しかしBakuApoは違います。<br>
-                            <span class="marker-yellow text-black px-1">販売価格50万円（税抜）の50％、つまり「25万円」をあなたに還元します。</span></p>
+                            <span class="marker-yellow text-black px-1">販売価格50万円（税抜）の50％、つまり「25万円」をまるごとあなたに還元。</span><br>
+                            この<span class="font-black text-black">「驚異の50%還元率」</span>こそが、BakuApo代理店が圧倒的に稼げる最大の理由です。</p>
                             <ul class="space-y-4 pt-6 text-black font-bold">
                                 <li>・月に1件売るだけで、<span class="text-xl">＋25万円</span>。</li>
                                 <li>・月に4件売れば、それだけで<span class="marker-yellow text-black px-1 text-xl">月収100万円</span>です。</li>
                             </ul>
-                            <p class="pt-6 text-sm text-gray-500 font-normal">あなたの周りに「集客に困っている経営者」はいませんか？「アポが欲しい営業会社」はいませんか？<br>
-                            その人たちにBakuApoを紹介するだけで、これだけの報酬が発生します。</p>
+                            <p class="pt-6 text-sm text-gray-500 font-normal">他社の代理店報酬が数万円〜10万円程度の中、BakuApoは<span class="font-bold text-black">1件で25万円</span>。<br>この還元率を知ったら、他の副業には戻れません。</p>
                         </div>
                     </div>
                 </div>
@@ -413,25 +473,23 @@
             <div class="container mx-auto">
                 <div class="max-w-4xl mx-auto flex flex-col items-center gap-16">
                     <div class="w-full flex items-end justify-between border-b border-gray-100 pb-4">
-                        <p class="text-6xl font-thin leading-none">02</p>
+                        <p class="text-6xl font-thin leading-none" style="font-family:'Caveat',cursive">02</p>
                         <!-- Illustration: Mechanism -->
                         <div class="w-16 h-16 text-gray-300">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                         </div>
                     </div>
                     <div class="w-full text-left">
-                        <h4 class="text-2xl font-black mb-10">営業トーク不要で「楽に売れる」</h4>
-                        <p class="text-lg font-bold mb-8 text-gray-800 italic">「サブスク疲れ」の顧客に刺さる、魔法のオファー</p>
+                        <h4 class="text-2xl font-black mb-10">“欲しがらない人がいない”<br> 魅力的な商材</h4>
+                        <p class="text-lg font-bold mb-8 text-gray-800 italic">50万円買い切りで一生使い放題・100万社のリスト内蔵の『フォーム営業自動化AIツール』</p>
                         <div class="text-[15px] leading-loose font-medium text-gray-700 space-y-6">
                             <p>なぜ、未経験でも売れるのか？それは商品スペックが「顧客の理想そのもの」だからです。</p>
                             <ul class="space-y-4 font-bold text-black border-l-4 border-black pl-6">
-                                <li>・月額費用ゼロ：50万円払えば一生使い放題（買い切り）。</li>
-                                <li>・制限なし：メール送信数も、アポ獲得数も無制限。</li>
-                                <li>・最新AI搭載：リスト作成も文章作成も全自動。</li>
+                                <li>・月額費用ゼロ：<br>50万円払えば一生使い放題（買い切り）。</li>
+                                <li>・制限なし：<br>メール送信数も、アポ獲得数も無制限。</li>
+                                <li>・最新AI搭載：<br>リスト作成も文章作成も全自動。</li>
+                                <li>・100万社リスト：<br>本来リストだけでも数百万円相当。</li>
                             </ul>
-                            <p class="pt-6">他社ツールが「月額数万円のサブスク」で毎月コストがかかる中、<br>
-                            <span class="marker-yellow text-black px-1 text-lg">「50万円で一生使い放題、追加コストなし」</span>と提案されて、断る経営者がいるでしょうか？<br>
-                            あなたは<span class="font-black text-black text-lg">「これ、一生使い放題ですよ」と伝えるだけ</span>でいいのです。</p>
                         </div>
                     </div>
                 </div>
@@ -443,20 +501,19 @@
             <div class="container mx-auto">
                 <div class="max-w-4xl mx-auto flex flex-col items-center gap-16">
                     <div class="w-full flex items-end justify-between border-b border-gray-100 pb-4">
-                        <p class="text-6xl font-thin leading-none">03</p>
+                        <p class="text-6xl font-thin leading-none" style="font-family:'Caveat',cursive">03</p>
                         <!-- Illustration: Safe/No Risk -->
                         <div class="w-16 h-16 text-gray-300">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         </div>
                     </div>
                     <div class="w-full text-left">
-                        <h4 class="text-2xl font-black mb-10">あなたへの「リスクはゼロ」</h4>
-                        <p class="text-lg font-bold mb-8 text-gray-800">参加費2万円。しかも「全額返金保証」付き</p>
+                        <h4 class="text-2xl font-black mb-10">営業トーク不要で<br>「本当に楽に売れる」</h4>
                         <div class="text-[15px] leading-loose font-medium text-gray-700 space-y-6">
-                            <p>この高額報酬を得るための「正規代理店」になる条件は、たったの2万円（税抜）です。これ以外の費用は一切かかりません。</p>
-                            <p>さらに、私たちは約束します。<br>
-                            <span class="marker-yellow text-black px-1 italic text-lg">もし、実際に販売活動をしてみて「自分には合わない」「売れそうにない」と判断された場合は、参加費の2万円を【全額返金】いたします。</span></p>
-                            <p class="pt-6 font-bold text-lg text-black">つまり、あなたは<span class="marker-yellow text-black px-1 emphatic-dots">「ノーリスク」</span>で、月100万円のチャンスに挑戦できるということです。</p>
+                            <p>「でも、具体的にどうやって売ればいいの？」<br>
+                            安心してください。あなたがやることは<span class="marker-yellow text-black px-1">「資料を送るだけ」</span>です。<br>
+                            私たちが数多くのテストを繰り返し、<span class="marker-yellow text-black px-1 italic text-lg">「最も成約率が高かったツール一式」</span>をそのままあなたに差し上げます。</p>
+                            <p class="pt-6 font-bold text-lg text-black">あとはツールと資料が勝手に営業してくれるので、営業未経験の方でも<span class="marker-yellow text-black px-1 emphatic-dots">収益化が簡単</span>なのです。</p>
                         </div>
                     </div>
                 </div>
@@ -467,49 +524,75 @@
         <section id="weapons" class="bg-gray-50 px-6 reveal">
             <div class="container mx-auto text-center">
                 <p class="text-[11px] font-bold text-gray-400 tracking-widest mb-12 uppercase italic">Stimulate: Weapons</p>
-                <h3 class="text-2xl font-black mb-10">あなたは「資料を送るだけ」</h3>
-                <p class="text-[15px] font-medium mb-20 max-w-2xl mx-auto leading-relaxed text-gray-700">
-                    「でも、具体的にどうやって売ればいいの？」<br>安心してください。あなたがやることは<span class="marker-yellow text-black px-1">「資料を送るだけ」</span>です。<br>
-                    私たちが数多くのテストを繰り返し、「最も成約率が高かったツール一式」をそのままあなたに差し上げます。
-                </p>
+                <h3 class="text-2xl font-black mb-10">正規代理店になるともらえる<br>特典・資料一覧</h3>
                 <div class="grid grid-cols-1 gap-6 max-w-5xl mx-auto text-left">
-                    <div class="bg-white p-8 border border-gray-100">
-                        <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 01</p>
-                        <h5 class="text-base font-bold mb-3">デモ動画</h5>
-                        <p class="text-xs text-gray-500 font-medium">見せるだけで「欲しい！」と思わせる解説動画</p>
+                    <div class="bg-white p-8 border border-gray-100 flex items-start gap-5 slide-in-left" style="transition-delay:0s;">
+                        <div class="w-10 h-10 flex-shrink-0 text-gray-400 mt-1">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 01</p>
+                            <h5 class="text-base font-bold mb-3">デモ動画</h5>
+                            <p class="text-xs text-gray-500 font-medium">見せるだけで「欲しい！」と思わせる解説動画</p>
+                        </div>
                     </div>
-                    <div class="bg-white p-8 border border-gray-100">
-                        <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 02</p>
-                        <h5 class="text-base font-bold mb-3">Web版デモアプリ</h5>
-                        <p class="text-xs text-gray-500 font-medium">実際に触ってもらい、感動させる最強のクロージング武器</p>
+                    <div class="bg-white p-8 border border-gray-100 flex items-start gap-5 slide-in-left" style="transition-delay:0.1s;">
+                        <div class="w-10 h-10 flex-shrink-0 text-gray-400 mt-1">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 02</p>
+                            <h5 class="text-base font-bold mb-3">Web版デモアプリ</h5>
+                            <p class="text-xs text-gray-500 font-medium">実際に触ってもらい、感動させる最強のクロージング武器</p>
+                        </div>
                     </div>
-                    <div class="bg-white p-8 border border-gray-100">
-                        <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 03</p>
-                        <h5 class="text-base font-bold mb-3">ライト版アプリ</h5>
-                        <p class="text-xs text-gray-500 font-medium">（インストール型）実際に送信を試せる体験版</p>
+                    <div class="bg-white p-8 border border-gray-100 flex items-start gap-5 slide-in-left" style="transition-delay:0.2s;">
+                        <div class="w-10 h-10 flex-shrink-0 text-gray-400 mt-1">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 03</p>
+                            <h5 class="text-base font-bold mb-3">ライト版アプリ</h5>
+                            <p class="text-xs text-gray-500 font-medium">（インストール型）実際に送信を試せる体験版</p>
+                        </div>
                     </div>
-                    <div class="bg-white p-8 border border-gray-100">
-                        <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 04</p>
-                        <h5 class="text-base font-bold mb-3">文章テンプレ</h5>
-                        <p class="text-xs text-gray-500 font-medium">コピペして送ればアポが取れる魔法のスクリプト</p>
+                    <div class="bg-white p-8 border border-gray-100 flex items-start gap-5 slide-in-left" style="transition-delay:0.3s;">
+                        <div class="w-10 h-10 flex-shrink-0 text-gray-400 mt-1">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 04</p>
+                            <h5 class="text-base font-bold mb-3">文章テンプレ</h5>
+                            <p class="text-xs text-gray-500 font-medium">コピペして送ればアポが取れる魔法のスクリプト</p>
+                        </div>
                     </div>
-                    <div class="bg-white p-8 border border-gray-100">
-                        <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 05</p>
-                        <h5 class="text-base font-bold mb-3">サービス説明LP</h5>
-                        <p class="text-xs text-gray-500 font-medium">顧客の疑問をすべて解消するセールページ</p>
+                    <div class="bg-white p-8 border border-gray-100 flex items-start gap-5 slide-in-left" style="transition-delay:0.4s;">
+                        <div class="w-10 h-10 flex-shrink-0 text-gray-400 mt-1">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 05</p>
+                            <h5 class="text-base font-bold mb-3">サービス説明LP</h5>
+                            <p class="text-xs text-gray-500 font-medium">顧客の疑問をすべて解消するセールページ</p>
+                        </div>
                     </div>
-                    <div class="bg-white p-8 border border-gray-100">
-                        <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 06</p>
-                        <h5 class="text-base font-bold mb-3">取扱説明書・資料</h5>
-                        <p class="text-xs text-gray-500 font-medium">詳細なスペック資料</p>
+                    <div class="bg-white p-8 border border-gray-100 flex items-start gap-5 slide-in-left" style="transition-delay:0.5s;">
+                        <div class="w-10 h-10 flex-shrink-0 text-gray-400 mt-1">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-300 mb-2 tracking-widest uppercase">Tool 06</p>
+                            <h5 class="text-base font-bold mb-3">取扱説明書・資料</h5>
+                            <p class="text-xs text-gray-500 font-medium">詳細なスペック資料</p>
+                        </div>
                     </div>
                 </div>
-                <p class="mt-20 text-lg font-black italic">あなたの仕事は、これらを「興味ありそうな人」に送るだけ。<br><span class="text-sm font-medium text-gray-500 block mt-6">あとはツールと資料が勝手に営業してくれます。</span></p>
+                <p class="mt-20 text-lg font-black italic">あなたの仕事は、これらを<br>「興味ありそうな人」に送るだけ。<br><span class="text-sm font-medium text-gray-500 block mt-6">あとはツールと資料が勝手に営業してくれます。</span></p>
             </div>
         </section>
 
         <!-- Q&A -->
-        <section class="bg-white px-6 border-b border-gray-50 reveal">
+        <section id="qanda" class="bg-white px-6 border-b border-gray-50 reveal">
             <div class="container mx-auto max-w-3xl">
                 <!-- Q&A 見出し -->
                 <div class="text-center mb-16">
@@ -557,46 +640,23 @@
         <!-- Closing / CTA -->
         <section id="apply" class="bg-black text-white px-6 reveal">
             <div class="container mx-auto text-center flex flex-col items-center">
-                <div class="flex flex-row-reverse items-start gap-5 mb-24">
-                    <h2 class="vertical-text text-3xl font-black leading-none tracking-widest">
-                        リスクは私たちが
-                    </h2>
-                    <h2 class="vertical-text text-3xl font-black leading-none tracking-widest">
-                        すべて引き受けました。
-                    </h2>
+                <div class="mb-16">
+                    <p class="text-white font-bold italic underline underline-offset-8 decoration-1 mb-10 decoration-yellow-300 text-lg">最後にもう一度だけお伝えします。</p>
                 </div>
                 <div class="max-w-2xl mx-auto text-[15px] leading-loose font-medium text-gray-400 mb-20 space-y-10">
-                    <p>想像してみてください。<br>来月のあなたの口座に、今の収入に加えて「＋25万円」、あるいは「＋100万円」が振り込まれている通帳を。</p>
-                    <p class="text-white font-bold italic text-lg border-y border-gray-800 py-10">
-                        ・我慢していた旅行に行くのもよし。<br>
-                        ・将来のために投資に回すのもよし。<br>
-                        ・美味しい食事を家族にご馳走するのもよし。
-                    </p>
-                    <p>BakuApoなら、それが現実になります。あなたが失うものは何もありません。</p>
-                    <p class="text-white font-black text-xl mt-16 px-4 leading-relaxed">今すぐ、下記のボタンから代理店に登録し、最強の収益源を手に入れてください。</p>
+                    <ol class="space-y-6 text-left text-white font-bold text-lg">
+                        <li>1. <span class="bg-yellow-300 text-black px-1 italic">驚異の還元率50%</span><br>＝1件売って25万円の超高割合報酬。</li>
+                        <li>2. <span class="bg-yellow-300 text-black px-1 italic">魅力的な商材</span>で売りやすい！</li>
+                        <li>3. <span class="bg-yellow-300 text-black px-1 italic">営業トーク不要</span>で楽々売れる！</li>
+                    </ol>
+                    <p class="pt-6 leading-relaxed font-normal text-gray-400">この条件で募集できる人数には、<br>サポートの品質を保つために限りがあります。<br>枠が埋まってしまう前に、<br>まずは一度、詳細を確認してください。</p>
+                    <p class="pt-10 font-black text-center tracking-tighter text-lg text-white">BakuApo 運営事務局</p>
                 </div>
                 <div class="w-full max-w-sm space-y-16 px-4">
                     <a href="#" class="bg-white text-black px-4 py-8 text-[15px] font-black inline-block w-full tracking-widest hover:bg-gray-200 transition-colors shadow-2xl">
-                        ＞ <span class="marker-yellow text-black px-1">全額返金保証付き</span>で<br>「BakuApo正規代理店」に申し込む
+                        ＞ <span class="marker-yellow text-black px-1">今だけの特別条件</span>で<br>「BakuApo正規代理店」に申し込む
                     </a>
                     <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">※クレジットカードのみ対応</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- P.S. -->
-        <section class="bg-white px-6 reveal">
-            <div class="container mx-auto max-w-2xl text-center">
-                <h3 class="text-[10px] font-bold text-gray-400 tracking-widest mb-12 italic">Postscript</h3>
-                <div class="text-[15px] leading-loose font-medium text-gray-800 text-left space-y-8">
-                    <p class="font-bold text-black italic underline underline-offset-8 decoration-1 mb-10 decoration-yellow-300">最後にもう一度だけお伝えします。</p>
-                    <ol class="space-y-6">
-                        <li>1. 報酬は<span class="marker-yellow text-black px-1 italic">1件25万円</span>（業界最高水準）。</li>
-                        <li>2. 商品は<span class="marker-yellow text-black px-1 italic">「一生使い放題」</span>だから飛ぶように売れる。</li>
-                        <li>3. 参加費2万円は<span class="marker-yellow text-black px-1 italic">「全額返金保証」</span>でリスクゼロ。</li>
-                    </ol>
-                    <p class="pt-10 leading-relaxed font-normal text-gray-600">この条件で募集できる人数には、サポートの品質を保つために限りがあります。<br>枠が埋まってしまう前に、まずは一度、詳細を確認してください。</p>
-                    <p class="pt-10 font-black text-right tracking-tighter text-lg uppercase">BakuApo 運営事務局</p>
                 </div>
             </div>
         </section>
@@ -604,17 +664,48 @@
         <!-- Footer -->
         <footer class="bg-white text-black py-20 px-6 border-t border-gray-50">
             <div class="container mx-auto text-center">
-                <h1 class="text-3xl font-black mb-16 tracking-tighter uppercase">BakuApo</h1>
+                <img src="./public/bakuapo-logo.svg" alt="BakuApo" class="h-10 mx-auto mb-16">
                 <div class="flex justify-center gap-8 text-[10px] text-gray-400 font-bold tracking-widest mb-16 flex-wrap uppercase">
-                    <a href="https://chainsoda.jp/" target="_blank" rel="noopener" class="hover:text-black">運営会社</a>
+                    <button class="hover:text-black" onclick="openModal('company-modal')">運営会社</button>
                     <button class="hover:text-black uppercase" onclick="openModal('terms-modal')">利用規約</button>
                     <button class="hover:text-black uppercase" onclick="openModal('privacy-modal')">プライバシーポリシー</button>
                 </div>
-                <p class="text-[9px] text-gray-300 tracking-[0.3em] font-medium uppercase">© BakuApo. All Rights Reserved.</p>
+                <p class="text-[9px] text-gray-300 tracking-[0.3em] font-medium">© BakuApo. <span class="uppercase">All Rights Reserved.</span></p>
             </div>
         </footer>
 
         <!-- Modals -->
+        <div id="company-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="company-title">
+            <button class="self-end text-sm font-bold mb-8" onclick="closeModal('company-modal')">CLOSE [×]</button>
+            <h2 id="company-title" class="text-2xl font-black mb-8 border-b border-black pb-4">運営会社</h2>
+            <div class="text-sm leading-loose space-y-8">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-1">Company Name</p>
+                    <p class="font-bold text-base">株式会社CHAINSODA</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-1">Location</p>
+                    <p class="font-medium">〒150-0001<br>東京都渋谷区神宮前6-23-4 桑野ビル2F</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-1">Executive</p>
+                    <p class="font-medium">代表取締役社長　濵村 涼輔</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-1">Contact</p>
+                    <p class="font-medium">070-4350-0294</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-1">Business</p>
+                    <p class="font-medium">マーケティングコンサルティング<br>人材系プラットフォーム事業<br>SaaS型事業の開発・運用 等</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-1">Established</p>
+                    <p class="font-medium">2022年10月28日</p>
+                </div>
+            </div>
+        </div>
+
         <div id="terms-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="terms-title">
             <button class="self-end text-sm font-bold mb-8" onclick="closeModal('terms-modal')">CLOSE [×]</button>
             <h2 id="terms-title" class="text-2xl font-black mb-8 border-b border-black pb-4">利用規約</h2>
@@ -733,6 +824,175 @@
         }, observerOptions);
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.slide-in-left').forEach(el => observer.observe(el));
+
+        // タイプライター風アニメーション
+        function initTypewriter(el) {
+            const html = el.innerHTML;
+            // HTMLをパースしてノードを再構成
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            const chars = [];
+
+            function extractChars(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent;
+                    for (let i = 0; i < text.length; i++) {
+                        if (text[i].trim() === '' && text[i] === '\n') continue; // 改行文字はスキップ
+                        chars.push({ type: 'char', char: text[i], wrapper: null });
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    if (node.tagName === 'BR') {
+                        chars.push({ type: 'br' });
+                    } else {
+                        // SPANなどの要素 - 中のテキストを1文字ずつ同じスタイルで
+                        const clone = node.cloneNode(false);
+                        const innerText = node.textContent;
+                        for (let i = 0; i < innerText.length; i++) {
+                            chars.push({ type: 'char', char: innerText[i], wrapper: clone.cloneNode(false) });
+                        }
+                    }
+                }
+            }
+
+            temp.childNodes.forEach(n => extractChars(n));
+
+            el.innerHTML = '';
+            const charEls = [];
+            chars.forEach((c, i) => {
+                if (c.type === 'br') {
+                    const br = document.createElement('br');
+                    el.appendChild(br);
+                } else {
+                    const span = document.createElement('span');
+                    span.className = 'typewriter-char';
+                    span.textContent = c.char;
+                    if (c.wrapper) {
+                        const w = c.wrapper.cloneNode(false);
+                        w.appendChild(span);
+                        el.appendChild(w);
+                    } else {
+                        el.appendChild(span);
+                    }
+                    charEls.push(span);
+                }
+            });
+
+            return charEls;
+        }
+
+        const typewriterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    typewriterObserver.unobserve(entry.target);
+                    const charEls = entry.target._typewriterChars;
+                    if (!charEls) return;
+                    charEls.forEach((el, i) => {
+                        setTimeout(() => {
+                            el.classList.add('active');
+                        }, i * 30); // 30msごとに1文字ずつ表示（クイック）
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.typewriter-text').forEach(el => {
+            const charEls = initTypewriter(el);
+            el._typewriterChars = charEls;
+            typewriterObserver.observe(el);
+        });
+
+        // ヒーロー文字のブラーフェードインをページ読み込み後に発火
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.hero-blur-in').forEach(el => {
+                el.classList.add('active');
+            });
+        });
+
+        // ニューロン風アニメーション
+        (function() {
+            const canvas = document.getElementById('neuron-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const section = canvas.parentElement;
+            let w, h, nodes = [], animId;
+            const NODE_COUNT = 60;
+            const MAX_DIST = 120;
+
+            function resize() {
+                w = section.offsetWidth;
+                h = section.offsetHeight;
+                canvas.width = w;
+                canvas.height = h;
+            }
+
+            function createNodes() {
+                nodes = [];
+                for (let i = 0; i < NODE_COUNT; i++) {
+                    nodes.push({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        r: Math.random() * 2 + 1,
+                        pulse: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+                const time = Date.now() * 0.001;
+
+                // 線を描画
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const dx = nodes[i].x - nodes[j].x;
+                        const dy = nodes[i].y - nodes[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < MAX_DIST) {
+                            const alpha = (1 - dist / MAX_DIST) * 0.15;
+                            ctx.beginPath();
+                            ctx.moveTo(nodes[i].x, nodes[i].y);
+                            ctx.lineTo(nodes[j].x, nodes[j].y);
+                            ctx.strokeStyle = 'rgba(180, 180, 180, ' + alpha + ')';
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // ノードを描画・移動
+                for (let i = 0; i < nodes.length; i++) {
+                    const n = nodes[i];
+                    const pulse = Math.sin(time * 0.8 + n.pulse) * 0.5 + 0.5;
+                    const alpha = 0.08 + pulse * 0.12;
+                    const radius = n.r + pulse * 0.8;
+
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(160, 160, 160, ' + alpha + ')';
+                    ctx.fill();
+
+                    n.x += n.vx;
+                    n.y += n.vy;
+
+                    if (n.x < 0 || n.x > w) n.vx *= -1;
+                    if (n.y < 0 || n.y > h) n.vy *= -1;
+                }
+
+                animId = requestAnimationFrame(draw);
+            }
+
+            resize();
+            createNodes();
+            draw();
+
+            window.addEventListener('resize', () => {
+                resize();
+                createNodes();
+            });
+        })();
     </script>
 
 </body>
