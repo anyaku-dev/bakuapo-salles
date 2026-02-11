@@ -62,14 +62,21 @@
         .btn-black {
             background-color: #000000;
             color: #ffffff;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             letter-spacing: 0.1em;
             text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15);
         }
 
         .btn-black:hover {
-            opacity: 0.8;
             transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-black:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .btn-black .marker-yellow {
@@ -382,7 +389,7 @@
                 <div class="line-vertical mb-10"></div>
                 <div class="max-w-2xl mx-auto mb-16">
                     <p class="text-base md:text-lg font-bold leading-loose mb-8">
-                        <span class="marker-yellow text-black">ノルマ一切なし。</span> <span class="marker-yellow text-black">在庫リスクなし。</span><br>
+                        <span class="marker-yellow text-black">ノルマ一切なしの"高報酬"商材。</span><br>
                         50万円の商材を売るだけで、<span class="marker-yellow text-black px-1">驚異の還元率50%＝「報酬25万円」</span>があなたの口座に振り込まれます。<br><br>
                         <span class="marker-yellow text-black px-1">「多くの企業にとって、欲しがらない人はいない」</span>の最強ツールだから、<br>
                         営業未経験でも、学生でも、どんどん販売していただいている実績があります。
@@ -755,7 +762,7 @@
                     <p class="pt-10 font-black text-center tracking-tighter text-lg text-white">BakuApo 運営事務局</p>
                 </div>
                 <div class="w-full max-w-sm space-y-16 px-4">
-                    <button onclick="openModal('apply-modal')" class="bg-white text-black px-4 py-8 text-[15px] font-black w-full tracking-widest hover:bg-gray-200 transition-colors shadow-2xl text-center cursor-pointer">
+                    <button onclick="openModal('apply-modal')" class="bg-white text-black px-4 py-8 text-[15px] font-black w-full tracking-widest hover:bg-gray-100 transition-all shadow-[0_4px_16px_rgba(255,255,255,0.3),0_2px_4px_rgba(255,255,255,0.15)] hover:shadow-[0_8px_24px_rgba(255,255,255,0.4)] active:translate-y-[1px] rounded-xl text-center cursor-pointer">
                         ＞ <span class="marker-yellow text-black px-1">今だけの特別条件</span>で<br>「BakuApo正規代理店」に申し込む
                     </button>
                 </div>
