@@ -552,7 +552,7 @@
                     <!-- 黄色カード + まとめ + イラスト -->
                     <div class="relative mb-16" style="overflow: visible;">
                         <!-- 女性イラスト：右端から見切れ配置 -->
-                        <div class="absolute" style="right: -40px; top: 30px; width: 180px; z-index: 2;">
+                        <div class="absolute" style="right: -45px; top: 80px; width: 180px; z-index: 2;">
                             <img src="./woman-02.svg" alt="" class="w-full h-auto block">
                         </div>
 
@@ -564,27 +564,29 @@
                             </p>
                             <p class="text-[14px] font-medium leading-loose text-gray-800 mt-4">
                                 でも、それはあなたの<br>
-                                <span class="font-black text-black text-[17px]">努力不足でも、<br>スキル不足でもありません。</span>
+                                <span class="font-black text-black text-[17px]">努力不足でも、<br>スキル不足でも<br>ありません。</span>
                             </p>
                         </div>
 
                         <!-- マーカー付きまとめ -->
-                        <p class="text-[17px] leading-loose font-medium text-gray-800 text-left" style="padding-right: 110px;">
-                            <span class="marker-yellow text-black px-1">「選んでいる副業の仕組み」</span>が、<br>
+                        <p class="text-[17px] leading-loose font-medium text-gray-800 text-left" style="padding-right: 50px;">
+                            <span class="marker-yellow text-black px-1">「選んでいる副業の仕組み」</span><br>が、
                             <span class="marker-yellow text-black px-1">割に合わないだけ</span> なのです。
                         </p>
                     </div>
 
                     <div class="line-vertical h-16 mb-16"></div>
-                    <p class="text-xl font-bold leading-loose italic px-2">
-                        では、もし……<br>
-                        「商品自体が勝手に売れていく」<br>
-                        ほど魅力的な商材で、<br>
-                        しかも<span class="marker-yellow text-black px-1 text-lg">「50万円の売上の50%<br>＝25万円がそのまま<br>あなたの報酬」</span>になる。<br>
-                        そんな「チート級の副業」が<br>
-                        あったとしたら、<br>
-                        やってみたいと思いませんか？
-                    </p>
+                    <div id="osatsu-area" class="relative overflow-hidden">
+                        <p class="text-xl font-bold leading-loose italic px-2 relative" style="z-index: 1;">
+                            では、もし……<br>
+                            「商品自体が勝手に売れていく」<br>
+                            ほど魅力的な商材で、<br>
+                            しかも<span class="marker-yellow text-black px-1 text-lg">「50万円の売上の50%<br>＝25万円がそのまま<br>あなたの報酬」</span>になる。<br>
+                            そんな「チート級の副業」が<br>
+                            あったとしたら、<br>
+                            やってみたいと思いませんか？
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1292,6 +1294,86 @@
                 resize();
                 createNodes();
             });
+        })();
+
+        // お札ひらひらアニメーション
+        (function() {
+            const area = document.getElementById('osatsu-area');
+            if (!area) return;
+            let started = false;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !started) {
+                        started = true;
+                        startOsatsuRain();
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            observer.observe(area);
+
+            function startOsatsuRain() {
+                const DURATION = 5000; // 5秒間
+                const INTERVAL = 300;  // 生成間隔
+                const startTime = Date.now();
+
+                const timer = setInterval(() => {
+                    if (Date.now() - startTime > DURATION) {
+                        clearInterval(timer);
+                        return;
+                    }
+                    dropOsatsu();
+                }, INTERVAL);
+
+                // 最初に数枚まとめて投下
+                for (let i = 0; i < 4; i++) {
+                    setTimeout(() => dropOsatsu(), i * 80);
+                }
+            }
+
+            function dropOsatsu() {
+                const rect = area.getBoundingClientRect();
+                const el = document.createElement('img');
+                el.src = './osatsu.jpg';
+                el.style.cssText = `
+                    position: absolute;
+                    top: -60px;
+                    width: ${28 + Math.random() * 20}px;
+                    opacity: 0.85;
+                    pointer-events: none;
+                    z-index: 0;
+                `;
+                const startX = Math.random() * (area.offsetWidth - 40);
+                el.style.left = startX + 'px';
+
+                area.appendChild(el);
+
+                // ひらひら落下アニメーション
+                const duration = 2500 + Math.random() * 2000;
+                const swingAmp = 20 + Math.random() * 30;
+                const rotateEnd = (Math.random() - 0.5) * 120;
+                const startT = performance.now();
+
+                function animate(now) {
+                    const elapsed = now - startT;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const y = progress * (area.offsetHeight + 60);
+                    const swing = Math.sin(progress * Math.PI * (3 + Math.random())) * swingAmp;
+                    const rotate = progress * rotateEnd;
+
+                    el.style.transform = `translateX(${swing}px) translateY(${y}px) rotate(${rotate}deg)`;
+                    el.style.opacity = progress > 0.8 ? (1 - progress) * 5 * 0.85 : 0.85;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        el.remove();
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
         })();
     </script>
 
