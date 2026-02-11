@@ -575,16 +575,18 @@
                         </p>
                     </div>
 
-                    <div class="line-vertical h-16 mb-16"></div>
-                    <p class="text-xl font-bold leading-loose italic px-2 relative" style="z-index: 1;">
-                        では、もし……<br>
-                        「商品自体が勝手に売れていく」<br>
-                        ほど魅力的な商材で、<br>
-                        しかも<span class="marker-yellow text-black px-1 text-lg">「50万円の売上の50%<br>＝25万円がそのまま<br>あなたの報酬」</span>になる。<br>
-                        そんな「チート級の副業」が<br>
-                        あったとしたら、<br>
-                        やってみたいと思いませんか？
-                    </p>
+                    <div id="osatsu-origin" class="line-vertical h-16 mb-16"></div>
+                    <div id="moshi-text" style="opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease;">
+                        <p class="text-xl font-bold leading-loose italic px-2 relative" style="z-index: 1;">
+                            では、もし……<br>
+                            「商品自体が勝手に売れていく」<br>
+                            ほど魅力的な商材で、<br>
+                            しかも<span class="marker-yellow text-black px-1 text-lg">「50万円の売上の50%<br>＝25万円がそのまま<br>あなたの報酬」</span>になる。<br>
+                            そんな「チート級の副業」が<br>
+                            あったとしたら、<br>
+                            やってみたいと思いませんか？
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1294,27 +1296,33 @@
             });
         })();
 
-        // お札ひらひらアニメーション
+        // お札ひらひらアニメーション + テキスト出現
         (function() {
             const area = document.getElementById('mission');
-            if (!area) return;
+            const moshiText = document.getElementById('moshi-text');
+            const origin = document.getElementById('osatsu-origin');
+            if (!area || !moshiText || !origin) return;
             let started = false;
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting && !started) {
                         started = true;
-                        startOsatsuRain();
+                        // テキスト出現アニメーション
+                        moshiText.style.opacity = '1';
+                        moshiText.style.transform = 'translateY(0)';
+                        // お札を少し遅らせて開始
+                        setTimeout(() => startOsatsuRain(), 400);
                         observer.disconnect();
                     }
                 });
-            }, { threshold: 0.2 });
+            }, { threshold: 0.15 });
 
-            observer.observe(area);
+            observer.observe(moshiText);
 
             function startOsatsuRain() {
-                const DURATION = 5000; // 5秒間
-                const INTERVAL = 300;  // 生成間隔
+                const DURATION = 5000;
+                const INTERVAL = 300;
                 const startTime = Date.now();
 
                 const timer = setInterval(() => {
@@ -1325,7 +1333,6 @@
                     dropOsatsu();
                 }, INTERVAL);
 
-                // 最初に数枚まとめて投下
                 for (let i = 0; i < 4; i++) {
                     setTimeout(() => dropOsatsu(), i * 80);
                 }
@@ -1336,9 +1343,11 @@
                 el.src = './osatsu.jpg';
                 const size = 28 + Math.random() * 20;
                 const startX = Math.random() * (area.offsetWidth - 40);
+                // line-verticalの位置を起点にする
+                const originTop = origin.offsetTop;
                 el.style.cssText = `
                     position: absolute;
-                    top: 0;
+                    top: ${originTop}px;
                     left: ${startX}px;
                     width: ${size}px;
                     opacity: 0;
@@ -1349,32 +1358,27 @@
 
                 area.appendChild(el);
 
-                // パラメータを事前に固定（毎フレームrandomしない）
                 const duration = 3000 + Math.random() * 2500;
                 const swingAmp = 15 + Math.random() * 25;
-                const swingFreq = 2 + Math.random() * 1.5; // ゆったりしたsin波の周期数
+                const swingFreq = 2 + Math.random() * 1.5;
                 const rotateAmp = 15 + Math.random() * 20;
                 const rotateFreq = 1.5 + Math.random() * 1;
                 const phaseSwing = Math.random() * Math.PI * 2;
                 const phaseRotate = Math.random() * Math.PI * 2;
-                const fallHeight = area.offsetHeight + 80;
+                // 落下距離 = セクション下端 - 起点
+                const fallHeight = area.offsetHeight - originTop + 40;
                 const startT = performance.now();
 
                 function animate(now) {
                     const elapsed = now - startT;
                     const t = Math.min(elapsed / duration, 1);
 
-                    // イージング: ゆっくり始まり自然に落下
-                    const easedY = t * t * (3 - 2 * t); // smoothstep
-                    const y = easedY * fallHeight - 60;
+                    const easedY = t * t * (3 - 2 * t);
+                    const y = easedY * fallHeight;
 
-                    // スムーズなsin波で左右揺れ
                     const swing = Math.sin(t * Math.PI * swingFreq + phaseSwing) * swingAmp;
-
-                    // スムーズなsin波で回転（ひらひら感）
                     const rotate = Math.sin(t * Math.PI * rotateFreq + phaseRotate) * rotateAmp;
 
-                    // フェードイン → 表示 → フェードアウト
                     let opacity;
                     if (t < 0.05) {
                         opacity = t / 0.05 * 0.8;
