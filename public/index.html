@@ -505,7 +505,7 @@
         </section>
 
         <!-- Intro (Problem) -->
-        <section id="mission" class="bg-white px-6 reveal">
+        <section id="mission" class="bg-white px-6 reveal relative overflow-hidden">
             <div class="container mx-auto text-center">
                 <p class="text-[11px] font-bold text-gray-400 tracking-widest mb-12 uppercase italic">Misshon</p>
                 <div class="max-w-2xl mx-auto">
@@ -576,17 +576,15 @@
                     </div>
 
                     <div class="line-vertical h-16 mb-16"></div>
-                    <div id="osatsu-area" class="relative overflow-hidden">
-                        <p class="text-xl font-bold leading-loose italic px-2 relative" style="z-index: 1;">
-                            では、もし……<br>
-                            「商品自体が勝手に売れていく」<br>
-                            ほど魅力的な商材で、<br>
-                            しかも<span class="marker-yellow text-black px-1 text-lg">「50万円の売上の50%<br>＝25万円がそのまま<br>あなたの報酬」</span>になる。<br>
-                            そんな「チート級の副業」が<br>
-                            あったとしたら、<br>
-                            やってみたいと思いませんか？
-                        </p>
-                    </div>
+                    <p class="text-xl font-bold leading-loose italic px-2 relative" style="z-index: 1;">
+                        では、もし……<br>
+                        「商品自体が勝手に売れていく」<br>
+                        ほど魅力的な商材で、<br>
+                        しかも<span class="marker-yellow text-black px-1 text-lg">「50万円の売上の50%<br>＝25万円がそのまま<br>あなたの報酬」</span>になる。<br>
+                        そんな「チート級の副業」が<br>
+                        あったとしたら、<br>
+                        やってみたいと思いませんか？
+                    </p>
                 </div>
             </div>
         </section>
@@ -1298,7 +1296,7 @@
 
         // お札ひらひらアニメーション
         (function() {
-            const area = document.getElementById('osatsu-area');
+            const area = document.getElementById('mission');
             if (!area) return;
             let started = false;
 
