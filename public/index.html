@@ -1334,39 +1334,62 @@
             }
 
             function dropOsatsu() {
-                const rect = area.getBoundingClientRect();
                 const el = document.createElement('img');
                 el.src = './osatsu.jpg';
+                const size = 28 + Math.random() * 20;
+                const startX = Math.random() * (area.offsetWidth - 40);
                 el.style.cssText = `
                     position: absolute;
-                    top: -60px;
-                    width: ${28 + Math.random() * 20}px;
-                    opacity: 0.85;
+                    top: 0;
+                    left: ${startX}px;
+                    width: ${size}px;
+                    opacity: 0;
                     pointer-events: none;
                     z-index: 0;
+                    will-change: transform, opacity;
                 `;
-                const startX = Math.random() * (area.offsetWidth - 40);
-                el.style.left = startX + 'px';
 
                 area.appendChild(el);
 
-                // ひらひら落下アニメーション
-                const duration = 2500 + Math.random() * 2000;
-                const swingAmp = 20 + Math.random() * 30;
-                const rotateEnd = (Math.random() - 0.5) * 120;
+                // パラメータを事前に固定（毎フレームrandomしない）
+                const duration = 3000 + Math.random() * 2500;
+                const swingAmp = 15 + Math.random() * 25;
+                const swingFreq = 2 + Math.random() * 1.5; // ゆったりしたsin波の周期数
+                const rotateAmp = 15 + Math.random() * 20;
+                const rotateFreq = 1.5 + Math.random() * 1;
+                const phaseSwing = Math.random() * Math.PI * 2;
+                const phaseRotate = Math.random() * Math.PI * 2;
+                const fallHeight = area.offsetHeight + 80;
                 const startT = performance.now();
 
                 function animate(now) {
                     const elapsed = now - startT;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const y = progress * (area.offsetHeight + 60);
-                    const swing = Math.sin(progress * Math.PI * (3 + Math.random())) * swingAmp;
-                    const rotate = progress * rotateEnd;
+                    const t = Math.min(elapsed / duration, 1);
 
-                    el.style.transform = `translateX(${swing}px) translateY(${y}px) rotate(${rotate}deg)`;
-                    el.style.opacity = progress > 0.8 ? (1 - progress) * 5 * 0.85 : 0.85;
+                    // イージング: ゆっくり始まり自然に落下
+                    const easedY = t * t * (3 - 2 * t); // smoothstep
+                    const y = easedY * fallHeight - 60;
 
-                    if (progress < 1) {
+                    // スムーズなsin波で左右揺れ
+                    const swing = Math.sin(t * Math.PI * swingFreq + phaseSwing) * swingAmp;
+
+                    // スムーズなsin波で回転（ひらひら感）
+                    const rotate = Math.sin(t * Math.PI * rotateFreq + phaseRotate) * rotateAmp;
+
+                    // フェードイン → 表示 → フェードアウト
+                    let opacity;
+                    if (t < 0.05) {
+                        opacity = t / 0.05 * 0.8;
+                    } else if (t > 0.75) {
+                        opacity = (1 - t) / 0.25 * 0.8;
+                    } else {
+                        opacity = 0.8;
+                    }
+
+                    el.style.transform = `translateY(${y}px) translateX(${swing}px) rotate(${rotate}deg)`;
+                    el.style.opacity = opacity;
+
+                    if (t < 1) {
                         requestAnimationFrame(animate);
                     } else {
                         el.remove();
