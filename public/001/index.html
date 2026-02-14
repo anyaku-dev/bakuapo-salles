@@ -55,13 +55,15 @@
             transform: translateX(-50%);
             width: calc(425px * 0.9);
             max-width: calc(100vw * 0.9);
-            z-index: 100;
+            z-index: 9999;
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         .fixed-footer-cta.visible {
             opacity: 1;
+            visibility: visible;
             pointer-events: auto;
         }
 
@@ -1282,8 +1284,8 @@
         // スクロールフェードイン
         const observerOptions = {
             root: null,
-            rootMargin: '0px',
-            threshold: 0.1
+            rootMargin: '50px',
+            threshold: 0.05
         };
 
         const observer = new IntersectionObserver((entries) => {
