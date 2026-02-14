@@ -276,6 +276,28 @@
             transform: translateX(0);
         }
 
+        /* 右からスライドイン */
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .slide-in-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* 下からフェードイン */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .fade-in-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* タイプライター風アニメーション */
         .typewriter-char {
             display: inline-block;
@@ -524,7 +546,7 @@
 
                         <!-- 落ち込みイラスト -->
                         <div class="flex justify-center mb-8" style="margin-top: -8px;">
-                            <img src="../sad-man.webp" alt="落ち込む人" class="w-52 h-auto">
+                            <img src="../sad-man.webp" alt="落ち込む人" class="w-52 h-auto fade-in-up">
                         </div>
 
                         <!-- 3つのリスト項目（カード風） -->
@@ -553,7 +575,7 @@
                     <div class="relative mb-16" style="overflow: visible;">
                         <!-- 女性イラスト：右端から見切れ配置 -->
                         <div class="absolute" style="right: -45px; top: 80px; width: 180px; z-index: 2;">
-                            <img src="../woman-02.svg" alt="" class="w-full h-auto block">
+                            <img src="../woman-02.svg" alt="" class="w-full h-auto block slide-in-right">
                         </div>
 
                         <!-- 黄色カード -->
@@ -670,7 +692,7 @@
                         <div class="relative" style="overflow: visible;">
                             <!-- AIイラスト：右端から見切れ配置 -->
                             <div class="absolute" style="right: -65px; top: 50px; width: 180px; z-index: 2;">
-                                <img src="../ai.svg" alt="" class="w-full h-auto block">
+                                <img src="../ai.svg" alt="" class="w-full h-auto block slide-in-right">
                             </div>
                             <p class="text-lg font-bold mb-8 text-gray-800 italic" style="padding-right: 80px;">50万円買い切りで一生使い放題・100万社のリスト内蔵の<br>『フォーム営業<br>自動化AIツール』</p>
                             <div class="text-[15px] leading-loose font-medium text-gray-700 space-y-6 mt-4">
@@ -841,6 +863,10 @@
                         <p>もし、実際に販売活動をしてみて<br>
                         「自分には合わない」「売れそうにない」と判断された場合は、<br>
                         参加費の2万円を<span class="marker-yellow text-black px-1 font-black text-lg">【全額返金】</span><br>いたします。</p>
+                    </div>
+
+                    <div class="my-8">
+                        <img src="./campaign.png" alt="キャンペーン" class="w-full h-auto block" style="border-radius: 10px;" loading="lazy">
                     </div>
 
                     <p class="text-center text-lg font-black text-black pt-4">つまり、あなたは<br>
@@ -1200,6 +1226,8 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         document.querySelectorAll('.slide-in-left').forEach(el => observer.observe(el));
+        document.querySelectorAll('.slide-in-right').forEach(el => observer.observe(el));
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
 
         // タイプライター風アニメーション
         function initTypewriter(el) {
