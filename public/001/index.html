@@ -344,15 +344,6 @@
             background: linear-gradient(180deg, #ffffff 0%, #f0f4ff 40%, #e8eeff 100%);
         }
 
-        /* 限定バッジ パルスアニメーション */
-        .hero-urgency-badge {
-            animation: badge-pulse 2s ease-in-out infinite;
-        }
-        @keyframes badge-pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-        }
-
         /* カウントアップ数字カード */
         .hero-stat-card {
             background: rgba(255, 255, 255, 0.85);
@@ -482,14 +473,6 @@
         <!-- Hero Section (FV) -->
         <section id="top" class="hero-section flex flex-col items-center relative overflow-hidden reveal">
             <canvas id="neuron-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index:0;"></canvas>
-
-            <!-- 限定バッジ -->
-            <div class="w-full px-6 relative" style="z-index:1; margin-top: -10px; margin-bottom: 16px;">
-                <div class="hero-urgency-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold tracking-wide" style="background: rgba(239,68,68,0.08); color: #DC2626; border: 1px solid rgba(239,68,68,0.2);">
-                    <span class="inline-block w-2 h-2 rounded-full bg-red-500" style="animation: badge-pulse 1.5s ease-in-out infinite;"></span>
-                    2月限定 ｜ 特別条件で募集中
-                </div>
-            </div>
 
             <div class="w-full px-6 flex flex-col justify-between items-start mb-12 relative" style="z-index:1;">
                 <div class="mb-10">
