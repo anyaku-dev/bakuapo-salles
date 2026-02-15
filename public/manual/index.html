@@ -141,6 +141,50 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* --- Chat Reference Links --- */
+        .chat-ref-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .chat-ref-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #F0F4FF;
+            border: 1px solid #D0DBFF;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: all 0.15s;
+            line-height: 1.4;
+        }
+        .chat-ref-btn:hover {
+            background: #E0EAFF;
+            border-color: var(--accent-color);
+        }
+        .chat-ref-btn .ref-icon {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .chat-ref-btn .ref-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .chat-ref-btn .ref-badge.badge-video { background: #DBEAFE; color: #1D4ED8; }
+        .chat-ref-btn .ref-badge.badge-drive { background: #D1FAE5; color: #065F46; }
+        .chat-ref-btn .ref-badge.badge-qa { background: #FEF3C7; color: #92400E; }
+        .chat-ref-btn .ref-badge.badge-rebuttal { background: #FCE7F3; color: #9D174D; }
+
         /* --- Initial Loading Overlay --- */
         .initial-loading {
             display: flex;
@@ -1141,6 +1185,43 @@
     function handleChatKey(e) { if (e.key === 'Enter') sendChatMessage(); }
     function scrollToBottom() { els.chatMessages.scrollTop = els.chatMessages.scrollHeight; }
 
+    function navigateToItem(tab, index) {
+        // Close chat
+        els.chatWindow.classList.remove('active');
+        // Switch to tab
+        switchTab(tab);
+        // Wait for render then scroll to the item
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                let targetEl = null;
+                if (tab === 'video') {
+                    targetEl = document.getElementById(`video-${index}`);
+                } else if (tab === 'drive') {
+                    // For drive, find the file by index in current rendered items
+                    const allFileItems = document.querySelectorAll('#list-drive .drive-file-item');
+                    if (allFileItems[index]) targetEl = allFileItems[index];
+                } else if (tab === 'qa') {
+                    const allQaCards = document.querySelectorAll('#list-qa .qa-card');
+                    if (allQaCards[index]) targetEl = allQaCards[index];
+                } else if (tab === 'rebuttal') {
+                    const allRebuttalCards = document.querySelectorAll('#list-rebuttal .qa-card');
+                    if (allRebuttalCards[index]) targetEl = allRebuttalCards[index];
+                }
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Highlight briefly
+                    targetEl.style.transition = 'box-shadow 0.3s, outline 0.3s';
+                    targetEl.style.outline = '2px solid var(--accent-color)';
+                    targetEl.style.boxShadow = '0 0 0 4px rgba(35,131,226,0.15)';
+                    setTimeout(() => {
+                        targetEl.style.outline = 'none';
+                        targetEl.style.boxShadow = '';
+                    }, 2500);
+                }
+            });
+        });
+    }
+
     function formatChatMessage(text) {
         if (!text) return "";
         let formatted = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
@@ -1196,41 +1277,58 @@
         return (2.0 * intersection) / (bg1.length + bg2.length);
     }
 
-    function findBestContextWithFuzzyLogic(query) {
-        const allItems = [
-            ...state.data.video, 
-            ...state.data.drive,
-            ...state.data.qa,
-            ...state.data.rebuttal
+    function findRelevantContents(query, maxResults = 5) {
+        const taggedItems = [
+            ...state.data.video.map((item, i) => ({ ...item, _tab: 'video', _index: i })),
+            ...state.data.drive.map((item, i) => ({ ...item, _tab: 'drive', _index: i })),
+            ...state.data.qa.map((item, i) => ({ ...item, _tab: 'qa', _index: i })),
+            ...state.data.rebuttal.map((item, i) => ({ ...item, _tab: 'rebuttal', _index: i }))
         ];
-        
-        let bestMatch = null;
-        let highestScore = 0.0;
 
-        allItems.forEach(item => {
-            let targetText = "";
-            let displayText = "";
+        const scored = taggedItems.map(item => {
+            let targetText = '';
+            let displayText = '';
+            let refLabel = '';
 
             if (item.sourceType === 'manual') {
-                targetText = `${item.category} ${item.title}`;
+                targetText = `${item.category} ${item.title} ${item.desc || ''}`;
                 displayText = `[動画: ${item.title}] 内容: ${item.desc}`;
+                refLabel = item.title;
             } else if (item.sourceType === 'material') {
                 targetText = `${item.large} ${item.medium} ${item.small} ${item.detail} ${item.desc}`;
-                // Drive items don't have a single 'title' field in data structure, using combination
                 const name = item.detail || item.small || item.medium || item.large;
                 displayText = `[資料: ${name}] 内容: ${item.desc}`;
+                refLabel = name;
             } else {
-                targetText = `${item.question}`;
-                displayText = `[QA] Q: ${item.question}\nA: ${item.answer}`;
+                targetText = `${item.category} ${item.question} ${item.answer}`;
+                const tabLabel = item._tab === 'rebuttal' ? '切り返し' : 'Q&A';
+                displayText = `[${tabLabel}] Q: ${item.question}\nA: ${item.answer}`;
+                refLabel = item.question;
             }
 
-            const score = calculateSimilarity(query, targetText);
-            if (score > highestScore) {
-                highestScore = score;
-                bestMatch = { item, score, displayText };
-            }
+            // keyword-based boost: split query into words and check if they appear in target
+            const queryWords = query.toLowerCase().replace(/[\s　]+/g, ' ').split(' ').filter(w => w.length > 1);
+            let keywordScore = 0;
+            queryWords.forEach(w => {
+                if (targetText.toLowerCase().includes(w)) keywordScore += 0.15;
+            });
+
+            const bigramScore = calculateSimilarity(query, targetText);
+            const score = Math.min(bigramScore + keywordScore, 1.0);
+
+            return { item, score, displayText, refLabel, tab: item._tab, index: item._index };
         });
-        return bestMatch;
+
+        return scored
+            .filter(s => s.score >= THRESHOLDS.SUGGESTION)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, maxResults);
+    }
+
+    // Legacy wrapper for backward compatibility
+    function findBestContextWithFuzzyLogic(query) {
+        const results = findRelevantContents(query, 1);
+        return results.length > 0 ? results[0] : null;
     }
 
     async function sendChatMessage() {
@@ -1262,15 +1360,21 @@
         const loadingDiv = addTypingIndicator();
 
         try {
-            const bestContext = findBestContextWithFuzzyLogic(text);
-            const score = bestContext ? bestContext.score : 0;
-            let prompt = "";
-            const commonInstruction = `\n[AIの振る舞い・回答ルール]\n1. 機能に関する質問: 「パートナーQA、商談切り返し、動画・資料マニュアルの案内が可能です」と回答。\n2. 挨拶: 端的に返す。\n3. 不適切: 拒否する。\n4. フォーマット: **太字**使用。リンクは[こちら](URL)形式。`;
+            const relevantResults = findRelevantContents(text, 5);
+            const topScore = relevantResults.length > 0 ? relevantResults[0].score : 0;
+            let prompt = '';
+            const commonInstruction = `\n[AIの振る舞い・回答ルール]\n1. 機能に関する質問: 「パートナーQA、商談切り返し、動画・資料マニュアルの案内が可能です」と回答。\n2. 挨拶: 端的に返す。\n3. 不適切: 拒否する。\n4. フォーマット: **太字**使用。外部URLリンクは[こちら](URL)形式。\n5. 関連する参考情報がある場合は、回答内で「こちらの動画」「こちらのQ&A」「こちらの資料」「こちらの切り返し集」などの言葉で言及してください。具体的なリンクボタンは回答の後にシステムが自動で付与するため、回答文内にREF_LINKタグは書かないでください。`;
 
-            if (score >= THRESHOLDS.CONFIDENCE) {
-                prompt = `あなたは営業パートナー支援AIです。以下の[参考情報]を元に回答してください。URLがあれば必ず案内してください。\n\n[参考情報]\n${bestContext.displayText}\n\n[ユーザーの質問]\n${text}\n${commonInstruction}`;
-            } else if (score >= THRESHOLDS.SUGGESTION) {
-                prompt = `あなたは営業パートナー支援AIです。完全一致しませんでしたが、近い資料が見つかりました。「もしかしてこちらですか？」と提案してください。\n\n[近い資料]\n${bestContext.displayText}\n\n[ユーザーの質問]\n${text}\n${commonInstruction}`;
+            // Build context text from relevant results
+            const contextText = relevantResults.map((r, i) => {
+                const tabLabelMap = { video: '動画マニュアル', drive: '資料ドライブ', qa: 'Q&A', rebuttal: '切り返し集' };
+                return `${i+1}. [${tabLabelMap[r.tab]}] ${r.displayText}`;
+            }).join('\n');
+
+            if (topScore >= THRESHOLDS.CONFIDENCE) {
+                prompt = `あなたは営業パートナー支援AIです。以下の[参考情報]を元に質問に回答してください。複数の参考情報がある場合は、関連するものすべてに言及してください。\n\n[参考情報]\n${contextText}\n\n[ユーザーの質問]\n${text}\n${commonInstruction}`;
+            } else if (topScore >= THRESHOLDS.SUGGESTION) {
+                prompt = `あなたは営業パートナー支援AIです。完全一致しませんでしたが、近い資料が見つかりました。「もしかしてこちらですか？」と提案してください。\n\n[近い資料]\n${contextText}\n\n[ユーザーの質問]\n${text}\n${commonInstruction}`;
             } else {
                 prompt = `あなたは営業パートナー支援AIです。関連資料は見当たりませんでしたが、ルールに従って回答してください。業務的な質問で答えられない場合は謝罪してください。\n\n[ユーザーの質問]\n${text}\n${commonInstruction}`;
             }
@@ -1288,9 +1392,37 @@
             if (data.error) {
                 addMessage(`システムエラー: ${data.error.message}`, 'system');
             } else {
-                let answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "すみません、回答を生成できませんでした。";
+                let answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'すみません、回答を生成できませんでした。';
+                
+                // Build reference link buttons from relevant results
+                let refLinksHtml = '';
+                if (relevantResults.length > 0 && topScore >= THRESHOLDS.SUGGESTION) {
+                    const tabLabelMap = { video: '動画マニュアル', drive: '資料ドライブ', qa: 'Q&A', rebuttal: '切り返し集' };
+                    const badgeClassMap = { video: 'badge-video', drive: 'badge-drive', qa: 'badge-qa', rebuttal: 'badge-rebuttal' };
+                    const iconMap = {
+                        video: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+                        drive: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+                        qa: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+                        rebuttal: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+                    };
+                    refLinksHtml = '<div class="chat-ref-links">';
+                    // For drive items with external URLs, also provide external link
+                    relevantResults.forEach(r => {
+                        const label = r.refLabel.length > 30 ? r.refLabel.substring(0, 30) + '…' : r.refLabel;
+                        const badge = `<span class="ref-badge ${badgeClassMap[r.tab]}">${tabLabelMap[r.tab]}</span>`;
+                        const icon = iconMap[r.tab];
+                        if (r.tab === 'drive' && r.item.url && r.item.url !== '#') {
+                            // Drive: also offer external link
+                            refLinksHtml += `<a class="chat-ref-btn" href="${r.item.url}" target="_blank" rel="noopener noreferrer">${icon}${badge}<span>${label}</span></a>`;
+                        } else {
+                            refLinksHtml += `<a class="chat-ref-btn" onclick="navigateToItem('${r.tab}', ${r.index})">${icon}${badge}<span>${label}</span></a>`;
+                        }
+                    });
+                    refLinksHtml += '</div>';
+                }
+
                 const disclaimer = '<div style="display:block; margin-top:10px; padding-top:8px; border-top:1px solid rgba(0,0,0,0.1); font-size:11px; color:#888; line-height:1.4;">※回答は必ずしも正しいとは限りません。重要な情報は事務局まで確認するようにしてください。</div>';
-                addMessage(answer, 'bot', disclaimer);
+                addMessage(answer, 'bot', refLinksHtml + disclaimer);
             }
         } catch (err) {
             loadingDiv.remove();
