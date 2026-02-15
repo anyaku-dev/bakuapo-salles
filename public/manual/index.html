@@ -1023,7 +1023,7 @@
                 catMap[item.category] = card.id;
             }
             card.innerHTML += `<div class="category-badge">${item.category}</div>`;
-            const actions = createActionButtons(item.id);
+            const actions = createActionButtons(item.id, 'video');
             card.appendChild(actions);
             const h3 = document.createElement('h3');
             h3.className = 'video-title';
@@ -1063,7 +1063,7 @@
             grouped[cat].forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'qa-card';
-                const actions = createActionButtons(item.id);
+                const actions = createActionButtons(item.id, 'qa');
                 card.innerHTML = `
                     <div class="qa-question"><span class="qa-badge qa-badge-q">Q</span><span>${item.question}</span></div>
                     <div class="qa-answer"><span class="qa-badge qa-badge-a">A</span><span>${item.answer}</span></div>
@@ -1097,7 +1097,7 @@
             grouped[cat].forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'qa-card rebuttal-card';
-                const actions = createActionButtons(item.id);
+                const actions = createActionButtons(item.id, 'rebuttal');
                 card.innerHTML = `
                     <div class="qa-question rebuttal-objection"><span class="qa-badge rebuttal-badge-obj">質問</span><span>${item.question}</span></div>
                     <div class="qa-answer rebuttal-response"><span class="qa-badge rebuttal-badge-res">切返し</span><span>${item.answer}</span></div>
@@ -1235,7 +1235,7 @@
             wrapper.appendChild(info);
             li.appendChild(wrapper);
 
-            const actions = createActionButtons(file.id);
+            const actions = createActionButtons(file.id, 'drive');
             actions.onclick = (e) => { e.preventDefault(); e.stopPropagation(); };
             li.appendChild(actions);
             ul.appendChild(li);
@@ -1243,16 +1243,19 @@
         return ul;
     }
 
-    function createActionButtons(id) {
+    function createActionButtons(id, tab) {
         const div = document.createElement('div');
         div.className = 'action-buttons';
         const isStarred = state.starredItems.has(id);
         const isWatched = state.watchedItems.has(id);
+        const starTitle = isStarred ? 'スター付きを外す' : 'スター付きにする';
+        const checkLabel = tab === 'video' ? '試聴済み' : '確認済み';
+        const checkTitle = isWatched ? `${checkLabel}を外す` : `${checkLabel}にする`;
         div.innerHTML = `
-            <button class="icon-btn star-btn ${isStarred?'active':''}" onclick="toggleStar('${id}')">
+            <button class="icon-btn star-btn ${isStarred?'active':''}" onclick="toggleStar('${id}')" title="${starTitle}">
                 <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             </button>
-            <button class="icon-btn check-btn ${isWatched?'active':''}" onclick="toggleWatched('${id}')">
+            <button class="icon-btn check-btn ${isWatched?'active':''}" onclick="toggleWatched('${id}')" title="${checkTitle}">
                 <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </button>
         `;
