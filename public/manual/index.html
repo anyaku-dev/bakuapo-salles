@@ -1099,7 +1099,7 @@
                 card.className = 'qa-card rebuttal-card';
                 const actions = createActionButtons(item.id);
                 card.innerHTML = `
-                    <div class="qa-question rebuttal-objection"><span class="qa-badge rebuttal-badge-obj">反論</span><span>${item.question}</span></div>
+                    <div class="qa-question rebuttal-objection"><span class="qa-badge rebuttal-badge-obj">質問</span><span>${item.question}</span></div>
                     <div class="qa-answer rebuttal-response"><span class="qa-badge rebuttal-badge-res">切返し</span><span>${item.answer}</span></div>
                 `;
                 card.querySelector('.qa-question').appendChild(actions);
