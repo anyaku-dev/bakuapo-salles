@@ -633,7 +633,9 @@
                     } else {
                         url = cells[1].textContent.trim();
                     }
-                    if (title && url) items.push({ title, url });
+                    // 3列目があれば説明文として取得
+                    const desc = cells.length >= 3 ? cells[2].textContent.trim() : '';
+                    if (title && url) items.push({ title, url, desc });
                 }
             });
             return items;
@@ -678,7 +680,7 @@
                 <div class="card-body">
                     <span class="card-tag"><span class="dot" style="background:${info.color}"></span>${info.tag}</span>
                     <h2 class="card-title">${item.title}</h2>
-                    <p class="card-desc" id="desc-${index}"><span class="desc-loading">説明を生成中...</span></p>
+                    <p class="card-desc" id="desc-${index}">${item.desc ? item.desc : '<span class="desc-loading">説明を生成中...</span>'}</p>
                     <div class="card-footer">
                         <span class="card-url">${shortenUrl(item.url)}</span>
                         <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
@@ -755,10 +757,12 @@
                     grid.appendChild(card);
                 });
 
-                // 説明文を並行生成（レート制限を考慮して少し間隔を空ける）
+                // 説明文がない項目のみGemini APIで生成（レート制限を考慮して間隔を空ける）
                 for (let i = 0; i < items.length; i++) {
-                    generateDescription(items[i].title, items[i].url, i);
-                    if (i < items.length - 1) await new Promise(r => setTimeout(r, 200));
+                    if (!items[i].desc) {
+                        generateDescription(items[i].title, items[i].url, i);
+                        await new Promise(r => setTimeout(r, 200));
+                    }
                 }
 
             } catch (e) {
