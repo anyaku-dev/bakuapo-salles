@@ -1,3 +1,6 @@
 {
-  "outputDirectory": "public"
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/api/gdoc-proxy", "destination": "/api/gdoc-proxy" }
+  ]
 }

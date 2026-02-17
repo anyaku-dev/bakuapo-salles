@@ -365,158 +365,6 @@
             transform: translate(1px, -1px);
         }
 
-        /* --- Notice Section --- */
-        .notice-section {
-            margin-top: 56px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
-
-        .notice-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 28px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .notice-header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .notice-header-left svg {
-            width: 20px;
-            height: 20px;
-            color: var(--text-muted);
-            flex-shrink: 0;
-        }
-
-        .notice-header h2 {
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--text-primary);
-        }
-
-        .notice-update {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-family: 'Inter', monospace;
-        }
-
-        .notice-body {
-            padding: 28px;
-            font-size: 14px;
-            line-height: 1.85;
-            color: var(--text-secondary);
-        }
-
-        .notice-body h1,
-        .notice-body h2,
-        .notice-body h3,
-        .notice-body h4 {
-            color: var(--text-primary);
-            margin: 24px 0 12px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .notice-body h1:first-child,
-        .notice-body h2:first-child,
-        .notice-body h3:first-child {
-            margin-top: 0;
-        }
-
-        .notice-body h1 { font-size: 22px; }
-        .notice-body h2 { font-size: 18px; }
-        .notice-body h3 { font-size: 16px; }
-
-        .notice-body p {
-            margin: 8px 0;
-        }
-
-        .notice-body a {
-            color: #60A5FA;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(96,165,250,0.3);
-            transition: border-color 0.2s;
-        }
-
-        .notice-body a:hover {
-            border-color: #60A5FA;
-        }
-
-        .notice-body ul, .notice-body ol {
-            padding-left: 24px;
-            margin: 8px 0;
-        }
-
-        .notice-body li {
-            margin: 4px 0;
-        }
-
-        .notice-body hr {
-            border: none;
-            height: 1px;
-            background: var(--border);
-            margin: 20px 0;
-        }
-
-        .notice-body table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 16px 0;
-        }
-
-        .notice-body th, .notice-body td {
-            padding: 10px 14px;
-            border: 1px solid var(--border);
-            text-align: left;
-        }
-
-        .notice-body th {
-            background: var(--accent-subtle);
-            color: var(--text-primary);
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .notice-body img {
-            max-width: 100%;
-            border-radius: var(--radius-sm);
-        }
-
-        .notice-body strong, .notice-body b {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .notice-loading {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .notice-skeleton {
-            height: 16px;
-            width: 100%;
-            border-radius: 4px;
-            background: linear-gradient(110deg, #18181B 8%, #27272A 18%, #18181B 33%);
-            background-size: 200% 100%;
-            animation: skeleton-shimmer 1.5s ease-in-out infinite;
-        }
-
-        .notice-error {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
         /* --- Footer --- */
         .site-footer {
             text-align: center;
@@ -541,6 +389,23 @@
         @keyframes skeleton-shimmer {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            pointer-events: none;
+        }
+
+        .skeleton-line {
+            border-radius: 4px;
+            background: linear-gradient(110deg, #18181B 8%, #27272A 18%, #18181B 33%);
+            background-size: 200% 100%;
+            animation: skeleton-shimmer 1.5s ease-in-out infinite;
+        }
+
+        .desc-loading {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 12px;
         }
 
         /* --- Google Drive Embed Fallback --- */
@@ -618,17 +483,6 @@
             .card-preview {
                 aspect-ratio: 16 / 10;
             }
-
-            .notice-header {
-                padding: 16px 20px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 6px;
-            }
-
-            .notice-body {
-                padding: 20px;
-            }
         }
     </style>
 </head>
@@ -655,146 +509,46 @@
             <div class="hero-divider"></div>
         </section>
 
-        <div class="link-grid">
-
-            <!-- 1. BakuApo LP (Featured) -->
-            <a class="link-card featured" href="https://lp.bakuure.com/bakuapo-01" target="_blank" rel="noopener noreferrer">
-                <div class="card-preview">
-                    <div class="preview-skeleton" id="skeleton-lp"></div>
-                    <img src="" alt="BakuApo LP" style="display:none" id="preview-lp"
-                         onload="this.style.display='block'; document.getElementById('skeleton-lp').style.display='none';"
-                         onerror="this.parentElement.querySelector('.preview-skeleton').style.display='none'; this.style.display='none'; showFallback(this.parentElement, 'LP');">
-                    <div class="card-preview-overlay"></div>
-                </div>
+        <!-- 動的生成されるカードグリッド -->
+        <div class="link-grid" id="linkGrid">
+            <!-- ローディングスケルトン -->
+            <div class="link-card skeleton-card" aria-hidden="true">
+                <div class="card-preview"><div class="preview-skeleton"></div></div>
                 <div class="card-body">
-                    <span class="card-tag"><span class="dot" style="background:#3B82F6"></span>Landing Page</span>
-                    <h2 class="card-title">BakuApo LP</h2>
-                    <p class="card-desc">BakuApoのランディングページです。お客様への共有やご紹介にご利用ください。</p>
-                    <div class="card-footer">
-                        <span class="card-url">lp.bakuure.com/bakuapo-01</span>
-                        <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
-                    </div>
+                    <div class="skeleton-line" style="width:80px;height:12px"></div>
+                    <div class="skeleton-line" style="width:70%;height:20px"></div>
+                    <div class="skeleton-line" style="width:100%;height:14px"></div>
+                    <div class="skeleton-line" style="width:90%;height:14px"></div>
                 </div>
-            </a>
-
-            <!-- 2. BakuApo 営業資料 -->
-            <a class="link-card" href="https://drive.google.com/file/d/1-hbDzZ1e7Wa7q9Xpymc--aJy9AISIq9l/view" target="_blank" rel="noopener noreferrer">
-                <div class="card-preview">
-                    <img src="https://drive.google.com/thumbnail?id=1-hbDzZ1e7Wa7q9Xpymc--aJy9AISIq9l&sz=w800" alt="営業資料プレビュー"
-                         onerror="this.style.display='none'; showFallback(this.parentElement, 'PDF');">
-                    <div class="card-preview-overlay"></div>
-                </div>
+            </div>
+            <div class="link-card skeleton-card" aria-hidden="true">
+                <div class="card-preview"><div class="preview-skeleton"></div></div>
                 <div class="card-body">
-                    <span class="card-tag"><span class="dot" style="background:#EF4444"></span>Sales Document</span>
-                    <h2 class="card-title">BakuApo 営業資料</h2>
-                    <p class="card-desc">商談でご活用いただける営業資料です。サービス概要・料金・導入フローをまとめています。</p>
-                    <div class="card-footer">
-                        <span class="card-url">drive.google.com</span>
-                        <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
-                    </div>
+                    <div class="skeleton-line" style="width:80px;height:12px"></div>
+                    <div class="skeleton-line" style="width:60%;height:20px"></div>
+                    <div class="skeleton-line" style="width:100%;height:14px"></div>
+                    <div class="skeleton-line" style="width:85%;height:14px"></div>
                 </div>
-            </a>
-
-            <!-- 3. BakuApo 購入フォーム -->
-            <a class="link-card" href="https://tally.so/r/kdE5Ed" target="_blank" rel="noopener noreferrer">
-                <div class="card-preview">
-                    <div class="preview-skeleton" id="skeleton-form"></div>
-                    <img src="" alt="購入フォーム" style="display:none" id="preview-form"
-                         onload="this.style.display='block'; document.getElementById('skeleton-form').style.display='none';"
-                         onerror="this.parentElement.querySelector('.preview-skeleton').style.display='none'; this.style.display='none'; showFallback(this.parentElement, 'FORM');">
-                    <div class="card-preview-overlay"></div>
-                </div>
+            </div>
+            <div class="link-card skeleton-card" aria-hidden="true">
+                <div class="card-preview"><div class="preview-skeleton"></div></div>
                 <div class="card-body">
-                    <span class="card-tag"><span class="dot" style="background:#22C55E"></span>Order Form</span>
-                    <h2 class="card-title">BakuApo 購入フォーム</h2>
-                    <p class="card-desc">お客様がBakuApoをお申し込みいただく際の購入フォームです。</p>
-                    <div class="card-footer">
-                        <span class="card-url">tally.so/r/kdE5Ed</span>
-                        <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
-                    </div>
+                    <div class="skeleton-line" style="width:100px;height:12px"></div>
+                    <div class="skeleton-line" style="width:50%;height:20px"></div>
+                    <div class="skeleton-line" style="width:95%;height:14px"></div>
+                    <div class="skeleton-line" style="width:70%;height:14px"></div>
                 </div>
-            </a>
-
-            <!-- 4. デモアプリ (Web) -->
-            <a class="link-card" href="https://demo-three-sage.vercel.app/" target="_blank" rel="noopener noreferrer">
-                <div class="card-preview">
-                    <div class="preview-skeleton" id="skeleton-demo"></div>
-                    <img src="" alt="デモアプリ" style="display:none" id="preview-demo"
-                         onload="this.style.display='block'; document.getElementById('skeleton-demo').style.display='none';"
-                         onerror="this.parentElement.querySelector('.preview-skeleton').style.display='none'; this.style.display='none'; showFallback(this.parentElement, 'APP');">
-                    <div class="card-preview-overlay"></div>
-                </div>
+            </div>
+            <div class="link-card skeleton-card" aria-hidden="true">
+                <div class="card-preview"><div class="preview-skeleton"></div></div>
                 <div class="card-body">
-                    <span class="card-tag"><span class="dot" style="background:#A855F7"></span>Web Application</span>
-                    <h2 class="card-title">デモアプリ（Web）</h2>
-                    <p class="card-desc">BakuApoのデモ版をブラウザでお試しいただけます。お客様への画面共有にもご活用ください。</p>
-                    <div class="card-footer">
-                        <span class="card-url">demo-three-sage.vercel.app</span>
-                        <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
-                    </div>
+                    <div class="skeleton-line" style="width:90px;height:12px"></div>
+                    <div class="skeleton-line" style="width:65%;height:20px"></div>
+                    <div class="skeleton-line" style="width:100%;height:14px"></div>
+                    <div class="skeleton-line" style="width:80%;height:14px"></div>
                 </div>
-            </a>
-
-            <!-- 5. デモ動画 -->
-            <a class="link-card" href="https://drive.google.com/file/d/1UCWTX2PeAaDZ98nGNKrmr0j66wBXUKes/view" target="_blank" rel="noopener noreferrer">
-                <div class="card-preview">
-                    <img src="https://drive.google.com/thumbnail?id=1UCWTX2PeAaDZ98nGNKrmr0j66wBXUKes&sz=w800" alt="デモ動画"
-                         onerror="this.style.display='none'; showFallback(this.parentElement, 'VIDEO');">
-                    <div class="card-preview-overlay"></div>
-                    <div class="play-icon">
-                        <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="card-tag"><span class="dot" style="background:#F59E0B"></span>Video</span>
-                    <h2 class="card-title">デモ動画</h2>
-                    <p class="card-desc">BakuApoの操作デモ動画です。商談前の確認やお客様へのご紹介にご利用いただけます。</p>
-                    <div class="card-footer">
-                        <span class="card-url">drive.google.com</span>
-                        <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- 6. マニュアルサイト -->
-            <a class="link-card" href="https://partner.bakuapo.com/manual" target="_blank" rel="noopener noreferrer">
-                <div class="card-preview">
-                    <div class="preview-skeleton" id="skeleton-manual"></div>
-                    <img src="" alt="マニュアルサイト" style="display:none" id="preview-manual"
-                         onload="this.style.display='block'; document.getElementById('skeleton-manual').style.display='none';"
-                         onerror="this.parentElement.querySelector('.preview-skeleton').style.display='none'; this.style.display='none'; showFallback(this.parentElement, 'MANUAL');">
-                    <div class="card-preview-overlay"></div>
-                </div>
-                <div class="card-body">
-                    <span class="card-tag"><span class="dot" style="background:#06B6D4"></span>Manual</span>
-                    <h2 class="card-title">マニュアルサイト</h2>
-                    <p class="card-desc">動画マニュアル・資料ドライブ・Q&A・切り返し集を搭載したパートナー様向け総合マニュアルです。</p>
-                    <div class="card-footer">
-                        <span class="card-url">partner.bakuapo.com/manual</span>
-                        <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
-                    </div>
-                </div>
-            </a>
-
+            </div>
         </div>
-
-        <!-- お知らせセクション（Google Docs から自動取得） -->
-        <section class="notice-section" id="noticeSection" style="display:none">
-            <div class="notice-header">
-                <div class="notice-header-left">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                    <h2>お知らせ</h2>
-                </div>
-                <span class="notice-update" id="noticeUpdate"></span>
-            </div>
-            <div class="notice-body" id="noticeBody">
-                <div class="notice-loading">
-                    <div class="notice-skeleton"></div>
-                    <div class="notice-skeleton" style="width:80%"></div>
-                    <div class="notice-skeleton" style="width:60%"></div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer class="site-footer">
@@ -802,93 +556,242 @@
     </footer>
 
     <script>
-        // --- Fallback for images that fail to load ---
+        const GEMINI_API_KEY = 'AIzaSyBxxrrp9_VZaToi63RHLij2xGg8Aov1vWo';
+        const GDOC_PROXY_URL = '/api/gdoc-proxy';
+
+        // --- URL分類・タグ・色の自動推定 ---
+        function classifyUrl(url, title) {
+            const u = url.toLowerCase();
+            const t = title.toLowerCase();
+            if (t.includes('lp') || t.includes('ランディング') || u.includes('lp.'))
+                return { tag: 'Landing Page', color: '#3B82F6', type: 'LP' };
+            if (t.includes('営業資料') || t.includes('資料') || (u.includes('drive.google.com') && !t.includes('動画') && !t.includes('デモ')))
+                return { tag: 'Sales Document', color: '#EF4444', type: 'PDF' };
+            if (t.includes('購入') || t.includes('フォーム') || u.includes('tally.so'))
+                return { tag: 'Order Form', color: '#22C55E', type: 'FORM' };
+            if (t.includes('デモアプリ') || t.includes('アプリ') || (u.includes('vercel.app') && !t.includes('マニュアル')))
+                return { tag: 'Web Application', color: '#A855F7', type: 'APP' };
+            if (t.includes('動画') || t.includes('ビデオ') || t.includes('video'))
+                return { tag: 'Video', color: '#F59E0B', type: 'VIDEO' };
+            if (t.includes('マニュアル') || t.includes('manual'))
+                return { tag: 'Manual', color: '#06B6D4', type: 'MANUAL' };
+            return { tag: 'Link', color: '#8B5CF6', type: 'LP' };
+        }
+
+        // --- Google Drive サムネイル生成 ---
+        function getDriveThumbnailUrl(url) {
+            const match = url.match(/\/d\/([^/]+)/);
+            if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
+            return null;
+        }
+
+        // --- URL表示用のドメイン短縮 ---
+        function shortenUrl(url) {
+            try {
+                const u = new URL(url);
+                let display = u.hostname.replace(/^www\./, '') + u.pathname;
+                if (display.endsWith('/')) display = display.slice(0, -1);
+                return display.length > 40 ? display.slice(0, 37) + '...' : display;
+            } catch { return url; }
+        }
+
+        // --- Fallback SVGアイコン ---
+        const fallbackIcons = {
+            LP: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><circle cx="7" cy="6" r="1"/><circle cx="10" cy="6" r="1"/></svg>',
+            PDF: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h6"/><path d="M9 11h6"/></svg>',
+            FORM: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>',
+            APP: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>',
+            VIDEO: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21"/></svg>',
+            MANUAL: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>'
+        };
+
         function showFallback(container, type) {
-            const icons = {
-                LP: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><circle cx="7" cy="6" r="1"/><circle cx="10" cy="6" r="1"/></svg>`,
-                PDF: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h6"/><path d="M9 11h6"/></svg>`,
-                FORM: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>`,
-                APP: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>`,
-                VIDEO: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21"/></svg>`,
-                MANUAL: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>`
-            };
             const labels = { LP: 'Landing Page', PDF: 'Document', FORM: 'Form', APP: 'Web App', VIDEO: 'Video', MANUAL: 'Manual' };
             const fb = document.createElement('div');
             fb.className = 'drive-preview';
-            fb.innerHTML = `<div class="drive-icon">${icons[type] || icons.LP}<span>${labels[type] || type}</span></div>`;
-            // Insert before overlay
+            fb.innerHTML = `<div class="drive-icon">${fallbackIcons[type] || fallbackIcons.LP}<span>${labels[type] || type}</span></div>`;
             const overlay = container.querySelector('.card-preview-overlay');
             if (overlay) container.insertBefore(fb, overlay);
             else container.appendChild(fb);
         }
 
-        // --- Screenshot thumbnails via microlink / opengraph ---
-        function loadScreenshots() {
-            const targets = [
-                { id: 'preview-lp', url: 'https://lp.bakuure.com/bakuapo-01' },
-                { id: 'preview-form', url: 'https://tally.so/r/kdE5Ed' },
-                { id: 'preview-demo', url: 'https://demo-three-sage.vercel.app/' },
-                { id: 'preview-manual', url: 'https://partner.bakuapo.com/manual' }
-            ];
+        // --- Google Docs テーブルパーサー ---
+        function parseGoogleDocTable(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const rows = doc.querySelectorAll('table tr');
+            const items = [];
 
-            targets.forEach(t => {
-                const img = document.getElementById(t.id);
-                if (!img) return;
-                // Use Microlink screenshot API for live preview
-                img.src = `https://api.microlink.io/?url=${encodeURIComponent(t.url)}&screenshot=true&meta=false&embed=screenshot.url&type=png&viewport.width=1280&viewport.height=720`;
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 2) {
+                    const title = cells[0].textContent.trim();
+                    const link = cells[1].querySelector('a');
+                    let url = '';
+                    if (link) {
+                        url = link.getAttribute('href') || '';
+                        // Google Docs redirect URL を実URLに変換
+                        const realUrl = url.match(/[?&]q=([^&]+)/);
+                        if (realUrl) url = decodeURIComponent(realUrl[1]);
+                    } else {
+                        url = cells[1].textContent.trim();
+                    }
+                    if (title && url) items.push({ title, url });
+                }
             });
+            return items;
         }
 
-        // Load screenshots on page ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => { loadScreenshots(); loadGoogleDocNotice(); });
-        } else {
-            loadScreenshots();
-            loadGoogleDocNotice();
+        // --- プレビュー画像の取得 ---
+        function getPreviewSrc(url, type) {
+            if (type === 'PDF' || type === 'VIDEO') {
+                const thumb = getDriveThumbnailUrl(url);
+                if (thumb) return { type: 'direct', src: thumb };
+            }
+            // Webページはmicrolinkでスクリーンショット
+            return { type: 'microlink', src: `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=true&meta=false&embed=screenshot.url&type=png&viewport.width=1280&viewport.height=720` };
         }
 
-        // --- Google Docs notice auto-fetch ---
-        async function loadGoogleDocNotice() {
-            const docUrl = 'https://docs.google.com/document/d/e/2PACX-1vRON0qRusw-ReJWYTqB9M1rJK_9_QP8KYLBs81ZJXHw5rzySrEnQeF6zXr2OZMfwPe8P8zsJIKUOS8D/pub';
-            const section = document.getElementById('noticeSection');
-            const body = document.getElementById('noticeBody');
-            const updateEl = document.getElementById('noticeUpdate');
+        // --- カードHTML生成 ---
+        function createCardElement(item, index, totalItems) {
+            const info = classifyUrl(item.url, item.title);
+            const preview = getPreviewSrc(item.url, info.type);
+            const isFirst = index === 0;
+            const skeletonId = `skeleton-${index}`;
+            const imgId = `preview-img-${index}`;
+            const isVideo = info.type === 'VIDEO';
+
+            const card = document.createElement('a');
+            card.className = `link-card${isFirst ? ' featured' : ''}`;
+            card.href = item.url;
+            card.target = '_blank';
+            card.rel = 'noopener noreferrer';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(16px)';
+
+            card.innerHTML = `
+                <div class="card-preview">
+                    <div class="preview-skeleton" id="${skeletonId}"></div>
+                    <img src="${preview.src}" alt="${item.title}" style="display:none" id="${imgId}"
+                         onload="this.style.display='block'; document.getElementById('${skeletonId}').style.display='none';"
+                         onerror="this.parentElement.querySelector('.preview-skeleton').style.display='none'; this.style.display='none'; showFallback(this.parentElement, '${info.type}');">
+                    <div class="card-preview-overlay"></div>
+                    ${isVideo ? '<div class="play-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>' : ''}
+                </div>
+                <div class="card-body">
+                    <span class="card-tag"><span class="dot" style="background:${info.color}"></span>${info.tag}</span>
+                    <h2 class="card-title">${item.title}</h2>
+                    <p class="card-desc" id="desc-${index}"><span class="desc-loading">説明を生成中...</span></p>
+                    <div class="card-footer">
+                        <span class="card-url">${shortenUrl(item.url)}</span>
+                        <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
+                    </div>
+                </div>
+            `;
+
+            // フェードインアニメーション
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 80);
+            });
+
+            return card;
+        }
+
+        // --- Gemini APIで説明文を生成 ---
+        async function generateDescription(title, url, index) {
+            const descEl = document.getElementById(`desc-${index}`);
+            if (!descEl) return;
 
             try {
-                const res = await fetch(docUrl);
-                if (!res.ok) throw new Error('Fetch failed');
+                const prompt = `以下のリンクについて、代理店の営業担当者向けに1文（40〜60文字）で簡潔な説明文を生成してください。敬語で、「〜ください」「〜いただけます」のような語尾にしてください。余計な前置きや記号は不要で、説明文のみ返してください。\n\nタイトル: ${title}\nURL: ${url}`;
+
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.3, maxOutputTokens: 100 }
+                    })
+                });
+
+                if (!res.ok) throw new Error('Gemini API error');
+                const data = await res.json();
+                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+                if (text) {
+                    descEl.textContent = text;
+                    descEl.style.opacity = '0';
+                    requestAnimationFrame(() => {
+                        descEl.style.transition = 'opacity 0.4s ease';
+                        descEl.style.opacity = '1';
+                    });
+                } else {
+                    descEl.textContent = '';
+                }
+            } catch (e) {
+                console.warn(`Description generation failed for "${title}":`, e);
+                descEl.textContent = '';
+            }
+        }
+
+        // --- メインロード ---
+        async function loadLinksFromGoogleDoc() {
+            const grid = document.getElementById('linkGrid');
+
+            try {
+                const res = await fetch(GDOC_PROXY_URL);
+                if (!res.ok) throw new Error(`Proxy fetch failed: ${res.status}`);
                 const html = await res.text();
+                const items = parseGoogleDocTable(html);
 
-                // Parse the Google Docs HTML
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const content = doc.getElementById('contents') || doc.querySelector('.doc-content') || doc.body;
+                if (items.length === 0) throw new Error('No items found in document');
 
-                if (!content || !content.textContent.trim()) {
-                    body.innerHTML = '<p class="notice-error">お知らせはありません。</p>';
-                    section.style.display = 'block';
-                    return;
+                // スケルトンを削除
+                grid.innerHTML = '';
+
+                // カード生成
+                items.forEach((item, index) => {
+                    const card = createCardElement(item, index, items.length);
+                    grid.appendChild(card);
+                });
+
+                // 説明文を並行生成（レート制限を考慮して少し間隔を空ける）
+                for (let i = 0; i < items.length; i++) {
+                    generateDescription(items[i].title, items[i].url, i);
+                    if (i < items.length - 1) await new Promise(r => setTimeout(r, 200));
                 }
 
-                // Clean up Google Docs styles
-                let cleaned = content.innerHTML;
-                // Remove Google's inline styles that conflict with dark theme
-                cleaned = cleaned.replace(/style="[^"]*"/gi, '');
-                // Remove Google's class attributes
-                cleaned = cleaned.replace(/class="[^"]*"/gi, '');
-                // Remove empty spans
-                cleaned = cleaned.replace(/<span>\s*<\/span>/gi, '');
-                // Clean up Google's wrapper divs but keep content structure
-                cleaned = cleaned.replace(/<div>\s*<\/div>/gi, '');
-
-                body.innerHTML = cleaned;
-                updateEl.textContent = 'Google Docs と同期中';
-                section.style.display = 'block';
             } catch (e) {
-                console.warn('Google Doc fetch error:', e);
-                body.innerHTML = '<p class="notice-error">お知らせの読み込みに失敗しました。</p>';
-                section.style.display = 'block';
+                console.error('Google Doc load error:', e);
+                // フォールバック: 静的データ
+                const fallbackItems = [
+                    { title: 'BakuApoのLP', url: 'https://lp.bakuure.com/bakuapo-01' },
+                    { title: 'BakuApo営業資料', url: 'https://drive.google.com/file/d/1-hbDzZ1e7Wa7q9Xpymc--aJy9AISIq9l/view' },
+                    { title: 'BakuApo購入フォーム', url: 'https://tally.so/r/kdE5Ed' },
+                    { title: 'デモアプリ (Web)', url: 'https://demo-three-sage.vercel.app/' },
+                    { title: 'デモ動画', url: 'https://drive.google.com/file/d/1UCWTX2PeAaDZ98nGNKrmr0j66wBXUKes/view' },
+                    { title: 'マニュアルサイト', url: 'https://partner.bakuapo.com/manual' }
+                ];
+                grid.innerHTML = '';
+                fallbackItems.forEach((item, index) => {
+                    const card = createCardElement(item, index, fallbackItems.length);
+                    grid.appendChild(card);
+                });
+                for (let i = 0; i < fallbackItems.length; i++) {
+                    generateDescription(fallbackItems[i].title, fallbackItems[i].url, i);
+                    if (i < fallbackItems.length - 1) await new Promise(r => setTimeout(r, 200));
+                }
             }
+        }
+
+        // --- 起動 ---
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadLinksFromGoogleDoc);
+        } else {
+            loadLinksFromGoogleDoc();
         }
     </script>
 </body>
