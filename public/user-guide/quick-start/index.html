@@ -466,8 +466,146 @@
             color: var(--text-muted);
         }
 
+        /* --- Download Card --- */
+        .dl-hero {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .dl-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--success);
+            background: rgba(16,185,129,0.08);
+            padding: 5px 14px;
+            border-radius: 100px;
+            margin-bottom: 20px;
+        }
+        .dl-hero-badge svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+        .dl-hero h3 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+        .dl-hero .dl-version {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+        .dl-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .dl-option {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 24px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .dl-option:hover {
+            border-color: var(--accent);
+            background: var(--accent-subtle);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(8,82,255,0.1);
+        }
+        .dl-option-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dl-option-icon.windows { background: rgba(0,120,215,0.1); }
+        .dl-option-icon.mac { background: rgba(0,0,0,0.06); }
+        .dl-option-icon svg { width: 28px; height: 28px; }
+        .dl-option-title {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        .dl-option-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .dl-option-file {
+            font-size: 11px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: var(--text-muted);
+            background: var(--bg-alt);
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .dl-option-size {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .dl-option-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            background: var(--accent);
+            padding: 10px 24px;
+            border-radius: 10px;
+            transition: background 0.2s;
+            width: 100%;
+            justify-content: center;
+        }
+        .dl-option:hover .dl-option-btn { background: #063FCC; }
+        .dl-option-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .dl-trust {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .dl-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .dl-trust-item svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+        .dl-auto-detect {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .dl-auto-detect strong { color: var(--accent); font-weight: 600; }
+
         /* --- Responsive --- */
         @media (max-width: 640px) {
+            .dl-options { grid-template-columns: 1fr; }
+            .dl-hero { padding: 28px 20px; }
             .article { padding: 0 16px 80px; }
             .hero { padding: 48px 0 36px; }
             .hero h1 { font-size: 24px; }
@@ -508,8 +646,9 @@
             <p class="toc-title">Contents</p>
             <ol>
                 <li><a href="#intro">はじめに</a></li>
-                <li><a href="#download-windows">ダウンロード方法（Windows）</a></li>
-                <li><a href="#download-mac">ダウンロード方法（Mac）</a></li>
+                <li><a href="#download">アプリをダウンロード</a></li>
+                <li><a href="#setup-windows">セットアップ方法（Windows）</a></li>
+                <li><a href="#setup-mac">セットアップ方法（Mac）</a></li>
                 <li><a href="#usage">アプリ操作方法</a></li>
             </ol>
         </nav>
@@ -537,59 +676,117 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- 2. ダウンロード方法 (Windows) -->
+        <!-- 2. アプリをダウンロード -->
         <!-- ========================================== -->
-        <section class="guide-section" id="download-windows">
+        <section class="guide-section" id="download">
             <div class="section-header">
                 <span class="section-number">2</span>
-                <h2 class="section-title">ダウンロード方法（Windows）</h2>
+                <h2 class="section-title">アプリをダウンロード</h2>
             </div>
             <p class="section-intro">
-                Windows版BakuApoのダウンロードとセットアップ手順をご案内いたします。
+                お使いのOSに合わせて、以下よりインストーラーをダウンロードしてください。<br>
+                ボタンをクリックすると、すぐにダウンロードが開始されます。
+            </p>
+
+            <div class="dl-hero">
+                <span class="dl-hero-badge">
+                    <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    Latest Release
+                </span>
+                <h3>BakuApo Simple</h3>
+                <p class="dl-version">Version 1.0.1</p>
+                <p class="dl-auto-detect" id="osDetect"></p>
+
+                <div class="dl-options">
+                    <!-- Windows -->
+                    <a href="/app-download/BAKUAPO%20Simple%20Setup%201.0.1.exe" download class="dl-option" id="dlWindows">
+                        <div class="dl-option-icon windows">
+                            <svg viewBox="0 0 24 24" fill="#0078D7"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+                        </div>
+                        <span class="dl-option-title">Windows</span>
+                        <div class="dl-option-meta">
+                            <span class="dl-option-file">.exe インストーラー</span>
+                            <span class="dl-option-size">314 MB</span>
+                        </div>
+                        <span class="dl-option-btn">
+                            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            ダウンロード
+                        </span>
+                    </a>
+                    <!-- Mac -->
+                    <a href="/app-download/BAKUAPO%20Simple-1.0.1-arm64.dmg" download class="dl-option" id="dlMac">
+                        <div class="dl-option-icon mac">
+                            <svg viewBox="0 0 24 24" fill="#000"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                        </div>
+                        <span class="dl-option-title">macOS</span>
+                        <div class="dl-option-meta">
+                            <span class="dl-option-file">.dmg ディスクイメージ</span>
+                            <span class="dl-option-size">221 MB（Apple Silicon）</span>
+                        </div>
+                        <span class="dl-option-btn">
+                            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            ダウンロード
+                        </span>
+                    </a>
+                </div>
+
+                <div class="dl-trust">
+                    <span class="dl-trust-item">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        安全なサーバーから配信
+                    </span>
+                    <span class="dl-trust-item">
+                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        ウイルスチェック済み
+                    </span>
+                    <span class="dl-trust-item">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        ワンクリックで即時ダウンロード
+                    </span>
+                </div>
+            </div>
+
+            <div class="callout callout-info">
+                <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                <div>
+                    ダウンロード完了後は、お使いのOSに合わせて<a href="#setup-windows">Windows版</a>または<a href="#setup-mac">Mac版</a>のセットアップ手順にお進みください。
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. セットアップ方法 (Windows) -->
+        <!-- ========================================== -->
+        <section class="guide-section" id="setup-windows">
+            <div class="section-header">
+                <span class="section-number">3</span>
+                <h2 class="section-title">セットアップ方法（Windows）</h2>
+            </div>
+            <p class="section-intro">
+                ダウンロードしたインストーラー（.exe）を実行し、画面の指示に沿ってセットアップを行います。
             </p>
 
             <!-- Step 1 -->
             <div class="step">
                 <span class="step-label">Step 1</span>
-                <h3>ダウンロードリンクを開く</h3>
-                <p>以下のボタンをクリックして、Google Driveのダウンロードページを開いてください。</p>
-                <a href="https://drive.google.com/file/d/16CXpDO_cv7dh4GxO691-EBKhNVDu3-kG/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="download-btn">
-                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Windows版をダウンロード
-                </a>
+                <h3>インストーラーを実行する</h3>
+                <p>ダウンロードした「<strong>BAKUAPO Simple Setup 1.0.1.exe</strong>」をダブルクリックして実行してください。<br>
+                ブラウザの下部やダウンロードフォルダからお開きいただけます。</p>
+                <div class="callout callout-warning">
+                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>
+                    <div>
+                        Windows SmartScreenの警告が表示される場合がございます。<br>
+                        「<strong>詳細情報</strong>」をクリックし、「<strong>実行</strong>」を選択してください。安全にインストールいただけます。
+                    </div>
+                </div>
             </div>
 
             <!-- Step 2 -->
             <div class="step">
                 <span class="step-label">Step 2</span>
-                <h3>ダウンロードを開始する</h3>
-                <p>Google Driveの画面が表示されましたら、画面上部にあるダウンロードボタン（赤枠の部分）をクリックしてください。</p>
-                <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUe1STd5aJ-vEEDtU88LO7TPc0d1isi-_p8tPbSfdIZaF_15dzqlMXtkXX1aeXwYd74bJygvZCaSY9WkCuJTdW0hhcGJDsiCHkfW6qSnUf6kivEebOloqhJrpn8zG8F2eB2CcMqkU0hKA7Cy=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="Google Driveのダウンロードボタンをクリック" loading="lazy">
-                <p>続いて表示される確認画面でも、赤枠の部分をクリックしてダウンロードを進めてください。</p>
-                <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUcwz3ucHV9mXDoEYPymnDEYQO-CwwM7SXKBf0NgbFaC6h7tQYCmtVINdUk6XIrmqe8JQN78aWxdk3FNAcQwTdI0NPh9NDSXD6uKYKz4edM7aqMxNnMrEPbj2IaGaeVx4WGUeKm7aWw7stqM=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="ダウンロード確認画面" loading="lazy">
-            </div>
-
-            <!-- Step 3 - Error -->
-            <div class="step">
-                <span class="step-label">Step 3</span>
-                <h3>エラーが表示された場合の対処方法</h3>
-                <p>ダウンロード時に、ブラウザ（Edge等）のセキュリティにより警告が表示される場合がございます。</p>
-                <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUdKg9qPYFy-ubrW4fu2tSnSQCukaVqmXorZ5KQ3FmJUMtF2dH-MDPGFJN8KAhJhJrXFLbYAU5Zd5k2MEQQXThsnf4qeMmgchuV4gxQGOCw8EfIzV5p2og9btpd2BD6N7PZi84wTpcRsO3E=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="ダウンロードエラー画面" loading="lazy">
-                <div class="callout callout-warning">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>
-                    <div>
-                        このようなエラーが表示された場合は、以下のリンクを参考にしていただければ解決できます。<br>
-                        <a href="https://www.systemgear.com/spt/info/info_dl_edge.html" target="_blank" rel="noopener noreferrer">Edge でのダウンロードエラー解決方法 →</a>
-                    </div>
-                </div>
-                <p>リンク先の手順に沿って操作いただければ、正常にダウンロードが完了いたします。</p>
-            </div>
-
-            <!-- Step 4 - Success -->
-            <div class="step">
-                <span class="step-label">Step 4</span>
-                <h3>ダウンロード完了</h3>
-                <p>ダウンロードが完了し、以下のような画面が表示されましたら成功です。BakuApoがお使いいただけるようになります。</p>
+                <h3>セットアップ完了</h3>
+                <p>インストーラーの指示に沿って操作すると、自動的にセットアップが完了します。<br>
+                以下のような画面が表示されましたら、BakuApoが正常にインストールされています。</p>
                 <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUdXN9wIPPo5CtjlyBILRDh60hS5j2YQRqWpx3WmjT-HywRSJyn1sGLLMTZKNpCwJmA0gl7qohm0Nj-59ye3miAkl-tcYGOMw7pRLQC1XuldlYPXGlI3r6Acgtm5QOka5GXwv9XB_VF2sxJN=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="BakuApo起動成功画面" loading="lazy">
                 <div class="callout callout-success">
                     <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -599,69 +796,44 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- 3. ダウンロード方法 (Mac) -->
+        <!-- 4. セットアップ方法 (Mac) -->
         <!-- ========================================== -->
-        <section class="guide-section" id="download-mac">
+        <section class="guide-section" id="setup-mac">
             <div class="section-header">
-                <span class="section-number">3</span>
-                <h2 class="section-title">ダウンロード方法（Mac）</h2>
+                <span class="section-number">4</span>
+                <h2 class="section-title">セットアップ方法（Mac）</h2>
             </div>
             <p class="section-intro">
-                Mac版BakuApoのダウンロードからインストールまでの手順をご案内いたします。
+                ダウンロードしたディスクイメージ（.dmg）を開き、アプリケーションフォルダにインストールします。
             </p>
 
             <!-- Step 1 -->
             <div class="step">
                 <span class="step-label">Step 1</span>
-                <h3>ダウンロードリンクを開く</h3>
-                <p>以下のボタンをクリックして、Google Driveのダウンロードページを開いてください。</p>
-                <a href="https://drive.google.com/file/d/18DdgntLvFbqgkLqmZTXqt4FLbOHt1yqw/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="download-btn">
-                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Mac版をダウンロード
-                </a>
+                <h3>ディスクイメージを開く</h3>
+                <p>ダウンロードした「<strong>BAKUAPO Simple-1.0.1-arm64.dmg</strong>」をダブルクリックして開いてください。<br>
+                以下のような画面が表示されます。</p>
+                <div class="callout callout-info">
+                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    <div>ファイルの展開に少しお時間がかかる場合がございます。焦らずお待ちくださいませ。</div>
+                </div>
             </div>
 
             <!-- Step 2 -->
             <div class="step">
                 <span class="step-label">Step 2</span>
-                <h3>ダウンロードを開始する</h3>
-                <p>Google Driveの画面にて、赤枠のダウンロードボタンをクリックしてください。</p>
-                <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUdPmjqzUjSQSn4Ldvy2DobOW_wS7WKE4NoDBU6XZQPhAZydqGBY0OJCxLrf0LJcjpYtXzdG4OMxV1qlAxuOIXFlCieD7KBr4bI0OQw9Lc42dWcu5bX53OCtxcUrf2BmeNMsY5SqxrxlAK82=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="Mac版 Google Driveダウンロードボタン" loading="lazy">
-                <p>続けて表示される確認画面でも、同様にクリックしてください。</p>
-                <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUf1fIExaB1LGl4hSmRBGNH_-5gJPDVhiwlNjFw6Qn4b0-XmwkaF3Hm2x7WeThG4lDsr2JzpLCdKAUDqCoY1KuQf2S7FRfCzOhJzNtt0ssZEdQ4WSN3nLW2N0cs14fdF0tsb9sOFlAmwar-6=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="Mac版 ダウンロード確認画面" loading="lazy">
-                <div class="callout callout-info">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                    <div>ダウンロード中は焦らずお待ちくださいませ。通信環境によっては数分かかる場合がございます。</div>
-                </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="step">
-                <span class="step-label">Step 3</span>
-                <h3>ダウンロード完了後の確認</h3>
-                <p>ダウンロードが完了すると、画面右上に通知が表示されます。こちらをクリックしてください。</p>
-                <div class="step-img-row">
-                    <img src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUc1TW7YN1Ao4Pms9g4Cr5w26QLD0zcbqAfjBMdPN02NQiz03TlnxwQofVIeb-erQdQX8RNTTROLhDwdpDih6PrepHNBxFmyXGOKHQSxCNG3qNeSJUaryDmPJBfazbk0LkLHx82brtJRrD_m=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="ダウンロード待ち画面" loading="lazy">
-                    <img src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUcSHVQ-Ka6nxXoLpiZztt9Gwe-4K_kFolafKLW4SDki6iwbbk_zWDBdqUFmQvk-kHKXWhY7xLfABsFNR-xhU8TFntRRXO2TyY0dYhfD3lWm3uYXKS4-7sUK5JyOQSWO0tD1xroz6TpBxmQ=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="ダウンロード完了通知" loading="lazy">
-                </div>
-            </div>
-
-            <!-- Step 4 -->
-            <div class="step">
-                <span class="step-label">Step 4</span>
                 <h3>アプリケーションフォルダにインストール</h3>
-                <p>ダウンロードしたファイルを開くと、以下の画面が表示されます。<br>
-                左側の「<strong>BakuApo Simple</strong>」を、右側の「<strong>アプリケーション</strong>」フォルダにドラッグしてください。</p>
+                <p>表示された画面で、左側の「<strong>BakuApo Simple</strong>」を、右側の「<strong>アプリケーション</strong>」フォルダにドラッグしてください。</p>
                 <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUfsiW30Y1YFgmL51xJJn2Ve-gGItzPSaMagMNoBVUs5y8vk7YKKPa2ldFMpARRKTzADk82C4HAQINgGK0bSGnAesA_6fp6S2u1VhvsLwF-ZKjUWHSD0SR-81kqR8V9-S1v-fJp7avC0nnol=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="アプリケーションフォルダにドラッグ" loading="lazy">
                 <p>これで「アプリケーション」の中に正しく「BakuApo Simple」がインストールされます。</p>
                 <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUfIQIc9WBYj7Q-0xo1DUn2dYcCci-dxzL_25_FHwSqdGzDuByuCRV7_lufezVLQo8xucXIvQHjn_OrZVEpyz652q54IIUoYmDRlDfpLTt7EOjjLsey35PyFSodPlkvendUGAI_Bsag92anB=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="インストール完了" loading="lazy">
             </div>
 
-            <!-- Step 5 -->
+            <!-- Step 3 -->
             <div class="step">
-                <span class="step-label">Step 5</span>
+                <span class="step-label">Step 3</span>
                 <h3>インストール完了を確認</h3>
-                <p>先ほどの画面を閉じて、Finderの「<strong>アプリケーション</strong>」フォルダを確認してください。<br>
+                <p>ディスクイメージの画面を閉じて、Finderの「<strong>アプリケーション</strong>」フォルダを確認してください。<br>
                 「<strong>BakuApo Simple</strong>」が表示されていればインストール完了です。ダブルクリックでBakuApoが起動します。</p>
                 <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUeqMfVdtwwVTYUjFUi3XThpQXHhzRY9wBstG7OGbZfY0OOxejc9d406_6HpptruYgqcYH-z8Lp0eOTbA3C6ErvNAv8IRRpyNettx-MZCm4kQ8uytXw6UKrcSsotbbl-20Tclo0oOxG-joXo=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="Finderでアプリケーション確認" loading="lazy">
                 <div class="callout callout-warning">
@@ -722,7 +894,7 @@
         <!-- ========================================== -->
         <section class="guide-section" id="usage">
             <div class="section-header">
-                <span class="section-number">4</span>
+                <span class="section-number">5</span>
                 <h2 class="section-title">アプリ操作方法</h2>
             </div>
             <p class="section-intro">
@@ -779,6 +951,21 @@
                 }, 2000);
             });
         }
+
+        // --- OS auto-detect ---
+        (function() {
+            const ua = navigator.userAgent || navigator.platform || '';
+            const detect = document.getElementById('osDetect');
+            const dlWin = document.getElementById('dlWindows');
+            const dlMac = document.getElementById('dlMac');
+            if (/Mac|iPhone|iPad/.test(ua)) {
+                if (detect) detect.innerHTML = 'お使いの環境: <strong>macOS</strong> が検出されました';
+                if (dlMac) dlMac.style.borderColor = 'var(--accent)';
+            } else if (/Win/.test(ua)) {
+                if (detect) detect.innerHTML = 'お使いの環境: <strong>Windows</strong> が検出されました';
+                if (dlWin) dlWin.style.borderColor = 'var(--accent)';
+            }
+        })();
 
         // --- Smooth scroll ---
         document.querySelectorAll('a[href^="#"]').forEach(link => {
