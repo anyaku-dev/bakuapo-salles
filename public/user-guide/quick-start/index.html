@@ -58,19 +58,13 @@
             align-items: center;
             justify-content: space-between;
         }
-        .header-logo img { height: 26px; }
-        .header-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+        .header-logo img { height: 58px; }
+        .header-label {
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s;
+            letter-spacing: -0.01em;
         }
-        .header-back:hover { color: var(--accent); }
-        .header-back svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
 
         /* --- Article --- */
         .article {
@@ -550,16 +544,10 @@
             padding-bottom: 32px;
             border-bottom: 1px solid var(--border);
         }
-        .page-title h1 {
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 8px;
-        }
-        .page-title p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.7;
+        .page-title-img {
+            width: 100%;
+            border-radius: 16px;
+            display: block;
         }
 
         /* --- Download Card --- */
@@ -708,7 +696,6 @@
             .dl-options { grid-template-columns: 1fr; }
             .dl-hero { padding: 28px 20px; }
             .article { padding: 24px 16px 80px; }
-            .page-title h1 { font-size: 22px; }
             .step { padding: 20px; }
             .step-img-row { grid-template-columns: 1fr; }
             .os-tabs { flex-direction: column; }
@@ -722,10 +709,7 @@
             <div class="header-logo">
                 <img src="/bakuapo-logo-useer.svg" alt="BakuApo">
             </div>
-            <a href="/user-guide/" class="header-back">
-                <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                ご利用ガイドに戻る
-            </a>
+            <span class="header-label">BakuApoご購入者様限定｜クイックスタートガイド</span>
         </div>
     </header>
 
@@ -744,8 +728,7 @@
     </aside>
     <main class="article">
         <div class="page-title">
-            <h1>クイックスタートガイド</h1>
-            <p>BakuApoのダウンロードからセットアップまで、画像付きでわかりやすくご案内いたします。</p>
+            <img class="page-title-img" src="/quiq-start-ogp.webp" alt="クイックスタートガイド">
         </div>
 
         <!-- ========================================== -->
