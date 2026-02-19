@@ -51,7 +51,7 @@
             border-bottom: 1px solid var(--border);
         }
         .header-inner {
-            max-width: 820px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 14px 24px;
             display: flex;
@@ -74,9 +74,10 @@
 
         /* --- Article --- */
         .article {
-            max-width: 820px;
-            margin: 0 auto;
-            padding: 0 24px 100px;
+            flex: 1;
+            min-width: 0;
+            max-width: 780px;
+            padding: 40px 24px 100px 40px;
         }
 
         /* --- Hero --- */
@@ -466,6 +467,101 @@
             color: var(--text-muted);
         }
 
+        /* --- Page Layout --- */
+        .page-layout {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            border-right: 1px solid var(--border);
+        }
+        .sidebar-nav {
+            position: sticky;
+            top: 57px;
+            padding: 32px 16px;
+            max-height: calc(100vh - 57px);
+            overflow-y: auto;
+        }
+        .sidebar-title {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            padding: 0 12px;
+        }
+        .sidebar-nav ul {
+            list-style: none;
+        }
+        .sidebar-nav li {
+            margin-bottom: 2px;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
+            margin-left: -3px;
+        }
+        .sidebar-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-alt);
+        }
+        .sidebar-link.active {
+            color: var(--accent);
+            background: var(--accent-light);
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+        .sidebar-link .link-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+            background: var(--bg-alt);
+            color: var(--text-muted);
+            transition: all 0.15s;
+        }
+        .sidebar-link.active .link-num {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* --- Page Title --- */
+        .page-title {
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+        .page-title h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+        .page-title p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
         /* --- Download Card --- */
         .dl-hero {
             background: var(--bg-card);
@@ -603,13 +699,16 @@
         .dl-auto-detect strong { color: var(--accent); font-weight: 600; }
 
         /* --- Responsive --- */
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .page-layout { display: block; }
+            .article { padding: 32px 24px 80px; max-width: 100%; }
+        }
         @media (max-width: 640px) {
             .dl-options { grid-template-columns: 1fr; }
             .dl-hero { padding: 28px 20px; }
-            .article { padding: 0 16px 80px; }
-            .hero { padding: 48px 0 36px; }
-            .hero h1 { font-size: 24px; }
-            .toc { padding: 20px 20px; }
+            .article { padding: 24px 16px 80px; }
+            .page-title h1 { font-size: 22px; }
             .step { padding: 20px; }
             .step-img-row { grid-template-columns: 1fr; }
             .os-tabs { flex-direction: column; }
@@ -630,28 +729,24 @@
         </div>
     </header>
 
-    <main class="article">
-        <!-- ===== Hero ===== -->
-        <section class="hero">
-            <span class="hero-eyebrow">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Quick Start Guide
-            </span>
-            <h1>クイックスタートガイド</h1>
-            <p class="hero-sub">BakuApoのダウンロードからセットアップまで、<br>画像付きでわかりやすくご案内いたします。</p>
-        </section>
-
-        <!-- ===== TOC ===== -->
-        <nav class="toc">
-            <p class="toc-title">Contents</p>
-            <ol>
-                <li><a href="#intro">はじめに</a></li>
-                <li><a href="#download">アプリをダウンロード</a></li>
-                <li><a href="#setup-windows">セットアップ方法（Windows）</a></li>
-                <li><a href="#setup-mac">セットアップ方法（Mac）</a></li>
-                <li><a href="#usage">アプリ操作方法</a></li>
-            </ol>
+    <div class="page-layout">
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <p class="sidebar-title">クイックスタートガイド</p>
+            <ul>
+                <li><a href="#intro" class="sidebar-link active" data-section="intro"><span class="link-num">1</span>はじめに</a></li>
+                <li><a href="#download" class="sidebar-link" data-section="download"><span class="link-num">2</span>アプリをダウンロード</a></li>
+                <li><a href="#setup-windows" class="sidebar-link" data-section="setup-windows"><span class="link-num">3</span>セットアップ（Win）</a></li>
+                <li><a href="#setup-mac" class="sidebar-link" data-section="setup-mac"><span class="link-num">4</span>セットアップ（Mac）</a></li>
+                <li><a href="#usage" class="sidebar-link" data-section="usage"><span class="link-num">5</span>アプリ操作方法</a></li>
+            </ul>
         </nav>
+    </aside>
+    <main class="article">
+        <div class="page-title">
+            <h1>クイックスタートガイド</h1>
+            <p>BakuApoのダウンロードからセットアップまで、画像付きでわかりやすくご案内いたします。</p>
+        </div>
 
         <!-- ========================================== -->
         <!-- 1. はじめに -->
@@ -699,7 +794,7 @@
 
                 <div class="dl-options">
                     <!-- Windows -->
-                    <a href="/app-download/BAKUAPO%20Simple%20Setup%201.0.1.exe" download class="dl-option" id="dlWindows">
+                    <a href="https://pub-f05486cd473b432092da184cec71eb70.r2.dev/bakuapo/app-download/BAKUAPO%20Simple%20Setup%201.0.1.exe" download class="dl-option" id="dlWindows">
                         <div class="dl-option-icon windows">
                             <svg viewBox="0 0 24 24" fill="#0078D7"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
                         </div>
@@ -714,7 +809,7 @@
                         </span>
                     </a>
                     <!-- Mac -->
-                    <a href="/app-download/BAKUAPO%20Simple-1.0.1-arm64.dmg" download class="dl-option" id="dlMac">
+                    <a href="https://pub-f05486cd473b432092da184cec71eb70.r2.dev/bakuapo/app-download/BAKUAPO%20Simple-1.0.1-arm64.dmg" download class="dl-option" id="dlMac">
                         <div class="dl-option-icon mac">
                             <svg viewBox="0 0 24 24" fill="#000"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
                         </div>
@@ -933,6 +1028,7 @@
             </div>
         </section>
     </main>
+    </div><!-- /.page-layout -->
 
     <footer class="site-footer">
         <p>&copy; 2026 BakuApo — All rights reserved.</p>
@@ -975,6 +1071,26 @@
                 if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
+
+        // --- Scroll spy for sidebar ---
+        (function() {
+            const sections = document.querySelectorAll('.guide-section[id]');
+            const links = document.querySelectorAll('.sidebar-link[data-section]');
+            if (!links.length) return;
+            function updateActive() {
+                let current = '';
+                sections.forEach(sec => {
+                    const top = sec.getBoundingClientRect().top;
+                    if (top <= 120) current = sec.id;
+                });
+                if (!current && sections.length) current = sections[0].id;
+                links.forEach(link => {
+                    link.classList.toggle('active', link.dataset.section === current);
+                });
+            }
+            window.addEventListener('scroll', updateActive, { passive: true });
+            updateActive();
+        })();
     </script>
 </body>
 </html>
