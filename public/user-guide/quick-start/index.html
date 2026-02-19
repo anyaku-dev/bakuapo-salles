@@ -250,8 +250,8 @@
         }
 
         .step-img-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
             margin-top: 8px;
             margin-bottom: 8px;
@@ -339,35 +339,80 @@
         .callout a:hover { text-decoration: none; }
 
         /* --- Code Block --- */
+        .code-section {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            padding: 24px;
+            margin: 16px 0;
+        }
+        .code-section-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .code-section-label svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            flex-shrink: 0;
+        }
+        .code-section-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
         .code-block {
             background: #1E293B;
             color: #E2E8F0;
             font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
-            font-size: 13px;
-            padding: 16px 20px;
+            font-size: 14px;
+            padding: 18px 20px;
             border-radius: 10px;
-            margin: 12px 0;
+            margin: 0 0 14px;
             overflow-x: auto;
             position: relative;
+            letter-spacing: 0.02em;
+            line-height: 1.6;
         }
-        .code-block .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: #94A3B8;
-            font-size: 11px;
-            font-weight: 600;
+        .code-copy-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
             font-family: inherit;
-            padding: 4px 12px;
-            border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .code-block .copy-btn:hover {
-            background: rgba(255,255,255,0.2);
-            color: #fff;
+        .code-copy-btn:hover {
+            background: #063FCC;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(8,82,255,0.25);
+        }
+        .code-copy-btn.copied {
+            background: var(--success);
+        }
+        .code-copy-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
         }
 
         /* --- OS Tab --- */
@@ -697,7 +742,6 @@
             .dl-hero { padding: 28px 20px; }
             .article { padding: 24px 16px 80px; }
             .step { padding: 20px; }
-            .step-img-row { grid-template-columns: 1fr; }
             .os-tabs { flex-direction: column; }
             .section-header { flex-wrap: wrap; }
         }
@@ -943,11 +987,22 @@
                     <img src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUdCHYOw5rtagTRLZEmXIy6QdlXgQf2zcUgROezV05l7V9OYxxuOYVO6Fg243GNK1kpzGB6OPzcdqvkhqzDxilHTBWgfC9MfSC8VeYXJ7Vq9RMVXXYXq-hBE5RNVa-Da8Gj-vhlW-UP78q4=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="ターミナルを検索" loading="lazy">
                 </div>
 
-                <p style="margin-top: 16px;"><strong>② コマンドを入力する</strong><br>
-                ターミナルが開きましたら、以下のコマンドをコピーして貼り付け、Enterキーを押してください。</p>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">コピー</button>
-                    <code>xattr -cr /Applications/BAKUAPO\ Simple.app</code>
+                <p style="margin-top: 16px;"><strong>② コマンドをコピー＆実行する</strong><br>
+                ターミナルが開きましたら、下のボタンでコマンドをコピーし、ターミナルに貼り付けて <strong>Enter</strong> キーを押してください。</p>
+
+                <div class="code-section">
+                    <div class="code-section-label">
+                        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        コピーして貼り付けるコマンド
+                    </div>
+                    <p class="code-section-desc">下の黒いエリアに表示されている文字列が、貼り付けるコマンドです。<br>「コマンドをコピー」ボタンを押すとコピーされます。</p>
+                    <div class="code-block">
+                        <code id="terminalCmd">xattr -cr /Applications/BAKUAPO\ Simple.app</code>
+                    </div>
+                    <button class="code-copy-btn" onclick="copyCommand(this)">
+                        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        コマンドをコピー
+                    </button>
                 </div>
                 <div class="step-img-row">
                     <img src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUfawIAb6IvuZEUByjzlGMBmiEpjs6WBRnQJgj2U7EknLxigvXWtaXZWah1Z6UcT2FcWRGGq-m6B-xug54DtkkRU95MJKYisLWE24YAAaRSNwKewP1nlI9IophrK3zQRdwqgSl_HsmBkl4oy=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="コマンド入力前" loading="lazy">
@@ -1018,16 +1073,16 @@
     </footer>
 
     <script>
-        // --- Copy code button ---
-        function copyCode(btn) {
-            const code = btn.parentElement.querySelector('code').textContent;
+        // --- Copy command button ---
+        function copyCommand(btn) {
+            const code = document.getElementById('terminalCmd').textContent;
             navigator.clipboard.writeText(code).then(() => {
-                btn.textContent = 'コピー済み ✓';
-                btn.style.color = '#10B981';
+                btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> コピーしました！';
+                btn.classList.add('copied');
                 setTimeout(() => {
-                    btn.textContent = 'コピー';
-                    btn.style.color = '';
-                }, 2000);
+                    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コマンドをコピー';
+                    btn.classList.remove('copied');
+                }, 2500);
             });
         }
 
