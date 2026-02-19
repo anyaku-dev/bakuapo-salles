@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BakuApoご利用ユーザー様専用 ご利用ガイド</title>
+    <meta name="description" content="BakuApoご利用ユーザー様専用のご利用ガイドです。各種情報リンクを掲載しています。">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="BakuApoご利用ユーザー様専用 ご利用ガイド">
+    <meta property="og:description" content="BakuApoご利用ユーザー様専用のご利用ガイドです。">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="BakuApo">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAFA;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F5F7FA;
+            --border: #E5E7EB;
+            --border-hover: #D1D5DB;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --accent: #0852FF;
+            --accent-light: rgba(8,82,255,0.08);
+            --accent-subtle: rgba(8,82,255,0.05);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+
+        /* --- Ambient Background --- */
+        .ambient-glow {
+            position: fixed;
+            top: -30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(ellipse, rgba(8,82,255,0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- Header --- */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-logo img {
+            height: 28px;
+        }
+
+        .header-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #FFFFFF;
+            background: var(--accent);
+            padding: 8px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            letter-spacing: -0.01em;
+        }
+
+        .header-btn:hover {
+            background: #063FCC;
+            transform: translateY(-1px);
+        }
+
+        .header-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        /* --- Hero --- */
+        .hero {
+            padding: 72px 0 56px;
+            text-align: center;
+        }
+
+        .hero-eyebrow {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 42px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .hero-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .hero-divider {
+            width: 48px;
+            height: 2px;
+            background: var(--accent);
+            margin: 40px auto 0;
+            border-radius: 1px;
+        }
+
+        /* --- Link Grid --- */
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* --- Link Card --- */
+        .link-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .link-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(8,82,255,0.08), 0 0 0 1px var(--accent);
+        }
+
+        .link-card:active {
+            transform: translateY(0);
+        }
+
+        /* Featured card spans full width */
+        .link-card.featured {
+            grid-column: 1 / -1;
+        }
+
+        /* --- Card Preview --- */
+        .card-preview {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #F3F4F6;
+            overflow: hidden;
+        }
+
+        .card-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .link-card:hover .card-preview img {
+            transform: scale(1.03);
+        }
+
+        .card-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+
+        .card-preview-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.4) 100%);
+            pointer-events: none;
+        }
+
+        .card-preview .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 56px;
+            height: 56px;
+            background: rgba(8,82,255,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(8,82,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .link-card:hover .play-icon {
+            background: rgba(8,82,255,1);
+            transform: translate(-50%, -50%) scale(1.08);
+        }
+
+        .play-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: #fff;
+            margin-left: 2px;
+        }
+
+        /* --- Card Body --- */
+        .card-body {
+            padding: 20px 24px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            width: fit-content;
+        }
+
+        .card-tag .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.35;
+            color: var(--text-primary);
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .card-url {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: 'Inter', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 80%;
+        }
+
+        .card-arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .link-card:hover .card-arrow {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .card-arrow svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s ease;
+        }
+
+        .link-card:hover .card-arrow svg {
+            stroke: #FFFFFF;
+            transform: translate(1px, -1px);
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            text-align: center;
+            padding: 32px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .site-footer p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* --- Preview Skeleton Loading --- */
+        .preview-skeleton {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(110deg, #F3F4F6 8%, #E5E7EB 18%, #F3F4F6 33%);
+            background-size: 200% 100%;
+            animation: skeleton-shimmer 1.5s ease-in-out infinite;
+        }
+
+        @keyframes skeleton-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            pointer-events: none;
+        }
+
+        .skeleton-line {
+            border-radius: 4px;
+            background: linear-gradient(110deg, #F3F4F6 8%, #E5E7EB 18%, #F3F4F6 33%);
+            background-size: 200% 100%;
+            animation: skeleton-shimmer 1.5s ease-in-out infinite;
+        }
+
+        .desc-loading {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        /* --- Google Drive Embed Fallback --- */
+        .drive-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+        }
+
+        .drive-preview .drive-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .drive-preview .drive-icon svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.35;
+            stroke: var(--text-secondary);
+        }
+
+        .drive-preview .drive-icon span {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .link-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .hero {
+                padding: 48px 0 36px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .card-body {
+                padding: 16px 20px 20px;
+            }
+
+            .card-title {
+                font-size: 16px;
+            }
+
+            .header-inner {
+                padding: 14px 16px;
+            }
+
+            .main-content {
+                padding: 0 16px 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-logo img {
+                height: 22px;
+            }
+
+            .header-btn {
+                font-size: 11px;
+                padding: 6px 14px;
+            }
+
+            .card-preview {
+                aspect-ratio: 16 / 10;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-logo">
+                <img src="/bakuapo-logo-useer.svg" alt="BakuApo">
+            </div>
+            <span style="font-size:13px;color:var(--text-muted);font-weight:500;">ご利用ユーザー様専用ページ</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero">
+            <p class="hero-eyebrow">User Guide</p>
+            <h1>BakuApoご利用ユーザー様専用<br>ご利用ガイド</h1>
+            <p class="hero-sub">※随時更新して参ります。</p>
+            <div class="hero-divider"></div>
+        </section>
+
+        <!-- 動的生成されるカードグリッド -->
+        <div class="link-grid" id="linkGrid">
+            <!-- ローディングスケルトン -->
+            <div class="link-card skeleton-card" aria-hidden="true">
+                <div class="card-preview"><div class="preview-skeleton"></div></div>
+                <div class="card-body">
+                    <div class="skeleton-line" style="width:80px;height:12px"></div>
+                    <div class="skeleton-line" style="width:70%;height:20px"></div>
+                    <div class="skeleton-line" style="width:100%;height:14px"></div>
+                    <div class="skeleton-line" style="width:90%;height:14px"></div>
+                </div>
+            </div>
+            <div class="link-card skeleton-card" aria-hidden="true">
+                <div class="card-preview"><div class="preview-skeleton"></div></div>
+                <div class="card-body">
+                    <div class="skeleton-line" style="width:80px;height:12px"></div>
+                    <div class="skeleton-line" style="width:60%;height:20px"></div>
+                    <div class="skeleton-line" style="width:100%;height:14px"></div>
+                    <div class="skeleton-line" style="width:85%;height:14px"></div>
+                </div>
+            </div>
+            <div class="link-card skeleton-card" aria-hidden="true">
+                <div class="card-preview"><div class="preview-skeleton"></div></div>
+                <div class="card-body">
+                    <div class="skeleton-line" style="width:100px;height:12px"></div>
+                    <div class="skeleton-line" style="width:50%;height:20px"></div>
+                    <div class="skeleton-line" style="width:95%;height:14px"></div>
+                    <div class="skeleton-line" style="width:70%;height:14px"></div>
+                </div>
+            </div>
+            <div class="link-card skeleton-card" aria-hidden="true">
+                <div class="card-preview"><div class="preview-skeleton"></div></div>
+                <div class="card-body">
+                    <div class="skeleton-line" style="width:90px;height:12px"></div>
+                    <div class="skeleton-line" style="width:65%;height:20px"></div>
+                    <div class="skeleton-line" style="width:100%;height:14px"></div>
+                    <div class="skeleton-line" style="width:80%;height:14px"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 BakuApo — All rights reserved.</p>
+    </footer>
+
+    <script>
+        const GEMINI_API_KEY = 'AIzaSyBxxrrp9_VZaToi63RHLij2xGg8Aov1vWo';
+        const GDOC_PROXY_URL = '/api/gdoc-proxy';
+
+        // --- URL分類・タグ・色の自動推定 ---
+        function classifyUrl(url, title) {
+            const u = url.toLowerCase();
+            const t = title.toLowerCase();
+            if (t.includes('lp') || t.includes('ランディング') || u.includes('lp.'))
+                return { tag: 'Landing Page', color: '#3B82F6', type: 'LP' };
+            if (t.includes('営業資料') || t.includes('資料') || (u.includes('drive.google.com') && !t.includes('動画') && !t.includes('デモ')))
+                return { tag: 'Sales Document', color: '#EF4444', type: 'PDF' };
+            if (t.includes('購入') || t.includes('フォーム') || u.includes('tally.so'))
+                return { tag: 'Order Form', color: '#22C55E', type: 'FORM' };
+            if (t.includes('デモアプリ') || t.includes('アプリ') || (u.includes('vercel.app') && !t.includes('マニュアル')))
+                return { tag: 'Web Application', color: '#A855F7', type: 'APP' };
+            if (t.includes('動画') || t.includes('ビデオ') || t.includes('video'))
+                return { tag: 'Video', color: '#F59E0B', type: 'VIDEO' };
+            if (t.includes('マニュアル') || t.includes('manual'))
+                return { tag: 'Manual', color: '#06B6D4', type: 'MANUAL' };
+            return { tag: 'Link', color: '#0852FF', type: 'LP' };
+        }
+
+        // --- Google Drive サムネイル生成 ---
+        function getDriveThumbnailUrl(url) {
+            const match = url.match(/\/d\/([^/]+)/);
+            if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w800`;
+            return null;
+        }
+
+        // --- URL表示用のドメイン短縮 ---
+        function shortenUrl(url) {
+            try {
+                const u = new URL(url);
+                let display = u.hostname.replace(/^www\./, '') + u.pathname;
+                if (display.endsWith('/')) display = display.slice(0, -1);
+                return display.length > 40 ? display.slice(0, 37) + '...' : display;
+            } catch { return url; }
+        }
+
+        // --- Fallback SVGアイコン ---
+        const fallbackIcons = {
+            LP: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><circle cx="7" cy="6" r="1"/><circle cx="10" cy="6" r="1"/></svg>',
+            PDF: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h6"/><path d="M9 11h6"/></svg>',
+            FORM: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>',
+            APP: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>',
+            VIDEO: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21"/></svg>',
+            MANUAL: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>'
+        };
+
+        function showFallback(container, type) {
+            const labels = { LP: 'Landing Page', PDF: 'Document', FORM: 'Form', APP: 'Web App', VIDEO: 'Video', MANUAL: 'Manual' };
+            const fb = document.createElement('div');
+            fb.className = 'drive-preview';
+            fb.innerHTML = `<div class="drive-icon">${fallbackIcons[type] || fallbackIcons.LP}<span>${labels[type] || type}</span></div>`;
+            const overlay = container.querySelector('.card-preview-overlay');
+            if (overlay) container.insertBefore(fb, overlay);
+            else container.appendChild(fb);
+        }
+
+        // --- Google Docs テーブルパーサー ---
+        function parseGoogleDocTable(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const rows = doc.querySelectorAll('table tr');
+            const items = [];
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if (cells.length >= 2) {
+                    const title = cells[0].textContent.trim();
+                    const link = cells[1].querySelector('a');
+                    let url = '';
+                    if (link) {
+                        url = link.getAttribute('href') || '';
+                        // Google Docs redirect URL を実URLに変換
+                        const realUrl = url.match(/[?&]q=([^&]+)/);
+                        if (realUrl) url = decodeURIComponent(realUrl[1]);
+                    } else {
+                        url = cells[1].textContent.trim();
+                    }
+                    // 3列目があれば説明文として取得
+                    const desc = cells.length >= 3 ? cells[2].textContent.trim() : '';
+                    if (title && url) items.push({ title, url, desc });
+                }
+            });
+            return items;
+        }
+
+        // --- プレビュー画像の取得 ---
+        function getPreviewSrc(url, type) {
+            if (type === 'PDF' || type === 'VIDEO') {
+                const thumb = getDriveThumbnailUrl(url);
+                if (thumb) return { type: 'direct', src: thumb };
+            }
+            // Webページはmicrolinkでスクリーンショット
+            return { type: 'microlink', src: `https://api.microlink.io/?url=${encodeURIComponent(url)}&screenshot=true&meta=false&embed=screenshot.url&type=png&viewport.width=1280&viewport.height=720` };
+        }
+
+        // --- カードHTML生成 ---
+        function createCardElement(item, index, totalItems) {
+            const info = classifyUrl(item.url, item.title);
+            const preview = getPreviewSrc(item.url, info.type);
+            const isFirst = index === 0;
+            const skeletonId = `skeleton-${index}`;
+            const imgId = `preview-img-${index}`;
+            const isVideo = info.type === 'VIDEO';
+
+            const card = document.createElement('a');
+            card.className = `link-card${isFirst ? ' featured' : ''}`;
+            card.href = item.url;
+            card.target = '_blank';
+            card.rel = 'noopener noreferrer';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(16px)';
+
+            card.innerHTML = `
+                <div class="card-preview">
+                    <div class="preview-skeleton" id="${skeletonId}"></div>
+                    <img src="${preview.src}" alt="${item.title}" style="display:none" id="${imgId}"
+                         onload="this.style.display='block'; document.getElementById('${skeletonId}').style.display='none';"
+                         onerror="this.parentElement.querySelector('.preview-skeleton').style.display='none'; this.style.display='none'; showFallback(this.parentElement, '${info.type}');">
+                    <div class="card-preview-overlay"></div>
+                    ${isVideo ? '<div class="play-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>' : ''}
+                </div>
+                <div class="card-body">
+                    <span class="card-tag"><span class="dot" style="background:${info.color}"></span>${info.tag}</span>
+                    <h2 class="card-title">${item.title}</h2>
+                    <p class="card-desc" id="desc-${index}">${item.desc ? item.desc : '<span class="desc-loading">説明を生成中...</span>'}</p>
+                    <div class="card-footer">
+                        <span class="card-url">${shortenUrl(item.url)}</span>
+                        <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
+                    </div>
+                </div>
+            `;
+
+            // フェードインアニメーション
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 80);
+            });
+
+            return card;
+        }
+
+        // --- Gemini APIで説明文を生成 ---
+        async function generateDescription(title, url, index) {
+            const descEl = document.getElementById(`desc-${index}`);
+            if (!descEl) return;
+
+            try {
+                const prompt = `以下のリンクについて、ユーザー向けに1文（40〜60文字）で簡潔な説明文を生成してください。敬語で、「〜ください」「〜いただけます」のような語尾にしてください。余計な前置きや記号は不要で、説明文のみ返してください。\n\nタイトル: ${title}\nURL: ${url}`;
+
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.3, maxOutputTokens: 100 }
+                    })
+                });
+
+                if (!res.ok) throw new Error('Gemini API error');
+                const data = await res.json();
+                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+                if (text) {
+                    descEl.textContent = text;
+                    descEl.style.opacity = '0';
+                    requestAnimationFrame(() => {
+                        descEl.style.transition = 'opacity 0.4s ease';
+                        descEl.style.opacity = '1';
+                    });
+                } else {
+                    descEl.textContent = '';
+                }
+            } catch (e) {
+                console.warn(`Description generation failed for "${title}":`, e);
+                descEl.textContent = '';
+            }
+        }
+
+        // --- メインロード ---
+        async function loadLinksFromGoogleDoc() {
+            const grid = document.getElementById('linkGrid');
+
+            try {
+                const res = await fetch(GDOC_PROXY_URL);
+                if (!res.ok) throw new Error(`Proxy fetch failed: ${res.status}`);
+                const html = await res.text();
+                const items = parseGoogleDocTable(html);
+
+                if (items.length === 0) throw new Error('No items found in document');
+
+                // スケルトンを削除
+                grid.innerHTML = '';
+
+                // カード生成
+                items.forEach((item, index) => {
+                    const card = createCardElement(item, index, items.length);
+                    grid.appendChild(card);
+                });
+
+                // 説明文がない項目のみGemini APIで生成（レート制限を考慮して間隔を空ける）
+                for (let i = 0; i < items.length; i++) {
+                    if (!items[i].desc) {
+                        generateDescription(items[i].title, items[i].url, i);
+                        await new Promise(r => setTimeout(r, 200));
+                    }
+                }
+
+            } catch (e) {
+                console.error('Google Doc load error:', e);
+                // フォールバック: 静的データ
+                const fallbackItems = [
+                    { title: 'BakuApoのLP', url: 'https://lp.bakuure.com/bakuapo-01' },
+                    { title: 'BakuApo営業資料', url: 'https://drive.google.com/file/d/1-hbDzZ1e7Wa7q9Xpymc--aJy9AISIq9l/view' },
+                    { title: 'BakuApo購入フォーム', url: 'https://tally.so/r/kdE5Ed' },
+                    { title: 'デモアプリ (Web)', url: 'https://demo-three-sage.vercel.app/' },
+                    { title: 'デモ動画', url: 'https://drive.google.com/file/d/1UCWTX2PeAaDZ98nGNKrmr0j66wBXUKes/view' },
+                    { title: 'マニュアルサイト', url: 'https://partner.bakuapo.com/manual' }
+                ];
+                grid.innerHTML = '';
+                fallbackItems.forEach((item, index) => {
+                    const card = createCardElement(item, index, fallbackItems.length);
+                    grid.appendChild(card);
+                });
+                for (let i = 0; i < fallbackItems.length; i++) {
+                    generateDescription(fallbackItems[i].title, fallbackItems[i].url, i);
+                    if (i < fallbackItems.length - 1) await new Promise(r => setTimeout(r, 200));
+                }
+            }
+        }
+
+        // --- 起動 ---
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadLinksFromGoogleDoc);
+        } else {
+            loadLinksFromGoogleDoc();
+        }
+    </script>
+</body>
+</html>
