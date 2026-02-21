@@ -77,6 +77,12 @@
         .stripe-note{font-size:14px;color:var(--text-muted);line-height:1.8;margin-top:20px;text-align:left}
         .stripe-note p{margin-bottom:8px}
 
+        /* Proceed Button (credit step1) */
+        .btn-proceed{display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;font-family:inherit;color:#fff;background:var(--accent);padding:18px 48px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(8,82,255,.2);margin-top:8px}
+        .btn-proceed:hover{background:#063FCC;transform:translateY(-2px);box-shadow:0 8px 28px rgba(8,82,255,.3)}
+        .btn-proceed:disabled{background:var(--text-muted);cursor:not-allowed;transform:none;box-shadow:none}
+        .btn-proceed svg{width:18px;height:18px}
+
         /* Bank Transfer Panel */
         .bank-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
@@ -117,7 +123,6 @@
         .bank-info-view.visible{display:block}
         .bank-info-card{background:var(--bg-card);border:2px solid var(--accent);border-radius:16px;padding:36px 32px;text-align:center}
         .bank-info-card h2{font-size:24px;font-weight:700;margin-bottom:8px}
-        .bank-info-card .info-lead{font-size:16px;color:var(--text-secondary);margin-bottom:24px;line-height:1.8}
         .bank-info-card .memo-hint{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--warning);background:rgba(245,158,11,.08);padding:6px 16px;border-radius:100px;margin-bottom:24px}
         .bank-detail-box{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:left;margin:0 auto;max-width:400px}
         .bank-detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:15px}
@@ -127,6 +132,18 @@
         .bank-detail-row dd.amount{color:var(--accent);font-size:18px;font-weight:800}
         .bank-after-note{font-size:14px;color:var(--text-muted);line-height:1.9;margin-top:24px;text-align:left}
         .bank-after-note p{margin-bottom:8px}
+
+        /* Switch to Credit */
+        .switch-credit-section{margin-top:32px;padding-top:28px;border-top:2px dashed var(--border);text-align:center}
+        .switch-credit-section .switch-lead{font-size:14px;color:var(--text-secondary);margin-bottom:12px}
+        .switch-credit-section .switch-lead strong{color:var(--success);font-weight:700}
+        .btn-switch-credit{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;font-family:inherit;color:var(--stripe);background:rgba(99,91,255,.06);border:2px solid var(--stripe);padding:14px 32px;border-radius:12px;cursor:pointer;transition:all .2s;text-decoration:none}
+        .btn-switch-credit:hover{background:var(--stripe);color:#fff;transform:translateY(-1px);box-shadow:0 4px 16px rgba(99,91,255,.25)}
+        .btn-switch-credit svg{width:18px;height:18px}
+
+        /* Stripe Section after switch */
+        .stripe-after-switch{display:none;margin-top:24px}
+        .stripe-after-switch.visible{display:block}
 
         /* Error */
         .form-error{color:var(--danger);font-size:13px;margin-top:6px;display:none}
@@ -140,7 +157,7 @@
             .form-section{padding:24px 20px}
             .bank-row{grid-template-columns:1fr}
             .product-banner .price{font-size:26px}
-            .btn-stripe,.btn-submit-bank{padding:16px 32px;font-size:15px}
+            .btn-stripe,.btn-submit-bank,.btn-proceed{padding:16px 32px;font-size:15px}
             .confirm-row{flex-direction:column;gap:4px}
             .confirm-row dd{text-align:left}
             .bank-detail-box{padding:18px}
@@ -191,34 +208,64 @@
                     </label>
                 </div>
 
-                <!-- A: Credit Card Panel -->
+                <!-- ===== A: Credit Card Panel ===== -->
                 <div class="payment-panel visible" id="panelCredit">
-                    <div class="stripe-card">
-                        <div class="secure-badge">
-                            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
-                            セキュアな決済
+                    <!-- Step A-1: Customer Info -->
+                    <div id="creditStep1">
+                        <div class="form-group">
+                            <label class="form-label">お客様氏名<span class="required">*</span></label>
+                            <input type="text" class="form-input" id="creditName" placeholder="例：山田 太郎" required>
+                            <p class="form-error" id="creditNameError">お客様氏名をご入力ください。</p>
                         </div>
-                        <a href="https://buy.stripe.com/eVq5kw6yNeVPgEO0DF5os06" class="btn-stripe" target="_blank" rel="noopener">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                            クレジットカードで支払う（¥550,000・税込）
-                        </a>
-                        <div class="stripe-logo">
-                            <span>Powered by</span>
-                            <svg viewBox="0 0 60 25" fill="var(--stripe)"><path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a13.4 13.4 0 01-4.56.83c-4.14 0-6.6-2.48-6.6-6.68 0-3.68 2.19-6.74 6.04-6.74 3.41 0 5.93 2.6 5.93 6.36v1.31zm-5.98-4.25c-1.17 0-2.14.87-2.29 2.35h4.42c-.07-1.48-.87-2.35-2.13-2.35zM38.54 20.1c-1.7 0-2.83-.66-3.55-1.38l-.07 1.18H31v-19h4.2v5.62c.73-.59 1.73-1.02 3.08-1.02 3.64 0 5.76 3.13 5.76 6.9 0 4.45-2.38 7.7-5.5 7.7zm-.87-11.08c-.97 0-1.7.42-2.13.93v5.16c.43.52 1.16.93 2.13.93 1.64 0 2.67-1.52 2.67-3.54 0-1.95-1.03-3.48-2.67-3.48zM27.65 6.97c1.38 0 2.37.37 3.13.83l-1.24 3.04c-.59-.34-1.38-.62-2.29-.62-1.7 0-2.55 1.1-2.55 3.2v6.49H20.5V7.17h3.92l.17 1.73c.63-1.35 1.86-1.93 3.06-1.93zM18.54 19.9H14.34V7.16h4.2v12.74zm-2.1-14.4c-1.31 0-2.37-.97-2.37-2.23 0-1.27 1.06-2.24 2.37-2.24 1.3 0 2.36.97 2.36 2.24 0 1.26-1.06 2.23-2.36 2.23zM9.65 7.73V4.4h4.2v3.33h-4.2zm4.2 12.18H9.65V7.17h4.2v12.74zM6.5 10.3H2.7v4.92c0 1.41.87 1.73 1.73 1.73.56 0 1.23-.17 1.73-.38v3.38c-.73.38-1.7.59-2.87.59C1.1 20.54 0 18.83 0 16.41v-8.9l2.7-.97V4.4h3.8v2.78h2.63v3.12H6.5z"/></svg>
+                        <div class="form-group">
+                            <label class="form-label">ご契約時にご登録のメールアドレス<span class="required">*</span></label>
+                            <input type="email" class="form-input" id="creditEmail" placeholder="例：taro@example.com" required>
+                            <p class="form-error" id="creditEmailError">正しいメールアドレスをご入力ください。</p>
                         </div>
+                        <div style="text-align:center">
+                            <button type="button" class="btn-proceed" id="creditProceedBtn" disabled>
+                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+                                クレジットカードでのお支払いに進む
+                            </button>
+                        </div>
+                    </div>
 
-                        <div class="stripe-note">
-                            <p>※ Stripeの決済ページに遷移いたしますので、決済をお願いいたします。</p>
-                            <p>決済後にStripe登録いただいたメールアドレス宛に「BakuApo」ダウンロードリンクをお送りさせていただきます。</p>
-                            <p>また、まれに迷惑メールなどに入ってしまう場合もございます。<br>決済後1時間経過しても届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
+                    <!-- Step A-2: Stripe Link (hidden initially) -->
+                    <div id="creditStep2" style="display:none">
+                        <div class="stripe-card">
+                            <div class="secure-badge">
+                                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
+                                セキュアな決済
+                            </div>
+                            <a href="https://buy.stripe.com/eVq5kw6yNeVPgEO0DF5os06" class="btn-stripe" target="_blank" rel="noopener">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                                クレジットカードで支払う（¥550,000・税込）
+                            </a>
+                            <div class="stripe-logo">
+                                <span>Powered by</span>
+                                <svg viewBox="0 0 60 25" fill="var(--stripe)"><path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a13.4 13.4 0 01-4.56.83c-4.14 0-6.6-2.48-6.6-6.68 0-3.68 2.19-6.74 6.04-6.74 3.41 0 5.93 2.6 5.93 6.36v1.31zm-5.98-4.25c-1.17 0-2.14.87-2.29 2.35h4.42c-.07-1.48-.87-2.35-2.13-2.35zM38.54 20.1c-1.7 0-2.83-.66-3.55-1.38l-.07 1.18H31v-19h4.2v5.62c.73-.59 1.73-1.02 3.08-1.02 3.64 0 5.76 3.13 5.76 6.9 0 4.45-2.38 7.7-5.5 7.7zm-.87-11.08c-.97 0-1.7.42-2.13.93v5.16c.43.52 1.16.93 2.13.93 1.64 0 2.67-1.52 2.67-3.54 0-1.95-1.03-3.48-2.67-3.48zM27.65 6.97c1.38 0 2.37.37 3.13.83l-1.24 3.04c-.59-.34-1.38-.62-2.29-.62-1.7 0-2.55 1.1-2.55 3.2v6.49H20.5V7.17h3.92l.17 1.73c.63-1.35 1.86-1.93 3.06-1.93zM18.54 19.9H14.34V7.16h4.2v12.74zm-2.1-14.4c-1.31 0-2.37-.97-2.37-2.23 0-1.27 1.06-2.24 2.37-2.24 1.3 0 2.36.97 2.36 2.24 0 1.26-1.06 2.23-2.36 2.23zM9.65 7.73V4.4h4.2v3.33h-4.2zm4.2 12.18H9.65V7.17h4.2v12.74zM6.5 10.3H2.7v4.92c0 1.41.87 1.73 1.73 1.73.56 0 1.23-.17 1.73-.38v3.38c-.73.38-1.7.59-2.87.59C1.1 20.54 0 18.83 0 16.41v-8.9l2.7-.97V4.4h3.8v2.78h2.63v3.12H6.5z"/></svg>
+                            </div>
+
+                            <div class="stripe-note">
+                                <p>※ Stripeの決済ページに遷移いたしますので、決済をお願いいたします。</p>
+                                <p>決済後にStripe登録いただいたメールアドレス宛に「BakuApo」ダウンロードリンクをお送りさせていただきます。</p>
+                                <p>また、まれに迷惑メールなどに入ってしまう場合もございます。<br>決済後1時間経過しても届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- B: Bank Transfer Panel -->
+                <!-- ===== B: Bank Transfer Panel ===== -->
                 <div class="payment-panel" id="panelBank">
                     <div id="bankFormView">
-                        <p style="font-size:16px;color:var(--text-secondary);margin-bottom:20px">振り込み元の名義を確認するため、下記の情報をご入力ください。</p>
+                        <p style="font-size:16px;color:var(--text-secondary);margin-bottom:20px">お客様情報と振り込み元の名義を確認するため、下記の情報をご入力ください。</p>
+
+                        <div class="form-group">
+                            <label class="form-label">お客様氏名<span class="required">*</span></label>
+                            <input type="text" class="form-input" id="bankCustomerName" placeholder="例：山田 太郎" required>
+                        </div>
+
+                        <hr style="border:none;border-top:1px solid var(--border);margin:8px 0 24px">
 
                         <div class="form-group">
                             <label class="form-label">銀行名<span class="required">*</span></label>
@@ -248,6 +295,10 @@
                         <div class="confirm-box-header">
                             <h3>振り込み元情報の確認</h3>
                             <button type="button" class="confirm-box-edit" id="bankEditBtn">編集</button>
+                        </div>
+                        <div class="confirm-row">
+                            <dt>お客様氏名</dt>
+                            <dd id="confirmCustomerName">—</dd>
                         </div>
                         <div class="confirm-row">
                             <dt>銀行名</dt>
@@ -282,7 +333,7 @@
             </div>
         </div>
 
-        <!-- Bank Info Display (after submit) -->
+        <!-- ===== Bank Info Display (after submit) ===== -->
         <div class="bank-info-view" id="bankInfoView">
             <div class="bank-info-card">
                 <h2>下記記載の「弊社振込先」に<br>お振り込みをお願いいたします。</h2>
@@ -323,6 +374,39 @@
                 <div class="bank-after-note">
                     <p>ご入金確認後、ご契約時に記載いただいたメールアドレス宛に「BakuApo」ダウンロードリンクやマニュアル等一式をお送りさせていただきます。</p>
                     <p>入金後 <strong>3営業日（土日祝日を除く）</strong>を経過しても連絡が届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
+                </div>
+
+                <!-- Switch to Credit Card -->
+                <div class="switch-credit-section" id="switchCreditSection">
+                    <p class="switch-lead">クレジットカードでのお支払いだと<strong>即日ご利用開始</strong>できます。</p>
+                    <button type="button" class="btn-switch-credit" id="switchCreditBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        クレジットカードでの支払いに切り替える
+                    </button>
+                </div>
+
+                <!-- Stripe section after switching -->
+                <div class="stripe-after-switch" id="stripeAfterSwitch">
+                    <div class="stripe-card">
+                        <div class="secure-badge">
+                            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
+                            セキュアな決済
+                        </div>
+                        <a href="https://buy.stripe.com/eVq5kw6yNeVPgEO0DF5os06" class="btn-stripe" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            クレジットカードで支払う（¥550,000・税込）
+                        </a>
+                        <div class="stripe-logo">
+                            <span>Powered by</span>
+                            <svg viewBox="0 0 60 25" fill="var(--stripe)"><path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a13.4 13.4 0 01-4.56.83c-4.14 0-6.6-2.48-6.6-6.68 0-3.68 2.19-6.74 6.04-6.74 3.41 0 5.93 2.6 5.93 6.36v1.31zm-5.98-4.25c-1.17 0-2.14.87-2.29 2.35h4.42c-.07-1.48-.87-2.35-2.13-2.35zM38.54 20.1c-1.7 0-2.83-.66-3.55-1.38l-.07 1.18H31v-19h4.2v5.62c.73-.59 1.73-1.02 3.08-1.02 3.64 0 5.76 3.13 5.76 6.9 0 4.45-2.38 7.7-5.5 7.7zm-.87-11.08c-.97 0-1.7.42-2.13.93v5.16c.43.52 1.16.93 2.13.93 1.64 0 2.67-1.52 2.67-3.54 0-1.95-1.03-3.48-2.67-3.48zM27.65 6.97c1.38 0 2.37.37 3.13.83l-1.24 3.04c-.59-.34-1.38-.62-2.29-.62-1.7 0-2.55 1.1-2.55 3.2v6.49H20.5V7.17h3.92l.17 1.73c.63-1.35 1.86-1.93 3.06-1.93zM18.54 19.9H14.34V7.16h4.2v12.74zm-2.1-14.4c-1.31 0-2.37-.97-2.37-2.23 0-1.27 1.06-2.24 2.37-2.24 1.3 0 2.36.97 2.36 2.24 0 1.26-1.06 2.23-2.36 2.23zM9.65 7.73V4.4h4.2v3.33h-4.2zm4.2 12.18H9.65V7.17h4.2v12.74zM6.5 10.3H2.7v4.92c0 1.41.87 1.73 1.73 1.73.56 0 1.23-.17 1.73-.38v3.38c-.73.38-1.7.59-2.87.59C1.1 20.54 0 18.83 0 16.41v-8.9l2.7-.97V4.4h3.8v2.78h2.63v3.12H6.5z"/></svg>
+                        </div>
+
+                        <div class="stripe-note">
+                            <p>※ Stripeの決済ページに遷移いたしますので、決済をお願いいたします。</p>
+                            <p>決済後にStripe登録いただいたメールアドレス宛に「BakuApo」ダウンロードリンクをお送りさせていただきます。</p>
+                            <p>また、まれに迷惑メールなどに入ってしまう場合もございます。<br>決済後1時間経過しても届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -374,6 +458,10 @@
     const optBank = $('optBank');
     const panelCredit = $('panelCredit');
     const panelBank = $('panelBank');
+    const creditName = $('creditName');
+    const creditEmail = $('creditEmail');
+    const creditProceedBtn = $('creditProceedBtn');
+    const bankCustomerName = $('bankCustomerName');
     const bankNameInput = $('bankName');
     const bankCodeInput = $('bankCode');
     const branchName = $('branchName');
@@ -384,6 +472,13 @@
 
     let acHighlight = -1;
     let savedBankData = null;
+    // Row number returned from GAS for bank transfer record (for switch-to-credit update)
+    let bankPaymentRowId = null;
+
+    // ===== Email validation =====
+    function isValidEmail(v) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
 
     // ===== Payment Method Toggle =====
     function updatePaymentMethod() {
@@ -398,6 +493,62 @@
 
     optCredit.addEventListener('change', updatePaymentMethod);
     optBank.addEventListener('change', updatePaymentMethod);
+
+    // ===== Credit Card: Validate & Proceed =====
+    function updateCreditState() {
+        const nameOk = creditName.value.trim().length > 0;
+        const emailOk = isValidEmail(creditEmail.value.trim());
+        creditProceedBtn.disabled = !(nameOk && emailOk);
+    }
+    creditName.addEventListener('input', updateCreditState);
+    creditEmail.addEventListener('input', updateCreditState);
+
+    creditProceedBtn.addEventListener('click', async () => {
+        // Validate
+        let hasError = false;
+        if (!creditName.value.trim()) {
+            $('creditNameError').classList.add('visible'); hasError = true;
+        } else { $('creditNameError').classList.remove('visible'); }
+        if (!isValidEmail(creditEmail.value.trim())) {
+            $('creditEmailError').classList.add('visible'); hasError = true;
+        } else { $('creditEmailError').classList.remove('visible'); }
+        if (hasError) return;
+
+        // Send to GAS: register payment info (credit card)
+        const payload = {
+            action: 'registerPayment',
+            customerName: creditName.value.trim(),
+            email: creditEmail.value.trim(),
+            paymentMethod: 'クレジットカード',
+            submittedAt: new Date().toISOString()
+        };
+
+        creditProceedBtn.disabled = true;
+        creditProceedBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> 処理中...';
+
+        if (CHECKOUT_ENDPOINT) {
+            try {
+                await fetch(CHECKOUT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                });
+            } catch (err) {
+                console.error('Credit register error:', err);
+            }
+        }
+
+        // Save to localStorage for thanks-stripe page
+        localStorage.setItem('checkoutEmail', creditEmail.value.trim());
+        localStorage.setItem('checkoutName', creditName.value.trim());
+
+        // Show Stripe link
+        setTimeout(() => {
+            $('creditStep1').style.display = 'none';
+            $('creditStep2').style.display = 'block';
+        }, 600);
+    });
 
     // ===== Bank Autocomplete =====
     bankNameInput.addEventListener('input', () => {
@@ -442,20 +593,22 @@
 
     // ===== Bank Save =====
     $('bankSaveBtn').addEventListener('click', () => {
+        const cn = bankCustomerName.value.trim();
         const bn = bankNameInput.value.trim();
         const bc = bankCodeInput.value;
         const brn = branchName.value.trim();
         const acHold = accountHolder.value.trim();
 
-        if (!bn || !brn || !acHold) {
+        if (!cn || !bn || !brn || !acHold) {
             $('bankError').classList.add('visible');
             return;
         }
         $('bankError').classList.remove('visible');
 
-        savedBankData = { bankName: bn, bankCode: bc, branchName: brn, accountHolder: acHold };
+        savedBankData = { customerName: cn, bankName: bn, bankCode: bc, branchName: brn, accountHolder: acHold };
 
         // Show confirmation
+        $('confirmCustomerName').textContent = cn;
         $('confirmBankName').textContent = bn;
         $('confirmBranchName').textContent = brn;
         $('confirmHolder').textContent = acHold;
@@ -487,12 +640,13 @@
         if (bankSubmitBtn.disabled || !savedBankData) return;
 
         const payload = {
-            paymentMethod: 'bank_transfer',
-            senderBankName: savedBankData.bankName,
-            senderBankCode: savedBankData.bankCode,
-            senderBranchName: savedBankData.branchName,
-            senderAccountHolder: savedBankData.accountHolder,
-            amount: 550000,
+            action: 'registerPayment',
+            customerName: savedBankData.customerName,
+            email: '',
+            paymentMethod: '銀行振込',
+            bankName: savedBankData.bankName,
+            branchName: savedBankData.branchName,
+            accountHolder: savedBankData.accountHolder,
             submittedAt: new Date().toISOString()
         };
 
@@ -508,9 +662,12 @@
                     mode: 'no-cors'
                 });
             } catch (err) {
-                console.error('Submit error:', err);
+                console.error('Bank submit error:', err);
             }
         }
+
+        // Save customer name for switch-to-credit
+        localStorage.setItem('checkoutName', savedBankData.customerName);
 
         // Show bank info view
         setTimeout(() => {
@@ -518,6 +675,39 @@
             $('bankInfoView').classList.add('visible');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 800);
+    });
+
+    // ===== Switch to Credit Card (from bank info view) =====
+    $('switchCreditBtn').addEventListener('click', async () => {
+        const btn = $('switchCreditBtn');
+        btn.disabled = true;
+        btn.textContent = '切り替え中...';
+
+        // Send GAS request to update payment method
+        const payload = {
+            action: 'switchToCredit',
+            customerName: localStorage.getItem('checkoutName') || '',
+            submittedAt: new Date().toISOString()
+        };
+
+        if (CHECKOUT_ENDPOINT) {
+            try {
+                await fetch(CHECKOUT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                });
+            } catch (err) {
+                console.error('Switch error:', err);
+            }
+        }
+
+        setTimeout(() => {
+            $('switchCreditSection').style.display = 'none';
+            $('stripeAfterSwitch').classList.add('visible');
+            $('stripeAfterSwitch').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 600);
     });
     </script>
 </body>

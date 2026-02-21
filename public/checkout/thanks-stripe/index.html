@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お支払い完了｜BakuApo</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#FAFAFA;--bg-card:#FFF;--bg-alt:#F3F4F6;--border:#E5E7EB;--text-primary:#111827;--text-secondary:#6B7280;--text-muted:#9CA3AF;--accent:#0852FF;--accent-light:rgba(8,82,255,.08);--success:#10B981;--stripe:#635BFF}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Inter','Noto Sans JP',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased}
+        .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
+        .header-inner{max-width:1000px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+        .header-logo img{height:58px}
+        .header-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
+        .main{max-width:680px;margin:0 auto;padding:60px 24px 100px;text-align:center}
+
+        .thanks-icon{width:80px;height:80px;border-radius:50%;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 28px}
+        .thanks-icon svg{width:40px;height:40px;color:var(--success)}
+
+        h1{font-size:32px;font-weight:800;letter-spacing:-.03em;margin-bottom:12px}
+        .sub-text{font-size:16px;color:var(--text-secondary);line-height:1.9;margin-bottom:40px}
+
+        .info-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:left;margin-bottom:32px}
+        .info-card h2{font-size:24px;font-weight:700;margin-bottom:16px}
+        .info-card p{font-size:16px;color:var(--text-secondary);line-height:1.9;margin-bottom:12px}
+        .info-card p:last-child{margin-bottom:0}
+        .info-card a{color:var(--accent);font-weight:600;text-decoration:none}
+        .info-card a:hover{text-decoration:underline}
+
+        .status-badge{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--success);background:rgba(16,185,129,.08);padding:8px 20px;border-radius:100px;margin-bottom:32px}
+        .status-badge svg{width:16px;height:16px}
+
+        .note{font-size:14px;color:var(--text-muted);line-height:1.8;margin-top:32px}
+
+        .site-footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border)}
+        .site-footer p{font-size:12px;color:var(--text-muted)}
+
+        /* Loading / Error */
+        .status-msg{font-size:14px;color:var(--text-muted);margin-top:8px}
+        .status-msg.error{color:#EF4444}
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-logo"><img src="/bakuapo-logo-useer.svg" alt="BakuApo"></div>
+            <span class="header-label">決済完了</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="thanks-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+
+        <h1>お支払いが完了しました</h1>
+
+        <div class="status-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
+            支払い完了
+        </div>
+
+        <p class="sub-text">
+            BakuApo（バクアポ）のクレジットカード決済が正常に完了しました。<br>
+            ご購入ありがとうございます。
+        </p>
+
+        <div class="info-card">
+            <h2>今後の流れ</h2>
+            <p>Stripe決済時にご登録いただいたメールアドレス宛に、「BakuApo」ダウンロードリンクやマニュアル等一式をお送りさせていただきます。</p>
+            <p>通常、決済完了後 <strong>1時間以内</strong> にメールをお届けいたします。</p>
+            <p>万が一、1時間経過してもメールが届かない場合は、迷惑メールフォルダをご確認のうえ、<a href="mailto:info@chainsoda.world">info@chainsoda.world</a> までお問い合わせください。</p>
+        </div>
+
+        <p class="status-msg" id="statusMsg">支払い情報を更新中...</p>
+
+        <p class="note">このページを閉じても問題ございません。</p>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 BakuApo &amp; CHAINSODA Co., Ltd. — All rights reserved.</p>
+    </footer>
+
+    <script>
+    // Google Apps Script Web App URL（後で設定）
+    const CHECKOUT_ENDPOINT = '';
+
+    (async () => {
+        const statusMsg = document.getElementById('statusMsg');
+        const customerName = localStorage.getItem('checkoutName') || '';
+        const customerEmail = localStorage.getItem('checkoutEmail') || '';
+
+        const payload = {
+            action: 'updatePaymentStatus',
+            customerName: customerName,
+            email: customerEmail,
+            paymentStatus: '支払済み',
+            paidAt: new Date().toISOString()
+        };
+
+        if (!CHECKOUT_ENDPOINT) {
+            statusMsg.textContent = '※ GASエンドポイント未設定のため、ステータスの自動更新はスキップされました。';
+            return;
+        }
+
+        try {
+            await fetch(CHECKOUT_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                mode: 'no-cors'
+            });
+            statusMsg.textContent = '✓ 支払い情報が正常に更新されました。';
+            statusMsg.style.color = '#10B981';
+        } catch (err) {
+            console.error('Status update error:', err);
+            statusMsg.textContent = '支払い情報の更新中にエラーが発生しました。決済自体は正常に完了しています。';
+            statusMsg.classList.add('error');
+        }
+    })();
+    </script>
+</body>
+</html>
