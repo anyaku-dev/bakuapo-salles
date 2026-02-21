@@ -21,9 +21,7 @@
 
         /* Hero */
         .hero{text-align:center;padding:64px 0 56px}
-        .hero-icon{width:96px;height:96px;margin:0 auto 28px;background:var(--accent-light);border-radius:24px;display:flex;align-items:center;justify-content:center}
-        .hero-icon svg{width:48px;height:48px;color:var(--accent)}
-        .hero h1{font-size:32px;font-weight:800;letter-spacing:-.03em;margin-bottom:14px}
+        .hero-banner{max-width:100%;height:auto;border-radius:16px;margin-bottom:24px}
         .hero p{font-size:16px;color:var(--text-secondary);max-width:520px;margin:0 auto;line-height:1.8}
 
         /* Timeline */
@@ -66,6 +64,35 @@
         .moti{text-align:center;padding:40px 0 0;border-top:1px solid var(--border);margin-top:56px}
         .moti p{font-size:16px;color:var(--text-muted);line-height:1.8}
 
+        /* Timeline link */
+        .tl-link{color:var(--accent);text-decoration:none;font-weight:700}
+        .tl-link:hover{text-decoration:underline}
+
+        /* Send guide button */
+        .btn-send-guide{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;font-family:inherit;color:var(--accent);background:var(--accent-light);border:1px solid rgba(8,82,255,.15);padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .15s;margin-top:12px}
+        .btn-send-guide:hover{background:rgba(8,82,255,.12);border-color:var(--accent)}
+
+        /* Modal */
+        .modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:24px}
+        .modal-overlay.open{display:flex}
+        .modal{background:var(--bg-card);border-radius:20px;width:100%;max-width:620px;max-height:85vh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2);display:flex;flex-direction:column}
+        .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--border)}
+        .modal-header h2{font-size:18px;font-weight:700}
+        .modal-close{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--bg-alt);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;font-size:18px;color:var(--text-secondary)}
+        .modal-close:hover{background:var(--border);color:var(--text-primary)}
+        .modal-body{overflow-y:auto;padding:24px}
+        .modal-tabs{display:flex;gap:8px;margin-bottom:20px}
+        .modal-tab{flex:1;padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--bg-alt);font-size:14px;font-weight:600;font-family:inherit;color:var(--text-secondary);cursor:pointer;text-align:center;transition:all .15s}
+        .modal-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .modal-tab:hover:not(.active){background:var(--border)}
+        .copy-block{position:relative;background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:20px;font-size:14px;line-height:1.9;color:var(--text-primary);white-space:pre-wrap;word-break:break-all}
+        .copy-block-tab{display:none}
+        .copy-block-tab.active{display:block}
+        .btn-copy{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;font-family:inherit;color:#fff;background:var(--accent);border:none;padding:8px 18px;border-radius:8px;cursor:pointer;transition:all .15s;margin-top:12px}
+        .btn-copy:hover{background:#063FCC}
+        .btn-copy.copied{background:var(--success)}
+        .btn-copy svg{width:14px;height:14px}
+
         .site-footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border);margin-top:60px}
         .site-footer p{font-size:12px;color:var(--text-muted)}
 
@@ -87,15 +114,7 @@
     <main class="main">
         <!-- Hero -->
         <section class="hero">
-            <div class="hero-icon">
-                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="8" y="4" width="32" height="40" rx="4"/>
-                    <path d="M16 18h16M16 26h10"/>
-                    <circle cx="34" cy="36" r="10" fill="#0852FF" stroke="none"/>
-                    <polyline points="29,36 32,39 39,32" stroke="#fff" stroke-width="2.5" fill="none"/>
-                </svg>
-            </div>
-            <h1>成約申請フォーム</h1>
+            <img src="/conversion-report.webp" alt="成約申請フォーム" class="hero-banner">
             <p>パートナー様の成約をご報告いただくためのフォームです。<br>以下の流れをご確認の上、成約申請をお送りください。</p>
         </section>
 
@@ -115,8 +134,12 @@
                 <div class="tl-step">
                     <div class="tl-marker">2</div>
                     <div class="tl-content">
-                        <h3>「契約フォーム」と「決済フォーム」を送付</h3>
-                        <p>お客様に対して「契約フォーム」と「決済フォーム」をお送りください。</p>
+                        <h3><a href="/contract/" class="tl-link">「契約フォーム」</a>と<a href="/checkout/" class="tl-link">「決済フォーム」</a>を送付</h3>
+                        <p>お客様に対して<a href="/contract/" class="tl-link">「契約フォーム」</a>と<a href="/checkout/" class="tl-link">「決済フォーム」</a>をお送りください。</p>
+                        <button type="button" class="btn-send-guide" onclick="openSendGuideModal()">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            「契約フォーム」「決済フォーム」の送付方法
+                        </button>
                     </div>
                 </div>
                 <div class="tl-step">
@@ -204,6 +227,104 @@
             <p>いつもBakuApoの販売にご尽力いただき、心より感謝申し上げます。<br>次の一件も、一緒に頑張りましょう！</p>
         </div>
     </main>
+
+    <!-- Send Guide Modal -->
+    <div class="modal-overlay" id="sendGuideModal" onclick="closeSendGuideModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>お客様への送付テンプレート</h2>
+                <button class="modal-close" onclick="closeSendGuideModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-tabs">
+                    <button class="modal-tab active" onclick="switchTab('contract',this)">「契約フォーム」送信時</button>
+                    <button class="modal-tab" onclick="switchTab('checkout',this)">「決済フォーム」送信時</button>
+                </div>
+
+                <div class="copy-block-tab active" id="tabContract">
+                    <div class="copy-block" id="copyContract">〇〇様
+
+この度は、弊社ツール「BakuApo（バクアポ）」の導入を
+ご決定いただき、誠にありがとうございます。
+
+今後のお手続きにつきまして、
+下記のご契約フォームより送信をお願いいたします。
+
+▼ご契約フォームはこちら
+https://partner.bakuapo.com/contract
+
+フォーム内にて、お客様情報のご入力および利用契約書のご確認をお願いしております。
+内容をご確認のうえ、送信いただけますと幸いです。
+
+送信完了後に一言ご連絡をいただけますと、
+スムーズに次のご案内へ進めさせていただきます。
+引き続き、どうぞよろしくお願いいたします。</div>
+                    <button class="btn-copy" onclick="copyText('copyContract',this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        コピーする
+                    </button>
+                </div>
+
+                <div class="copy-block-tab" id="tabCheckout">
+                    <div class="copy-block" id="copyCheckout">〇〇様
+
+ご契約フォームの送信、誠にありがとうございます。
+続きまして、お支払い手続きのご案内となります。
+
+事前にご案内の通り、BakuApoのお支払い方法は下記よりお選びいただけます。
+
+・クレジットカード決済（Stripe）
+・銀行振込
+
+▼お支払いフォームはこちら
+https://partner.bakuapo.com/checkout
+
+上記フォーム内のステップに沿ってお進みいただくことで、どちらのお支払い方法でも手続きを完了いただけます。内容をご確認のうえ、ご対応をお願いいたします。
+
+なお、
+クレジットカード決済の場合：決済完了後、すぐにBakuApoのご利用を開始いただけます。
+銀行振込の場合：通常は3営業日以内に入金確認を行っておりますが、ご一報いただけましたら優先して確認させていただきます。
+
+ご不明点などございましたら、いつでもお気軽にご連絡ください。
+引き続きどうぞよろしくお願いいたします。</div>
+                    <button class="btn-copy" onclick="copyText('copyCheckout',this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        コピーする
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openSendGuideModal() {
+        document.getElementById('sendGuideModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSendGuideModal(e) {
+        if (e && e.target !== e.currentTarget) return;
+        document.getElementById('sendGuideModal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function switchTab(tab, btn) {
+        document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.copy-block-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(tab === 'contract' ? 'tabContract' : 'tabCheckout').classList.add('active');
+    }
+    function copyText(id, btn) {
+        const text = document.getElementById(id).textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            btn.classList.add('copied');
+            btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> コピーしました';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> コピーする';
+            }, 2000);
+        });
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSendGuideModal(); });
+    </script>
 
     <footer class="site-footer">
         <p>&copy; 2026 BakuApo &amp; CHAINSODA Co., Ltd. — All rights reserved.</p>
