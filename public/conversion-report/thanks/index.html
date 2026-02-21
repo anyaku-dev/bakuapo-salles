@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成約申請完了｜BakuApo パートナーポータル</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#FAFAFA;--bg-card:#FFF;--bg-alt:#F3F4F6;--border:#E5E7EB;--text-primary:#111827;--text-secondary:#6B7280;--text-muted:#9CA3AF;--accent:#0852FF;--accent-light:rgba(8,82,255,.08);--success:#10B981;--warning:#F59E0B}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Inter','Noto Sans JP',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+        .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
+        .header-inner{max-width:1000px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+        .header-logo img{height:58px}
+        .header-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
+        .main{max-width:720px;margin:0 auto;padding:0 24px 100px}
+
+        /* Celebration Hero */
+        .celebration{text-align:center;padding:72px 0 48px;position:relative}
+        .celebration-icon{width:88px;height:88px;margin:0 auto 28px;background:rgba(16,185,129,.08);border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative}
+        .celebration-icon svg{width:44px;height:44px;color:var(--success)}
+        .celebration-icon::before,.celebration-icon::after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;animation:float 3s ease-in-out infinite}
+        .celebration-icon::before{background:var(--accent);top:-8px;right:-4px;animation-delay:0s}
+        .celebration-icon::after{background:var(--warning);bottom:-4px;left:-8px;animation-delay:1.5s}
+        @keyframes float{0%,100%{transform:translateY(0) scale(1);opacity:.6}50%{transform:translateY(-8px) scale(1.2);opacity:1}}
+        .celebration h1{font-size:clamp(24px,4vw,32px);font-weight:800;letter-spacing:-.03em;margin-bottom:12px}
+        .celebration h1 span{display:inline-block;background:linear-gradient(135deg,var(--accent),#6366F1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+        /* Particles */
+        .particle{position:absolute;width:6px;height:6px;border-radius:50%;animation:particle 4s ease-in-out infinite}
+        .p1{background:var(--accent);top:20%;left:15%;animation-delay:0s}
+        .p2{background:var(--success);top:30%;right:12%;animation-delay:.8s}
+        .p3{background:var(--warning);top:15%;right:25%;animation-delay:1.6s}
+        .p4{background:#8B5CF6;bottom:20%;left:20%;animation-delay:2.4s}
+        .p5{background:#EC4899;bottom:30%;right:18%;animation-delay:.4s}
+        @keyframes particle{0%,100%{transform:translateY(0) rotate(0);opacity:.3}50%{transform:translateY(-12px) rotate(180deg);opacity:.8}}
+
+        /* Message Section */
+        .message{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:40px 36px;margin-bottom:32px;line-height:2}
+        .message p{font-size:15px;color:var(--text-secondary);margin-bottom:20px}
+        .message p:last-child{margin-bottom:0}
+        .message strong{color:var(--text-primary);font-weight:600}
+        .message .highlight{color:var(--accent);font-weight:700}
+
+        /* Stats */
+        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
+        .stat{text-align:center;padding:20px 12px;background:var(--bg-alt);border-radius:12px}
+        .stat-num{font-size:24px;font-weight:800;color:var(--accent);margin-bottom:2px}
+        .stat-label{font-size:11px;color:var(--text-muted);font-weight:600}
+
+        /* Resource Cards */
+        .resources-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;padding-top:16px}
+        .resource-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;transition:box-shadow .2s}
+        .resource-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.04)}
+        .resource-card h3{font-size:16px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+        .resource-card h3 .rc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .resource-card h3 .rc-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+        .resource-card p{font-size:14px;color:var(--text-secondary);line-height:1.75;margin-bottom:16px}
+        .resource-card .rc-meta{font-size:12px;color:var(--text-muted);margin-bottom:16px}
+        .rc-btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;font-family:inherit;color:#fff;background:var(--accent);padding:10px 24px;border-radius:10px;text-decoration:none;transition:all .2s}
+        .rc-btn:hover{background:#063FCC;transform:translateY(-1px);box-shadow:0 4px 16px rgba(8,82,255,.2)}
+        .rc-btn svg{width:16px;height:16px}
+        .rc-btn.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+        .rc-btn.secondary:hover{background:var(--accent-light);box-shadow:none;transform:none}
+
+        /* Closing */
+        .closing{text-align:center;padding:48px 0 0;border-top:1px solid var(--border);margin-top:48px}
+        .closing p{font-size:14px;color:var(--text-secondary);line-height:2;margin-bottom:12px}
+        .closing .sign{font-size:13px;font-weight:600;color:var(--text-primary);margin-top:24px}
+
+        .site-footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border);margin-top:60px}
+        .site-footer p{font-size:12px;color:var(--text-muted)}
+
+        @media(max-width:640px){
+            .main{padding:0 16px 80px}
+            .message{padding:28px 20px}
+            .stats{grid-template-columns:1fr}
+            .celebration{padding:48px 0 36px}
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-logo"><img src="/bakuapo-logo-useer.svg" alt="BakuApo"></div>
+            <span class="header-label">パートナー様専用｜成約申請</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Celebration Hero -->
+        <section class="celebration">
+            <div class="particle p1"></div>
+            <div class="particle p2"></div>
+            <div class="particle p3"></div>
+            <div class="particle p4"></div>
+            <div class="particle p5"></div>
+            <div class="celebration-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <h1>ご成約、<span>おめでとうございます！</span></h1>
+            <p style="font-size:15px;color:var(--text-secondary)">成約申請が正常に送信されました。</p>
+        </section>
+
+        <!-- Message -->
+        <div class="message">
+            <p>
+                弊社の取り組みを共に広げていただき、BakuApoを通じて「営業」業界を変え、
+                社会をよりよくしていけることに、<strong>パートナー様と共にアプローチできることを、弊社は本当に幸せに思っています。</strong>
+            </p>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-num">上位30%</div>
+                    <div class="stat-label">初月から販売した<br>パートナー様の割合</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">5件+</div>
+                    <div class="stat-label">月間販売件数<br>トップクラス</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">¥125万+</div>
+                    <div class="stat-label">月間報酬<br>トップクラス</div>
+                </div>
+            </div>
+
+            <p>
+                初月から当サービスを実際に販売されているパートナー様は、<span class="highlight">上位30%</span>です。<br>
+                中には、1ヶ月間で<span class="highlight">5件以上</span>販売されている方も複数いらっしゃいます。<br>
+                その方には、月の報酬<span class="highlight">125万円以上</span>をお渡しすることができております。
+            </p>
+            <p>
+                弊社は、パートナー様にもっと販売していただき、もっと報酬を上げていただくために、
+                <strong>本気でサポートしていくことが弊社にとっても最大の投資</strong>ですし、
+                それが私たち事務局の使命だと思っています。
+            </p>
+            <p>
+                今後も、販売サポートを実施してまいりますので、<br>
+                <strong>どうぞ引き続きよろしくお願いいたします！</strong>
+            </p>
+        </div>
+
+        <!-- Resources -->
+        <p class="resources-title">販売サポート</p>
+
+        <div class="resource-card">
+            <h3>
+                <span class="rc-icon" style="background:rgba(8,82,255,.08);color:var(--accent)">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </span>
+                『販売応援！相談会』実施中
+            </h3>
+            <p>
+                営業革命-BakuApo事務局では、パートナー様（正規代理店）の販売サポートのため、
+                相談会を実施しています。お気軽にお申し込みください！
+            </p>
+            <p class="rc-meta">1回1時間枠 ／ 何度でも無料</p>
+            <a href="https://timerex.net/s/zerocost/a1766bdf/" target="_blank" rel="noopener" class="rc-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+                日程調整フォームへ
+            </a>
+        </div>
+
+        <div class="resource-card">
+            <h3>
+                <span class="rc-icon" style="background:rgba(16,185,129,.08);color:var(--success)">
+                    <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                </span>
+                『パートナー様向け動画カリキュラム』更新中！
+            </h3>
+            <p>
+                「BakuApoの魅力はこれ！」「こんなふうに伝えたら売れる」などといった、
+                販売のコツや商材理解のためのコンテンツを更新中。<br>
+                動画を見て学んでいただくと販売成功率をぐんと伸ばせます！
+            </p>
+            <a href="https://partner.bakuapo.com/manual" target="_blank" rel="noopener" class="rc-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+                動画カリキュラム（マニュアル）はこちら
+            </a>
+        </div>
+
+        <div class="resource-card">
+            <h3>
+                <span class="rc-icon" style="background:rgba(245,158,11,.08);color:var(--warning)">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </span>
+                販売サポート体制、サービス改善のご要望も受付中
+            </h3>
+            <p>
+                匿名で、サービスへのご意見やご要望をお送りいただけます。<br>
+                皆さまの声が、BakuApoをより良いサービスにしていく力になります。
+            </p>
+            <a href="https://partner.bakuapo.com/feedback" target="_blank" rel="noopener" class="rc-btn secondary">
+                <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+                サービス改善ご意見箱へ
+            </a>
+        </div>
+
+        <!-- Closing -->
+        <div class="closing">
+            <p>
+                引き続きBakuApoを、営業革命を、<br>
+                皆様と一緒に盛り上げていけましたら幸いです。<br>
+                引き続きどうぞよろしくお願いいたします。
+            </p>
+            <p class="sign">BakuApo運営事務局 ／ 株式会社CHAINSODA</p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 BakuApo &amp; CHAINSODA Co., Ltd. — All rights reserved.</p>
+    </footer>
+</body>
+</html>
