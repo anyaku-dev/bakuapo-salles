@@ -10,21 +10,141 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root{--bg:#FAFAFA;--bg-card:#FFF;--bg-alt:#F3F4F6;--border:#E5E7EB;--border-hover:#D1D5DB;--text-primary:#111827;--text-secondary:#6B7280;--text-muted:#9CA3AF;--accent:#0852FF;--accent-light:rgba(8,82,255,.08);--accent-subtle:rgba(8,82,255,.04);--success:#10B981;--warning:#F59E0B;--danger:#EF4444;--stripe:#635BFF}
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:'Inter','Noto Sans JP',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#FAFAFA;color:#111827;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
-        .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid #E5E7EB}
+        body{font-family:'Inter','Noto Sans JP',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased}
+        .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
         .header-inner{max-width:1000px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
         .header-logo img{height:58px}
-        .header-label{font-size:13px;font-weight:600;color:#6B7280}
-        .content{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
-        .card{text-align:center;max-width:480px}
-        .card-icon{width:80px;height:80px;margin:0 auto 28px;background:rgba(16,185,129,.08);border-radius:20px;display:flex;align-items:center;justify-content:center}
-        .card-icon svg{width:40px;height:40px;color:#10B981;stroke:currentColor;fill:none;stroke-width:1.5}
-        .card h1{font-size:32px;font-weight:800;letter-spacing:-.03em;margin-bottom:12px}
-        .card p{font-size:16px;color:#6B7280;line-height:1.8;margin-bottom:8px}
-        .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#F59E0B;background:rgba(245,158,11,.08);padding:6px 16px;border-radius:100px;margin-top:20px}
-        .site-footer{text-align:center;padding:24px;border-top:1px solid #E5E7EB}
-        .site-footer p{font-size:12px;color:#9CA3AF}
+        .header-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
+        .main{max-width:680px;margin:0 auto;padding:48px 24px 100px}
+
+        /* Page Title */
+        .page-top{margin-bottom:40px}
+        .page-top h1{font-size:32px;font-weight:800;letter-spacing:-.03em;margin-bottom:12px}
+        .page-top p{font-size:16px;color:var(--text-secondary);line-height:1.8}
+
+        /* Product Card */
+        .product-banner{background:linear-gradient(135deg,#f0f4ff 0%,#fafafa 100%);border:2px solid var(--accent);border-radius:16px;padding:28px;text-align:center;margin-bottom:32px}
+        .product-banner h2{font-size:24px;font-weight:700;margin-bottom:6px}
+        .product-banner .price{font-size:32px;font-weight:800;color:var(--accent);letter-spacing:-.02em}
+        .product-banner .price span{font-size:14px;font-weight:600;color:var(--text-secondary)}
+        .product-banner .price-sub{font-size:14px;color:var(--text-muted);margin-top:4px}
+
+        /* Form Section */
+        .form-section{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:20px;transition:box-shadow .2s}
+        .form-section:hover{box-shadow:0 2px 16px rgba(0,0,0,.03)}
+        .form-section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-light);display:inline-block;padding:4px 12px;border-radius:6px;margin-bottom:14px}
+        .form-section h2{font-size:24px;font-weight:700;margin-bottom:20px;letter-spacing:-.01em}
+
+        /* Form Elements */
+        .form-group{margin-bottom:24px}
+        .form-group:last-child{margin-bottom:0}
+        .form-label{display:block;font-size:16.5px;font-weight:600;margin-bottom:8px}
+        .form-label .required{color:var(--danger);font-size:13px;margin-left:4px}
+        .form-input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:16px;font-family:inherit;color:var(--text-primary);background:var(--bg-card);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+        .form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+        .form-hint{font-size:14px;color:var(--text-muted);margin-top:6px;line-height:1.6}
+
+        /* Radio / Check */
+        .check-group{display:flex;flex-direction:column;gap:12px}
+        .check-item{display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:18px 20px;border:1px solid var(--border);border-radius:12px;transition:all .15s;user-select:none}
+        .check-item:hover{border-color:var(--border-hover);background:var(--bg-alt)}
+        .check-item.checked{border-color:var(--accent);background:var(--accent-subtle);box-shadow:0 0 0 2px var(--accent-light)}
+        .check-item input[type="radio"]{appearance:none;-webkit-appearance:none;width:20px;height:20px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;margin-top:2px;position:relative;cursor:pointer;transition:all .15s}
+        .check-item input[type="radio"]:checked{background:var(--accent);border-color:var(--accent)}
+        .check-item input[type="radio"]:checked::after{content:'';position:absolute;left:4px;top:4px;width:8px;height:8px;border-radius:50%;background:#fff}
+        .check-item input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:20px;height:20px;border:2px solid var(--border);border-radius:6px;flex-shrink:0;margin-top:1px;position:relative;cursor:pointer;transition:all .15s}
+        .check-item input[type="checkbox"]:checked{background:var(--accent);border-color:var(--accent)}
+        .check-item input[type="checkbox"]:checked::after{content:'';position:absolute;left:5px;top:2px;width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+        .check-item-text{font-size:16px;font-weight:500;line-height:1.6}
+        .check-item-text small{display:block;font-size:14px;color:var(--text-muted);font-weight:400;margin-top:2px}
+        .check-item-text .badge-instant{display:inline-block;font-size:11px;font-weight:700;color:var(--success);background:rgba(16,185,129,.08);padding:2px 8px;border-radius:4px;margin-left:6px}
+
+        /* Payment Method Panels */
+        .payment-panel{display:none;margin-top:24px}
+        .payment-panel.visible{display:block}
+
+        /* Stripe Panel */
+        .stripe-card{background:linear-gradient(135deg,#f7f7ff 0%,#fafafa 100%);border:1px solid #e0deff;border-radius:14px;padding:28px;text-align:center}
+        .stripe-card .secure-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--stripe);background:rgba(99,91,255,.06);padding:6px 16px;border-radius:100px;margin-bottom:20px}
+        .stripe-card .secure-badge svg{width:14px;height:14px;fill:currentColor}
+        .btn-stripe{display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;font-family:inherit;color:#fff;background:var(--stripe);padding:18px 40px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(99,91,255,.25);text-decoration:none}
+        .btn-stripe:hover{background:#4b44d4;transform:translateY(-2px);box-shadow:0 8px 28px rgba(99,91,255,.35)}
+        .btn-stripe svg{width:18px;height:18px}
+        .stripe-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:12px;color:var(--text-muted)}
+        .stripe-logo svg{height:20px}
+        .stripe-note{font-size:14px;color:var(--text-muted);line-height:1.8;margin-top:20px;text-align:left}
+        .stripe-note p{margin-bottom:8px}
+
+        /* Bank Transfer Panel */
+        .bank-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+        /* Autocomplete */
+        .autocomplete-wrap{position:relative}
+        .autocomplete-list{position:absolute;top:100%;left:0;right:0;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;margin-top:4px;max-height:200px;overflow-y:auto;display:none;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+        .autocomplete-list.open{display:block}
+        .autocomplete-item{padding:10px 16px;font-size:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .1s}
+        .autocomplete-item:hover,.autocomplete-item.highlighted{background:var(--accent-light);color:var(--accent)}
+        .autocomplete-item .ac-code{font-size:12px;color:var(--text-muted);font-family:'SF Mono','Fira Code',monospace}
+        .autocomplete-item:hover .ac-code{color:var(--accent)}
+
+        /* Save / Edit Buttons */
+        .btn-save{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;font-family:inherit;color:#fff;background:var(--accent);padding:10px 24px;border-radius:10px;border:none;cursor:pointer;transition:all .2s;margin-top:8px}
+        .btn-save:hover{background:#063FCC}
+
+        /* Confirmation Box */
+        .confirm-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:none}
+        .confirm-box.visible{display:block}
+        .confirm-box-header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--bg-alt);border-bottom:1px solid var(--border)}
+        .confirm-box-header h3{font-size:14px;font-weight:700;color:var(--text-secondary)}
+        .confirm-box-edit{font-size:12px;color:var(--accent);background:none;border:1px solid var(--accent);padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s}
+        .confirm-box-edit:hover{background:var(--accent);color:#fff}
+        .confirm-row{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 20px;border-bottom:1px solid var(--border);font-size:15px}
+        .confirm-row:last-child{border-bottom:none}
+        .confirm-row dt{color:var(--text-secondary);font-weight:500;flex-shrink:0}
+        .confirm-row dd{font-weight:600;text-align:right}
+
+        .confirm-check{margin-top:20px}
+
+        .btn-submit-bank{display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;font-family:inherit;color:#fff;background:var(--accent);padding:18px 48px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(8,82,255,.2);margin-top:20px}
+        .btn-submit-bank:hover{background:#063FCC;transform:translateY(-2px);box-shadow:0 8px 28px rgba(8,82,255,.3)}
+        .btn-submit-bank:disabled{background:var(--text-muted);cursor:not-allowed;transform:none;box-shadow:none}
+        .btn-submit-bank svg{width:18px;height:18px}
+
+        /* Bank Info View (after submit) */
+        .bank-info-view{display:none}
+        .bank-info-view.visible{display:block}
+        .bank-info-card{background:var(--bg-card);border:2px solid var(--accent);border-radius:16px;padding:36px 32px;text-align:center}
+        .bank-info-card h2{font-size:24px;font-weight:700;margin-bottom:8px}
+        .bank-info-card .info-lead{font-size:16px;color:var(--text-secondary);margin-bottom:24px;line-height:1.8}
+        .bank-info-card .memo-hint{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--warning);background:rgba(245,158,11,.08);padding:6px 16px;border-radius:100px;margin-bottom:24px}
+        .bank-detail-box{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:left;margin:0 auto;max-width:400px}
+        .bank-detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:15px}
+        .bank-detail-row:last-child{border-bottom:none}
+        .bank-detail-row dt{color:var(--text-muted);font-weight:500}
+        .bank-detail-row dd{font-weight:700;color:var(--text-primary)}
+        .bank-detail-row dd.amount{color:var(--accent);font-size:18px;font-weight:800}
+        .bank-after-note{font-size:14px;color:var(--text-muted);line-height:1.9;margin-top:24px;text-align:left}
+        .bank-after-note p{margin-bottom:8px}
+
+        /* Error */
+        .form-error{color:var(--danger);font-size:13px;margin-top:6px;display:none}
+        .form-error.visible{display:block}
+
+        .site-footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border)}
+        .site-footer p{font-size:12px;color:var(--text-muted)}
+
+        @media(max-width:640px){
+            .main{padding:32px 16px 80px}
+            .form-section{padding:24px 20px}
+            .bank-row{grid-template-columns:1fr}
+            .product-banner .price{font-size:26px}
+            .btn-stripe,.btn-submit-bank{padding:16px 32px;font-size:15px}
+            .confirm-row{flex-direction:column;gap:4px}
+            .confirm-row dd{text-align:left}
+            .bank-detail-box{padding:18px}
+        }
     </style>
 </head>
 <body>
@@ -34,18 +154,371 @@
             <span class="header-label">決済フォーム</span>
         </div>
     </header>
-    <div class="content">
-        <div class="card">
-            <div class="card-icon">
-                <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+
+    <main class="main">
+        <div id="mainView">
+            <div class="page-top">
+                <h1>BakuApo（バクアポ）決済フォーム</h1>
             </div>
-            <h1>決済フォーム</h1>
-            <p>現在、ページを準備中です。<br>もうしばらくお待ちくださいませ。</p>
-            <span class="badge">🔧 準備中</span>
+
+            <!-- Product Banner -->
+            <div class="product-banner">
+                <h2>BakuApo（バクアポ）</h2>
+                <div class="price">¥550,000<span>（税込）</span></div>
+                <p class="price-sub">買い切り</p>
+            </div>
+
+            <!-- Step 1: Payment Method -->
+            <div class="form-section">
+                <span class="form-section-label">ステップ 1</span>
+                <h2>支払い方法を選択</h2>
+
+                <div class="check-group">
+                    <label class="check-item checked" id="optCreditWrap">
+                        <input type="radio" name="payMethod" value="credit" id="optCredit" checked>
+                        <span class="check-item-text">
+                            クレジットカード決済
+                            <span class="badge-instant">即日利用可能</span>
+                            <small>即日でご利用が可能です</small>
+                        </span>
+                    </label>
+                    <label class="check-item" id="optBankWrap">
+                        <input type="radio" name="payMethod" value="bank" id="optBank">
+                        <span class="check-item-text">
+                            銀行振込
+                            <small>弊社内で振込を確認するため、1日程度ツール提供が遅れる場合がございます。</small>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- A: Credit Card Panel -->
+                <div class="payment-panel visible" id="panelCredit">
+                    <div class="stripe-card">
+                        <div class="secure-badge">
+                            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
+                            セキュアな決済
+                        </div>
+                        <a href="https://buy.stripe.com/eVq5kw6yNeVPgEO0DF5os06" class="btn-stripe" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            クレジットカードで支払う（¥550,000・税込）
+                        </a>
+                        <div class="stripe-logo">
+                            <span>Powered by</span>
+                            <svg viewBox="0 0 60 25" fill="var(--stripe)"><path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a13.4 13.4 0 01-4.56.83c-4.14 0-6.6-2.48-6.6-6.68 0-3.68 2.19-6.74 6.04-6.74 3.41 0 5.93 2.6 5.93 6.36v1.31zm-5.98-4.25c-1.17 0-2.14.87-2.29 2.35h4.42c-.07-1.48-.87-2.35-2.13-2.35zM38.54 20.1c-1.7 0-2.83-.66-3.55-1.38l-.07 1.18H31v-19h4.2v5.62c.73-.59 1.73-1.02 3.08-1.02 3.64 0 5.76 3.13 5.76 6.9 0 4.45-2.38 7.7-5.5 7.7zm-.87-11.08c-.97 0-1.7.42-2.13.93v5.16c.43.52 1.16.93 2.13.93 1.64 0 2.67-1.52 2.67-3.54 0-1.95-1.03-3.48-2.67-3.48zM27.65 6.97c1.38 0 2.37.37 3.13.83l-1.24 3.04c-.59-.34-1.38-.62-2.29-.62-1.7 0-2.55 1.1-2.55 3.2v6.49H20.5V7.17h3.92l.17 1.73c.63-1.35 1.86-1.93 3.06-1.93zM18.54 19.9H14.34V7.16h4.2v12.74zm-2.1-14.4c-1.31 0-2.37-.97-2.37-2.23 0-1.27 1.06-2.24 2.37-2.24 1.3 0 2.36.97 2.36 2.24 0 1.26-1.06 2.23-2.36 2.23zM9.65 7.73V4.4h4.2v3.33h-4.2zm4.2 12.18H9.65V7.17h4.2v12.74zM6.5 10.3H2.7v4.92c0 1.41.87 1.73 1.73 1.73.56 0 1.23-.17 1.73-.38v3.38c-.73.38-1.7.59-2.87.59C1.1 20.54 0 18.83 0 16.41v-8.9l2.7-.97V4.4h3.8v2.78h2.63v3.12H6.5z"/></svg>
+                        </div>
+
+                        <div class="stripe-note">
+                            <p>※ Stripeの決済ページに遷移いたしますので、決済をお願いいたします。</p>
+                            <p>決済後にStripe登録いただいたメールアドレス宛に「BakuApo」ダウンロードリンクをお送りさせていただきます。</p>
+                            <p>また、まれに迷惑メールなどに入ってしまう場合もございます。<br>決済後1時間経過しても届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- B: Bank Transfer Panel -->
+                <div class="payment-panel" id="panelBank">
+                    <div id="bankFormView">
+                        <p style="font-size:16px;color:var(--text-secondary);margin-bottom:20px">振り込み元の名義を確認するため、下記の情報をご入力ください。</p>
+
+                        <div class="form-group">
+                            <label class="form-label">銀行名<span class="required">*</span></label>
+                            <div class="autocomplete-wrap">
+                                <input type="text" class="form-input" id="bankName" placeholder="銀行名を入力（例：みずほ銀行）" autocomplete="off">
+                                <div class="autocomplete-list" id="bankAcList"></div>
+                            </div>
+                            <input type="hidden" id="bankCode">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">支店名<span class="required">*</span></label>
+                            <input type="text" class="form-input" id="branchName" placeholder="例：新宿支店">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">口座名義（カタカナ）<span class="required">*</span></label>
+                            <input type="text" class="form-input" id="accountHolder" placeholder="例：ヤマダ タロウ">
+                        </div>
+                        <p class="form-error" id="bankError">すべての項目をご入力ください。</p>
+                        <button type="button" class="btn-save" id="bankSaveBtn">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            保存する
+                        </button>
+                    </div>
+
+                    <!-- Confirmation -->
+                    <div class="confirm-box" id="bankConfirmBox">
+                        <div class="confirm-box-header">
+                            <h3>振り込み元情報の確認</h3>
+                            <button type="button" class="confirm-box-edit" id="bankEditBtn">編集</button>
+                        </div>
+                        <div class="confirm-row">
+                            <dt>銀行名</dt>
+                            <dd id="confirmBankName">—</dd>
+                        </div>
+                        <div class="confirm-row">
+                            <dt>支店名</dt>
+                            <dd id="confirmBranchName">—</dd>
+                        </div>
+                        <div class="confirm-row">
+                            <dt>口座名義</dt>
+                            <dd id="confirmHolder">—</dd>
+                        </div>
+                    </div>
+
+                    <div id="bankConfirmSection" style="display:none">
+                        <div class="confirm-check" style="margin-top:20px">
+                            <label class="check-item" id="bankConfirmCheckWrap">
+                                <input type="checkbox" id="bankConfirmCheck">
+                                <span class="check-item-text">送信内容が正しいことを確認しました。</span>
+                            </label>
+                        </div>
+
+                        <div style="text-align:center">
+                            <button type="button" class="btn-submit-bank" id="bankSubmitBtn" disabled>
+                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+                                振り込み元情報を送信する
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <!-- Bank Info Display (after submit) -->
+        <div class="bank-info-view" id="bankInfoView">
+            <div class="bank-info-card">
+                <h2>下記記載の「弊社振込先」に<br>お振り込みをお願いいたします。</h2>
+                <div class="memo-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    スクリーンショットやメモの保存をお願いいたします
+                </div>
+
+                <div class="bank-detail-box">
+                    <dl>
+                        <div class="bank-detail-row">
+                            <dt>銀行名</dt>
+                            <dd>GMOあおぞらネット銀行</dd>
+                        </div>
+                        <div class="bank-detail-row">
+                            <dt>支店名</dt>
+                            <dd>法人第二営業部</dd>
+                        </div>
+                        <div class="bank-detail-row">
+                            <dt>口座種別</dt>
+                            <dd>普通</dd>
+                        </div>
+                        <div class="bank-detail-row">
+                            <dt>口座番号</dt>
+                            <dd>1389280</dd>
+                        </div>
+                        <div class="bank-detail-row">
+                            <dt>口座名義</dt>
+                            <dd>カ) チェインソーダ</dd>
+                        </div>
+                        <div class="bank-detail-row">
+                            <dt>お振り込み金額</dt>
+                            <dd class="amount">¥550,000</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="bank-after-note">
+                    <p>ご入金確認後、ご契約時に記載いただいたメールアドレス宛に「BakuApo」ダウンロードリンクやマニュアル等一式をお送りさせていただきます。</p>
+                    <p>入金後 <strong>3営業日（土日祝日を除く）</strong>を経過しても連絡が届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <footer class="site-footer">
         <p>&copy; 2026 BakuApo &amp; CHAINSODA Co., Ltd. — All rights reserved.</p>
     </footer>
+
+    <script>
+    // ===== Bank Data =====
+    const BANKS = [
+        {name:'みずほ銀行',code:'0001'},{name:'三菱UFJ銀行',code:'0005'},{name:'三井住友銀行',code:'0009'},
+        {name:'りそな銀行',code:'0010'},{name:'埼玉りそな銀行',code:'0017'},
+        {name:'PayPay銀行',code:'0033'},{name:'セブン銀行',code:'0034'},{name:'ソニー銀行',code:'0035'},
+        {name:'楽天銀行',code:'0036'},{name:'住信SBIネット銀行',code:'0038'},{name:'auじぶん銀行',code:'0039'},
+        {name:'イオン銀行',code:'0040'},{name:'みんなの銀行',code:'0043'},{name:'UI銀行',code:'0044'},
+        {name:'北海道銀行',code:'0116'},{name:'青森銀行',code:'0117'},{name:'みちのく銀行',code:'0118'},
+        {name:'秋田銀行',code:'0119'},{name:'北都銀行',code:'0120'},{name:'荘内銀行',code:'0121'},
+        {name:'山形銀行',code:'0122'},{name:'岩手銀行',code:'0123'},{name:'東邦銀行',code:'0126'},
+        {name:'群馬銀行',code:'0128'},{name:'足利銀行',code:'0129'},{name:'常陽銀行',code:'0130'},
+        {name:'筑波銀行',code:'0131'},{name:'武蔵野銀行',code:'0133'},{name:'千葉銀行',code:'0134'},
+        {name:'千葉興業銀行',code:'0135'},{name:'きらぼし銀行',code:'0137'},{name:'横浜銀行',code:'0138'},
+        {name:'第四北越銀行',code:'0140'},{name:'山梨中央銀行',code:'0142'},{name:'八十二銀行',code:'0143'},
+        {name:'北陸銀行',code:'0144'},{name:'富山銀行',code:'0145'},{name:'北國銀行',code:'0146'},
+        {name:'福井銀行',code:'0147'},{name:'静岡銀行',code:'0149'},{name:'スルガ銀行',code:'0150'},
+        {name:'清水銀行',code:'0151'},{name:'大垣共立銀行',code:'0152'},{name:'十六銀行',code:'0153'},
+        {name:'三十三銀行',code:'0154'},{name:'百五銀行',code:'0155'},{name:'滋賀銀行',code:'0157'},
+        {name:'京都銀行',code:'0158'},{name:'関西みらい銀行',code:'0159'},{name:'池田泉州銀行',code:'0161'},
+        {name:'南都銀行',code:'0162'},{name:'紀陽銀行',code:'0163'},{name:'但馬銀行',code:'0164'},
+        {name:'鳥取銀行',code:'0166'},{name:'山陰合同銀行',code:'0167'},{name:'中国銀行',code:'0168'},
+        {name:'広島銀行',code:'0169'},{name:'山口銀行',code:'0170'},{name:'阿波銀行',code:'0172'},
+        {name:'百十四銀行',code:'0173'},{name:'伊予銀行',code:'0174'},{name:'四国銀行',code:'0175'},
+        {name:'福岡銀行',code:'0177'},{name:'筑邦銀行',code:'0178'},{name:'佐賀銀行',code:'0179'},
+        {name:'十八親和銀行',code:'0180'},{name:'肥後銀行',code:'0182'},{name:'大分銀行',code:'0183'},
+        {name:'宮崎銀行',code:'0184'},{name:'鹿児島銀行',code:'0185'},{name:'琉球銀行',code:'0187'},
+        {name:'沖縄銀行',code:'0188'},{name:'西日本シティ銀行',code:'0190'},{name:'北九州銀行',code:'0191'},
+        {name:'三菱UFJ信託銀行',code:'0288'},{name:'みずほ信託銀行',code:'0289'},
+        {name:'三井住友信託銀行',code:'0294'},{name:'GMOあおぞらネット銀行',code:'0310'},
+        {name:'SBI新生銀行',code:'0397'},{name:'あおぞら銀行',code:'0398'},
+        {name:'東京スター銀行',code:'0526'},{name:'ゆうちょ銀行',code:'9900'}
+    ];
+
+    // Google Apps Script Web App URL（後で設定）
+    const CHECKOUT_ENDPOINT = '';
+
+    const $ = id => document.getElementById(id);
+    const optCredit = $('optCredit');
+    const optBank = $('optBank');
+    const panelCredit = $('panelCredit');
+    const panelBank = $('panelBank');
+    const bankNameInput = $('bankName');
+    const bankCodeInput = $('bankCode');
+    const branchName = $('branchName');
+    const accountHolder = $('accountHolder');
+    const acList = $('bankAcList');
+    const bankConfirmCheck = $('bankConfirmCheck');
+    const bankSubmitBtn = $('bankSubmitBtn');
+
+    let acHighlight = -1;
+    let savedBankData = null;
+
+    // ===== Payment Method Toggle =====
+    function updatePaymentMethod() {
+        const method = document.querySelector('input[name="payMethod"]:checked').value;
+        panelCredit.classList.toggle('visible', method === 'credit');
+        panelBank.classList.toggle('visible', method === 'bank');
+
+        document.querySelectorAll('input[name="payMethod"]').forEach(r => {
+            r.closest('.check-item').classList.toggle('checked', r.checked);
+        });
+    }
+
+    optCredit.addEventListener('change', updatePaymentMethod);
+    optBank.addEventListener('change', updatePaymentMethod);
+
+    // ===== Bank Autocomplete =====
+    bankNameInput.addEventListener('input', () => {
+        const val = bankNameInput.value.trim();
+        if (!val) { acList.classList.remove('open'); return; }
+        const filtered = BANKS.filter(b => b.name.includes(val) || b.code.includes(val));
+        if (!filtered.length) { acList.classList.remove('open'); return; }
+        acHighlight = -1;
+        acList.innerHTML = filtered.map((b,i) =>
+            `<div class="autocomplete-item" data-idx="${i}" data-name="${b.name}" data-code="${b.code}">
+                <span>${b.name}</span><span class="ac-code">${b.code}</span>
+            </div>`
+        ).join('');
+        acList.classList.add('open');
+    });
+
+    acList.addEventListener('click', e => {
+        const item = e.target.closest('.autocomplete-item');
+        if (!item) return;
+        bankNameInput.value = item.dataset.name;
+        bankCodeInput.value = item.dataset.code;
+        acList.classList.remove('open');
+    });
+
+    bankNameInput.addEventListener('keydown', e => {
+        const items = acList.querySelectorAll('.autocomplete-item');
+        if (!items.length || !acList.classList.contains('open')) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); acHighlight = Math.min(acHighlight+1, items.length-1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); acHighlight = Math.max(acHighlight-1, 0); }
+        else if (e.key === 'Enter' && acHighlight >= 0) {
+            e.preventDefault();
+            items[acHighlight].click();
+            return;
+        } else return;
+        items.forEach((it,i) => it.classList.toggle('highlighted', i === acHighlight));
+        items[acHighlight]?.scrollIntoView({block:'nearest'});
+    });
+
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.autocomplete-wrap')) acList.classList.remove('open');
+    });
+
+    // ===== Bank Save =====
+    $('bankSaveBtn').addEventListener('click', () => {
+        const bn = bankNameInput.value.trim();
+        const bc = bankCodeInput.value;
+        const brn = branchName.value.trim();
+        const acHold = accountHolder.value.trim();
+
+        if (!bn || !brn || !acHold) {
+            $('bankError').classList.add('visible');
+            return;
+        }
+        $('bankError').classList.remove('visible');
+
+        savedBankData = { bankName: bn, bankCode: bc, branchName: brn, accountHolder: acHold };
+
+        // Show confirmation
+        $('confirmBankName').textContent = bn;
+        $('confirmBranchName').textContent = brn;
+        $('confirmHolder').textContent = acHold;
+
+        $('bankFormView').style.display = 'none';
+        $('bankConfirmBox').classList.add('visible');
+        $('bankConfirmSection').style.display = 'block';
+    });
+
+    // ===== Bank Edit =====
+    $('bankEditBtn').addEventListener('click', () => {
+        savedBankData = null;
+        $('bankFormView').style.display = 'block';
+        $('bankConfirmBox').classList.remove('visible');
+        $('bankConfirmSection').style.display = 'none';
+        bankConfirmCheck.checked = false;
+        $('bankConfirmCheckWrap').classList.remove('checked');
+        bankSubmitBtn.disabled = true;
+    });
+
+    // ===== Bank Confirm Check =====
+    bankConfirmCheck.addEventListener('change', () => {
+        $('bankConfirmCheckWrap').classList.toggle('checked', bankConfirmCheck.checked);
+        bankSubmitBtn.disabled = !bankConfirmCheck.checked;
+    });
+
+    // ===== Bank Submit =====
+    bankSubmitBtn.addEventListener('click', async () => {
+        if (bankSubmitBtn.disabled || !savedBankData) return;
+
+        const payload = {
+            paymentMethod: 'bank_transfer',
+            senderBankName: savedBankData.bankName,
+            senderBankCode: savedBankData.bankCode,
+            senderBranchName: savedBankData.branchName,
+            senderAccountHolder: savedBankData.accountHolder,
+            amount: 550000,
+            submittedAt: new Date().toISOString()
+        };
+
+        bankSubmitBtn.disabled = true;
+        bankSubmitBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> 送信中...';
+
+        if (CHECKOUT_ENDPOINT) {
+            try {
+                await fetch(CHECKOUT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                });
+            } catch (err) {
+                console.error('Submit error:', err);
+            }
+        }
+
+        // Show bank info view
+        setTimeout(() => {
+            $('mainView').style.display = 'none';
+            $('bankInfoView').classList.add('visible');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 800);
+    });
+    </script>
 </body>
 </html>
