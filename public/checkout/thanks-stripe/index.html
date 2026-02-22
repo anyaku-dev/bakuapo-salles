@@ -41,24 +41,21 @@
         .btn-qs:hover{background:#063FCC;transform:translateY(-2px);box-shadow:0 8px 28px rgba(8,82,255,.3)}
 
         /* Sunray light animation from header */
-        .sunray-overlay{pointer-events:none;position:fixed;top:0;left:0;width:100%;height:100vh;z-index:99;overflow:hidden;opacity:0;animation:sunrayLife 3s ease-out forwards}
-        .sunray-overlay::before{content:'';position:absolute;top:-60%;left:50%;transform:translateX(-50%);width:140%;height:100%;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,220,100,.28) 0%,rgba(255,180,60,.15) 20%,rgba(255,140,40,.08) 40%,transparent 70%);filter:blur(8px)}
-        .sunray-overlay::after{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:200%;height:80%;background:conic-gradient(from 250deg at 50% 0%,transparent 0deg,rgba(255,230,140,.12) 10deg,transparent 25deg,rgba(255,200,80,.10) 35deg,transparent 50deg,rgba(255,220,120,.08) 58deg,transparent 70deg,rgba(255,240,160,.10) 80deg,transparent 95deg,rgba(255,200,100,.08) 105deg,transparent 120deg,transparent 360deg);filter:blur(4px)}
-        @keyframes sunrayLife{0%{opacity:0}15%{opacity:1}70%{opacity:.8}100%{opacity:0}}
+        .sunray-overlay{pointer-events:none;position:fixed;top:0;left:0;width:100%;height:0;z-index:99;overflow:visible}
+        .sunray-beam{position:absolute;top:0;height:100vh;opacity:0;animation:beamSweep 3s ease-out forwards}
+        .sunray-beam:nth-child(1){left:10%;width:18%;background:linear-gradient(180deg,rgba(255,210,80,.35) 0%,rgba(255,220,100,.12) 40%,transparent 80%);animation-delay:0s}
+        .sunray-beam:nth-child(2){left:30%;width:25%;background:linear-gradient(180deg,rgba(255,190,60,.3) 0%,rgba(255,200,80,.1) 35%,transparent 75%);animation-delay:.15s}
+        .sunray-beam:nth-child(3){left:50%;width:20%;background:linear-gradient(180deg,rgba(255,230,120,.32) 0%,rgba(255,240,160,.1) 38%,transparent 78%);animation-delay:.3s}
+        .sunray-beam:nth-child(4){left:68%;width:22%;background:linear-gradient(180deg,rgba(255,200,70,.28) 0%,rgba(255,210,90,.1) 36%,transparent 76%);animation-delay:.1s}
+        .sunray-beam:nth-child(5){left:5%;width:30%;background:linear-gradient(180deg,rgba(255,240,180,.2) 0%,rgba(255,220,120,.08) 40%,transparent 70%);animation-delay:.25s}
+        @keyframes beamSweep{0%{opacity:0;transform:translateY(-30%) scaleY(.5)}15%{opacity:1}50%{opacity:.7;transform:translateY(0) scaleY(1)}100%{opacity:0;transform:translateY(15%) scaleY(1.1)}}
 
         /* Cursor click animation on OGP image */
-        .qs-img-wrap{position:relative;overflow:visible}
-        .cursor-anim{position:absolute;top:50%;left:58%;transform:translate(-50%,-50%);width:36px;height:36px;opacity:0;pointer-events:none;z-index:10;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
-        .cursor-anim.active{animation:cursorFadeIn .6s ease-out forwards}
-        .cursor-anim.clicking{animation:cursorClick .4s ease-in-out forwards}
-        .cursor-anim.fade-out{animation:cursorFadeOut .5s ease-in forwards}
-        @keyframes cursorFadeIn{0%{opacity:0;transform:translate(calc(-50% + 40px),calc(-50% + 40px))}100%{opacity:1;transform:translate(-50%,-50%)}}
-        @keyframes cursorClick{0%{transform:translate(-50%,-50%) scale(1)}30%{transform:translate(-50%,-50%) scale(.7)}60%{transform:translate(-50%,-50%) scale(.75)}100%{transform:translate(-50%,-50%) scale(1)}}
-        @keyframes cursorFadeOut{0%{opacity:1;transform:translate(-50%,-50%)}100%{opacity:0;transform:translate(-50%,-50%)}}
+        .qs-img-wrap{position:relative}
+        .cursor-anim{position:absolute;top:50%;left:58%;width:36px;height:36px;opacity:0;pointer-events:none;z-index:10;filter:drop-shadow(0 2px 8px rgba(0,0,0,.35));transition:none}
         /* Click ripple */
-        .click-ripple{position:absolute;top:50%;left:58%;width:0;height:0;border-radius:50%;background:rgba(8,82,255,.25);transform:translate(-50%,-50%);pointer-events:none;z-index:9;opacity:0}
-        .click-ripple.burst{animation:rippleBurst .5s ease-out forwards}
-        @keyframes rippleBurst{0%{width:0;height:0;opacity:.6}100%{width:60px;height:60px;opacity:0}}
+        .click-ripple{position:absolute;top:50%;left:58%;pointer-events:none;z-index:9}
+        .click-ripple-ring{position:absolute;top:0;left:0;width:0;height:0;border-radius:50%;border:2.5px solid rgba(8,82,255,.5);background:rgba(8,82,255,.15);transform:translate(-50%,-50%);opacity:0}
 
         .mail-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:left;margin-bottom:32px}
         .mail-card h3{font-size:18px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px}
@@ -90,7 +87,7 @@
         </div>
     </header>
 
-    <div class="sunray-overlay" id="sunrayOverlay"></div>
+    <div class="sunray-overlay"><div class="sunray-beam"></div><div class="sunray-beam"></div><div class="sunray-beam"></div><div class="sunray-beam"></div><div class="sunray-beam"></div></div>
 
     <main class="main">
         <div>
@@ -119,8 +116,8 @@
             <p class="qs-label">クイックスタートガイド</p>
             <div class="qs-img-wrap" id="qsImgWrap">
                 <a href="/user-guide/quick-start/" class="qs-img-link"><img src="/quiq-start-ogp.webp" alt="BakuApo クイックスタートガイド" width="616" height="322"></a>
-                <div class="click-ripple" id="clickRipple"></div>
-                <svg class="cursor-anim" id="cursorAnim" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 2L5 19.5L9.5 15.5L13.5 23L16.5 21.5L12.5 14L18 13L5 2Z" fill="#fff" stroke="#111" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                <div class="click-ripple" id="clickRipple"><div class="click-ripple-ring"></div></div>
+                <svg class="cursor-anim" id="cursorAnim" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 2L5 19.5L9.5 15.5L13.5 23L16.5 21.5L12.5 14L18 13L5 2Z" fill="#fff" stroke="#222" stroke-width="2" stroke-linejoin="round"/></svg>
             </div>
             <a href="/user-guide/quick-start/" class="btn-qs">▶︎ クイックスタートガイドに進む</a>
         </div>
@@ -142,50 +139,76 @@
     </footer>
 
     <script>
-    // Cursor click animation on OGP image
+    // Cursor click animation on OGP image — JS-driven for reliability
     (function(){
         var wrap = document.getElementById('qsImgWrap');
         var cursor = document.getElementById('cursorAnim');
-        var ripple = document.getElementById('clickRipple');
-        if(!wrap||!cursor||!ripple) return;
+        var ringEl = document.querySelector('#clickRipple .click-ripple-ring');
+        if(!wrap||!cursor||!ringEl) return;
         var triggered = false;
+        var s = cursor.style;
+        var rs = ringEl.style;
 
-        function doClick(delay){
+        // Smooth transition helper
+        function setTransition(dur, props){
+            s.transition = props.map(function(p){ return p+' '+dur+'ms ease-out'; }).join(',');
+        }
+
+        // Click animation: scale cursor down then up + ripple ring
+        function doClick(cb){
+            // Press down
+            setTransition(120, ['transform']);
+            s.transform = 'translate(-50%,-50%) scale(0.6)';
+            // Ripple ring start
+            rs.transition = 'none';
+            rs.width = '0px'; rs.height = '0px'; rs.opacity = '0.7';
             setTimeout(function(){
-                // Reset cursor for click
-                cursor.classList.remove('active','clicking');
-                void cursor.offsetWidth;
-                cursor.classList.add('clicking');
-                // Ripple burst
-                ripple.classList.remove('burst');
-                void ripple.offsetWidth;
-                ripple.classList.add('burst');
-            }, delay);
+                // Release up
+                setTransition(200, ['transform']);
+                s.transform = 'translate(-50%,-50%) scale(1)';
+                // Ripple ring expand
+                rs.transition = 'width .45s ease-out, height .45s ease-out, opacity .45s ease-out';
+                rs.width = '56px'; rs.height = '56px'; rs.opacity = '0';
+                setTimeout(function(){ if(cb) cb(); }, 350);
+            }, 150);
         }
 
         var io = new IntersectionObserver(function(entries){
-            entries.forEach(function(e){
-                if(e.isIntersecting && !triggered){
-                    triggered = true;
-                    io.disconnect();
-                    // Phase 1: fade-in (0 – 600ms)
-                    cursor.classList.add('active');
-                    // Phase 2: 1st click at 1.0s
-                    doClick(1000);
-                    // Phase 3: 2nd click at 2.0s
-                    doClick(2000);
-                    // Phase 4: 3rd click at 3.0s
-                    doClick(3000);
-                    // Phase 5: fade out at 4.0s
+            for(var i=0;i<entries.length;i++){
+                if(entries[i].isIntersecting && !triggered){
+                    triggered = true; io.disconnect();
+
+                    // Phase 0: Start off-screen bottom-right, invisible
+                    s.transition = 'none';
+                    s.opacity = '0';
+                    s.transform = 'translate(-50%,-50%) translate(35px,35px)';
+
+                    // Phase 1: Fade-in + slide to center (0 → 600ms)
+                    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+                        setTransition(600, ['opacity','transform']);
+                        s.opacity = '1';
+                        s.transform = 'translate(-50%,-50%) scale(1)';
+                    });});
+
+                    // Phase 2: 1st click at 900ms
+                    setTimeout(function(){ doClick(null); }, 900);
+                    // Phase 3: 2nd click at 1700ms
+                    setTimeout(function(){ doClick(null); }, 1700);
+                    // Phase 4: 3rd click at 2500ms
+                    setTimeout(function(){ doClick(null); }, 2500);
+
+                    // Phase 5: Fade out at 3300ms
                     setTimeout(function(){
-                        cursor.classList.remove('clicking');
-                        cursor.classList.add('fade-out');
-                    }, 4000);
-                    // Phase 6: hide at 4.5s
-                    setTimeout(function(){ cursor.style.display='none'; ripple.style.display='none'; }, 4500);
+                        setTransition(500, ['opacity']);
+                        s.opacity = '0';
+                    }, 3300);
+                    // Phase 6: Cleanup at 3900ms
+                    setTimeout(function(){
+                        cursor.style.display = 'none';
+                    }, 3900);
                 }
-            });
-        }, {threshold: 0.4});
+            }
+        }, {threshold: 0.3});
         io.observe(wrap);
     })();
     </script>
