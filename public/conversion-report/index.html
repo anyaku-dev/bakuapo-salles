@@ -39,9 +39,9 @@
 
         /* Info Cards */
         .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:56px}
-        .info-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:28px 24px}
-        .info-card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-        .info-card-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+        .info-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:0;overflow:hidden}
+        .info-card-img{width:100%;display:block;border-radius:0}
+        .info-card-body{padding:20px 24px}
         .info-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
         .info-card p{font-size:16px;color:var(--text-secondary);line-height:1.75}
         .info-card .highlight{color:var(--accent);font-weight:600}
@@ -180,18 +180,18 @@
         <!-- Info Cards -->
         <div class="info-grid">
             <div class="info-card">
-                <div class="info-card-icon" style="background:rgba(16,185,129,.08);color:var(--success)">
-                    <svg viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-                </div>
+                <img src="/conversion-01.png" alt="報酬について" class="info-card-img">
+                <div class="info-card-body">
                 <h3>報酬について</h3>
                 <p>販売額の<span class="highlight">50%</span>がパートナー様の報酬です。<br>月末締め・翌月末払いでお振り込みいたします。複数成約は合算されます。</p>
+                </div>
             </div>
             <div class="info-card">
-                <div class="info-card-icon" style="background:var(--accent-light);color:var(--accent)">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-                </div>
+                <img src="/conversion-02.png" alt="請求書は不要です" class="info-card-img">
+                <div class="info-card-body">
                 <h3>請求書は不要です</h3>
                 <p>成約申請フォームからのご報告をもって自動的に報酬が確定いたします。<br>別途請求書をお送りいただく必要はございません。</p>
+                </div>
             </div>
         </div>
 
