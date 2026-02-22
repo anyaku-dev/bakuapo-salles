@@ -26,11 +26,28 @@
         .sub-text{font-size:16px;color:var(--text-secondary);line-height:1.9;margin-bottom:40px}
 
         .info-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:left;margin-bottom:32px}
-        .info-card h2{font-size:24px;font-weight:700;margin-bottom:16px}
+        .info-card h2{font-size:24px;font-weight:700;margin-bottom:8px}
+        .info-card .info-lead{font-size:16px;color:var(--text-secondary);line-height:1.9;margin-bottom:24px}
         .info-card p{font-size:16px;color:var(--text-secondary);line-height:1.9;margin-bottom:12px}
         .info-card p:last-child{margin-bottom:0}
         .info-card a{color:var(--accent);font-weight:600;text-decoration:none}
         .info-card a:hover{text-decoration:underline}
+
+        .qs-label{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+        .qs-img-link{display:block;border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:box-shadow .2s,transform .2s}
+        .qs-img-link:hover{box-shadow:0 8px 28px rgba(8,82,255,.12);transform:translateY(-2px)}
+        .qs-img-link img{width:100%;display:block}
+        .btn-qs{display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;font-family:inherit;color:#fff;background:var(--accent);padding:16px 40px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(8,82,255,.2);text-decoration:none;margin-top:20px}
+        .btn-qs:hover{background:#063FCC;transform:translateY(-2px);box-shadow:0 8px 28px rgba(8,82,255,.3)}
+
+        .mail-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:left;margin-bottom:32px}
+        .mail-card h3{font-size:18px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+        .mail-card h3 .mail-icon{width:32px;height:32px;border-radius:8px;background:rgba(8,82,255,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .mail-card h3 .mail-icon svg{width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:2}
+        .mail-card p{font-size:15px;color:var(--text-secondary);line-height:1.9;margin-bottom:10px}
+        .mail-card p:last-child{margin-bottom:0}
+        .mail-card a{color:var(--accent);font-weight:600;text-decoration:none}
+        .mail-card a:hover{text-decoration:underline}
 
         .status-badge{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--success);background:rgba(16,185,129,.08);padding:8px 20px;border-radius:100px;margin-bottom:32px}
         .status-badge svg{width:16px;height:16px}
@@ -64,22 +81,30 @@
 
         <div class="status-badge">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
-            支払い完了
+            支払い完了 - Stripe
         </div>
 
         <p class="sub-text">
             BakuApo（バクアポ）のクレジットカード決済が正常に完了しました。<br>
-            ご購入ありがとうございます。
+            ご購入いただき、誠にありがとうございます。
         </p>
 
         <div class="info-card">
-            <h2>今後の流れ</h2>
+            <h2>BakuApoへようこそ！</h2>
+            <p class="info-lead">早速BakuApo（バクアポ）のインストールを行いましょう。<br>フォーム営業の自動化はすぐそこです！</p>
+            <p class="qs-label">クイックスタートガイド</p>
+            <a href="/user-guide/quick-start/" class="qs-img-link"><img src="/quiq-start-ogp.webp" alt="BakuApo クイックスタートガイド" width="616" height="322"></a>
+            <div style="text-align:center"><a href="/user-guide/quick-start/" class="btn-qs">▶︎ クイックスタートガイドに進む</a></div>
+        </div>
+
+        <div class="mail-card">
+            <h3><span class="mail-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,14 2,7"/></svg></span>ご利用開始メールを送信しております</h3>
             <p>Stripe決済時にご登録いただいたメールアドレス宛に、「BakuApo」ダウンロードリンクやマニュアル等一式をお送りさせていただきます。</p>
             <p>通常、決済完了後 <strong>1時間以内</strong> にメールをお届けいたします。</p>
             <p>万が一、1時間経過してもメールが届かない場合は、迷惑メールフォルダをご確認のうえ、<a href="mailto:info@chainsoda.world">info@chainsoda.world</a> までお問い合わせください。</p>
         </div>
 
-        <p class="status-msg" id="statusMsg">支払い情報を更新中...</p>
+        <p class="status-msg" id="statusMsg" style="display:none">支払い情報を更新中...</p>
 
         <p class="note">このページを閉じても問題ございません。</p>
     </main>
