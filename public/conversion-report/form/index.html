@@ -144,7 +144,8 @@
         .congrats-overlay.show .congrats-modal{transform:scale(1) translateY(0);opacity:1}
         .congrats-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg-alt);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--text-muted);transition:all .15s;line-height:1}
         .congrats-close:hover{background:var(--border);color:var(--text-primary)}
-        .congrats-emoji{font-size:56px;margin-bottom:16px;display:block;animation:congratsBounce .6s ease}
+        .congrats-emoji{margin-bottom:16px;display:block;animation:congratsBounce .6s ease}
+        .congrats-emoji img{width:80px;height:auto;}
         @keyframes congratsBounce{0%{transform:scale(0) rotate(-20deg)}50%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
         .congrats-modal h2{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px;color:var(--text-primary)}
         .congrats-modal p{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:24px}
@@ -161,8 +162,8 @@
     <div class="congrats-overlay" id="congratsOverlay">
         <div class="congrats-modal">
             <button class="congrats-close" id="congratsClose">&times;</button>
-            <span class="congrats-emoji">🎉</span>
-            <h2>ご成約おめでとうございます。</h2>
+            <span class="congrats-emoji"><img src="/man&woman-01.svg" alt="おめでとう"></span>
+            <h2>ご成約おめでとうございます！</h2>
             <p>大切なお客様をお繋ぎいただき、<br>誠にありがとうございます。</p>
             <p>今後も一緒に、BakuApoの価値を<br>広げていけましたら幸いです。</p>
             <div class="congrats-progress"><div class="congrats-progress-bar" id="congratsBar"></div></div>
