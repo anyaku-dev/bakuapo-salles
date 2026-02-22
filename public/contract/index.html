@@ -450,6 +450,10 @@
             }
         }
 
+        // Save customer info for checkout page
+        localStorage.setItem('contractName', fullName.value.trim());
+        localStorage.setItem('contractEmail', email.value.trim());
+
         // Show thanks view
         setTimeout(() => {
             $('formView').style.display = 'none';

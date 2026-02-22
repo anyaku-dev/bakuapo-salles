@@ -836,6 +836,21 @@
             $('switchCreditSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 600);
     });
+
+    // ===== Auto-fill from contract page =====
+    (() => {
+        const cName = localStorage.getItem('contractName') || '';
+        const cEmail = localStorage.getItem('contractEmail') || '';
+        if (cName) {
+            creditName.value = cName;
+            bankCustomerName.value = cName;
+        }
+        if (cEmail) {
+            creditEmail.value = cEmail;
+            $('bankEmail').value = cEmail;
+        }
+        if (cName || cEmail) updateCreditState();
+    })();
     </script>
 </body>
 </html>
