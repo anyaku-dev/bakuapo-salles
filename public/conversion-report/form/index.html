@@ -207,6 +207,14 @@
                     <label class="form-label">お客様の氏名<span class="required">*</span></label>
                     <input type="text" class="form-input" id="customerName" placeholder="例：佐藤 花子" required>
                 </div>
+                <div class="form-group">
+                    <label class="form-label">お客様の会社名</label>
+                    <input type="text" class="form-input" id="companyName" placeholder="例：株式会社サンプル">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">お客様のメールアドレス</label>
+                    <input type="email" class="form-input" id="customerEmail" placeholder="例：sato@example.com">
+                </div>
             </div>
 
             <!-- Section 2: 成約商品 -->
@@ -344,6 +352,14 @@
                         <dd id="confirmCustomer">—</dd>
                     </div>
                     <div class="confirm-row">
+                        <dt>会社名</dt>
+                        <dd id="confirmCompany">—</dd>
+                    </div>
+                    <div class="confirm-row">
+                        <dt>メールアドレス</dt>
+                        <dd id="confirmEmail">—</dd>
+                    </div>
+                    <div class="confirm-row">
                         <dt>成約商品</dt>
                         <dd>BakuApo（バクアポ）</dd>
                     </div>
@@ -427,6 +443,8 @@
     const $ = id => document.getElementById(id);
     const partnerName = $('partnerName');
     const customerName = $('customerName');
+    const companyName = $('companyName');
+    const customerEmail = $('customerEmail');
     const cond1 = $('cond1'), cond2 = $('cond2');
     const bankExisting = $('bankExisting'), bankNew = $('bankNew');
     const bankFormEl = $('bankForm'), bankSavedEl = $('bankSaved');
@@ -550,6 +568,8 @@
     function updateConfirmation() {
         $('confirmPartner').textContent = partnerName.value.trim() || '—';
         $('confirmCustomer').textContent = customerName.value.trim() || '—';
+        $('confirmCompany').textContent = companyName.value.trim() || '—';
+        $('confirmEmail').textContent = customerEmail.value.trim() || '—';
         if (bankNew.checked && bankInfoSaved && savedBankData) {
             $('confirmBank').innerHTML = `${savedBankData.bankName} ${savedBankData.branchName}<br>${savedBankData.accountType} ${savedBankData.accountNumber}`;
         } else if (bankExisting.checked) {
@@ -560,6 +580,8 @@
     }
     partnerName.addEventListener('input', updateConfirmation);
     customerName.addEventListener('input', updateConfirmation);
+    companyName.addEventListener('input', updateConfirmation);
+    customerEmail.addEventListener('input', updateConfirmation);
 
     // ===== Progress & Validation =====
     function updateState() {
@@ -587,14 +609,20 @@
         if (submitBtn.disabled) return;
 
         const payload = {
-            partnerName: partnerName.value.trim(),
+            action: 'registerConversion',
+            submittedAt: new Date().toISOString(),
             customerName: customerName.value.trim(),
+            companyName: companyName.value.trim(),
+            email: customerEmail.value.trim(),
+            partnerName: partnerName.value.trim(),
+            contractStatus: '成約申請済み',
+            paymentMethod: '',
+            paymentStatus: '確認済み',
             product: 'BakuApo（バクアポ）税込55万円',
             commission: 275000,
             bankStatus: bankExisting.checked ? 'existing' : 'new',
             bankInfo: savedBankData || null,
-            paymentDate: getPaymentDate(),
-            submittedAt: new Date().toISOString()
+            paymentDate: getPaymentDate()
         };
 
         submitBtn.disabled = true;
