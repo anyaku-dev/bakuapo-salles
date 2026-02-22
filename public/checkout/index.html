@@ -700,6 +700,7 @@
         const payload = {
             action: 'switchToCredit',
             customerName: localStorage.getItem('checkoutName') || '',
+            email: localStorage.getItem('checkoutEmail') || '',
             submittedAt: new Date().toISOString()
         };
 
@@ -733,6 +734,7 @@
         const payload = {
             action: 'switchToBank',
             customerName: localStorage.getItem('checkoutName') || '',
+            email: localStorage.getItem('checkoutEmail') || '',
             submittedAt: new Date().toISOString()
         };
 
@@ -786,6 +788,7 @@
         const payload = {
             action: 'switchToBank',
             customerName: localStorage.getItem('checkoutName') || '',
+            email: localStorage.getItem('checkoutEmail') || '',
             submittedAt: new Date().toISOString()
         };
 
