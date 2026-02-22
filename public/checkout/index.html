@@ -145,6 +145,7 @@
         .stripe-after-switch{display:none;margin-top:24px}
         .stripe-after-switch.visible{display:block}
         #switchBackToBank:hover{text-decoration:underline;color:var(--text-secondary)}
+        #switchToBankFromCredit:hover{text-decoration:underline;color:var(--text-secondary)}
 
         /* Error */
         .form-error{color:var(--danger);font-size:13px;margin-top:6px;display:none}
@@ -253,6 +254,9 @@
                                 <p>また、まれに迷惑メールなどに入ってしまう場合もございます。<br>決済後1時間経過しても届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
                             </div>
                         </div>
+                        <p style="text-align:center;margin-top:16px">
+                            <a href="#" id="switchToBankFromCredit" style="font-size:14px;color:var(--text-muted);text-decoration:none;transition:all .15s">銀行振込に変更する</a>
+                        </p>
                     </div>
                 </div>
 
@@ -326,7 +330,7 @@
                         <div style="text-align:center">
                             <button type="button" class="btn-submit-bank" id="bankSubmitBtn" disabled>
                                 <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>
-                                振り込み元情報を送信する
+                                振り込みでのお支払いに進む
                             </button>
                         </div>
                     </div>
@@ -554,6 +558,8 @@
         setTimeout(() => {
             $('creditStep1').style.display = 'none';
             $('creditStep2').style.display = 'block';
+            // Hide payment method selection (already chose credit)
+            document.querySelector('.check-group').style.display = 'none';
         }, 600);
     });
 
@@ -717,7 +723,60 @@
         }, 600);
     });
 
-    // ===== Switch Back to Bank (from credit view) =====
+    // ===== Switch to Bank from Credit Step2 =====
+    $('switchToBankFromCredit').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const link = $('switchToBankFromCredit');
+        link.textContent = '切り替え中...';
+        link.style.pointerEvents = 'none';
+
+        const payload = {
+            action: 'switchToBank',
+            customerName: localStorage.getItem('checkoutName') || '',
+            submittedAt: new Date().toISOString()
+        };
+
+        if (CHECKOUT_ENDPOINT) {
+            try {
+                await fetch(CHECKOUT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                });
+            } catch (err) {
+                console.error('Switch to bank error:', err);
+            }
+        }
+
+        setTimeout(() => {
+            // Show bank panel with form, hide credit panel
+            $('creditStep2').style.display = 'none';
+            panelCredit.classList.remove('visible');
+            panelBank.classList.add('visible');
+            // Show payment method radios again, switch to bank
+            document.querySelector('.check-group').style.display = '';
+            optBank.checked = true;
+            optCredit.checked = false;
+            document.querySelectorAll('input[name="payMethod"]').forEach(r => {
+                r.closest('.check-item').classList.toggle('checked', r.checked);
+            });
+            // Reset bank form view
+            $('bankFormView').style.display = 'block';
+            $('bankConfirmBox').classList.remove('visible');
+            $('bankConfirmSection').style.display = 'none';
+            // Pre-fill customer name from credit flow
+            const savedName = localStorage.getItem('checkoutName') || '';
+            if (savedName && !bankCustomerName.value.trim()) {
+                bankCustomerName.value = savedName;
+            }
+            link.textContent = '銀行振込に変更する';
+            link.style.pointerEvents = '';
+            window.scrollTo({ top: panelBank.offsetTop - 100, behavior: 'smooth' });
+        }, 600);
+    });
+
+    // ===== Switch Back to Bank (from bank info credit view) =====
     $('switchBackToBank').addEventListener('click', async (e) => {
         e.preventDefault();
         const link = $('switchBackToBank');
