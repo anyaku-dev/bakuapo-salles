@@ -135,9 +135,40 @@
             .confirm-row{flex-direction:column;gap:4px}
             .confirm-row dd{text-align:left}
         }
+
+        /* Congrats Modal */
+        .congrats-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .4s;pointer-events:none}
+        .congrats-overlay.show{opacity:1;pointer-events:auto}
+        .congrats-overlay.hide{opacity:0;pointer-events:none}
+        .congrats-modal{background:#fff;border-radius:24px;padding:48px 40px 24px;text-align:center;max-width:420px;width:90%;position:relative;transform:scale(.85) translateY(20px);transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .4s;opacity:0;box-shadow:0 24px 64px rgba(0,0,0,.15)}
+        .congrats-overlay.show .congrats-modal{transform:scale(1) translateY(0);opacity:1}
+        .congrats-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg-alt);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--text-muted);transition:all .15s;line-height:1}
+        .congrats-close:hover{background:var(--border);color:var(--text-primary)}
+        .congrats-emoji{font-size:56px;margin-bottom:16px;display:block;animation:congratsBounce .6s ease}
+        @keyframes congratsBounce{0%{transform:scale(0) rotate(-20deg)}50%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+        .congrats-modal h2{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px;color:var(--text-primary)}
+        .congrats-modal p{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:24px}
+        .congrats-progress{width:100%;height:4px;background:var(--bg-alt);border-radius:4px;overflow:hidden}
+        .congrats-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),#635BFF);border-radius:4px;width:0%;transition:width .05s linear}
+        .confetti-canvas{position:fixed;inset:0;z-index:9998;pointer-events:none}
     </style>
 </head>
 <body>
+    <!-- Confetti -->
+    <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+
+    <!-- Congrats Modal -->
+    <div class="congrats-overlay" id="congratsOverlay">
+        <div class="congrats-modal">
+            <button class="congrats-close" id="congratsClose">&times;</button>
+            <span class="congrats-emoji">🎉</span>
+            <h2>ご成約おめでとうございます。</h2>
+            <p>大切なお客様をお繋ぎいただき、<br>誠にありがとうございます。</p>
+            <p>今後も一緒に、BakuApoの価値を<br>広げていけましたら幸いです。</p>
+            <div class="congrats-progress"><div class="congrats-progress-bar" id="congratsBar"></div></div>
+        </div>
+    </div>
+
     <header class="site-header">
         <div class="header-inner">
             <div class="header-logo"><img src="/bakuapo-logo-useer.svg" alt="BakuApo"></div>
@@ -589,6 +620,112 @@
 
     // Init
     updateState();
+
+    // === Congrats Modal + Confetti ===
+    (() => {
+        const overlay = document.getElementById('congratsOverlay');
+        const bar = document.getElementById('congratsBar');
+        const closeBtn = document.getElementById('congratsClose');
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        const DURATION = 4000;
+        let startTime = null;
+        let dismissed = false;
+
+        requestAnimationFrame(() => overlay.classList.add('show'));
+
+        function tickBar(now) {
+            if (!startTime) startTime = now;
+            const elapsed = now - startTime;
+            const pct = Math.min(elapsed / DURATION * 100, 100);
+            bar.style.width = pct + '%';
+            if (elapsed < DURATION && !dismissed) {
+                requestAnimationFrame(tickBar);
+            } else if (!dismissed) {
+                dismiss();
+            }
+        }
+        requestAnimationFrame(tickBar);
+
+        function dismiss() {
+            if (dismissed) return;
+            dismissed = true;
+            overlay.classList.remove('show');
+            overlay.classList.add('hide');
+            setTimeout(() => overlay.remove(), 500);
+        }
+        closeBtn.addEventListener('click', dismiss);
+        overlay.addEventListener('click', e => { if (e.target === overlay) dismiss(); });
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth * devicePixelRatio;
+            canvas.height = window.innerHeight * devicePixelRatio;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const colors = ['#0852FF','#635BFF','#10B981','#F59E0B','#EF4444','#EC4899','#8B5CF6','#06B6D4','#FF6B6B','#FFD93D'];
+        const pieces = [];
+        const W = () => window.innerWidth;
+        const H = () => window.innerHeight;
+
+        for (let i = 0; i < 120; i++) {
+            pieces.push({
+                x: Math.random() * W(),
+                y: -Math.random() * H() * 0.8 - 20,
+                w: 4 + Math.random() * 6,
+                h: 6 + Math.random() * 10,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                vx: (Math.random() - 0.5) * 2,
+                vy: 1.5 + Math.random() * 3,
+                rot: Math.random() * 360,
+                rotV: (Math.random() - 0.5) * 8,
+                alpha: 1,
+                shape: Math.random() > 0.4 ? 'rect' : 'circle'
+            });
+        }
+
+        let confettiDone = false;
+        function drawConfetti() {
+            ctx.clearRect(0, 0, W(), H());
+            let alive = 0;
+            for (const p of pieces) {
+                p.x += p.vx;
+                p.vy += 0.04;
+                p.y += p.vy;
+                p.rot += p.rotV;
+                p.vx *= 0.999;
+                if (p.y > H() + 40) {
+                    p.alpha -= 0.02;
+                    if (p.alpha <= 0) continue;
+                }
+                alive++;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot * Math.PI / 180);
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.fillStyle = p.color;
+                if (p.shape === 'rect') {
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+            if (alive > 0 && !confettiDone) {
+                requestAnimationFrame(drawConfetti);
+            } else {
+                confettiDone = true;
+                canvas.remove();
+            }
+        }
+        requestAnimationFrame(drawConfetti);
+    })();
     </script>
 </body>
 </html>
