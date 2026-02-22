@@ -123,7 +123,7 @@
         .bank-info-view.visible{display:block}
         .bank-info-card{background:var(--bg-card);border:2px solid var(--accent);border-radius:16px;padding:36px 32px;text-align:center}
         .bank-info-card h2{font-size:24px;font-weight:700;margin-bottom:8px}
-        .bank-info-card .memo-hint{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--warning);background:rgba(245,158,11,.08);padding:6px 16px;border-radius:100px;margin-bottom:24px}
+        .bank-info-card .memo-hint{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#555;background:rgba(0,0,0,.05);padding:6px 16px;border-radius:100px;margin-bottom:24px}
         .bank-detail-box{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:left;margin:0 auto;max-width:400px}
         .bank-detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:15px}
         .bank-detail-row:last-child{border-bottom:none}
@@ -144,6 +144,7 @@
         /* Stripe Section after switch */
         .stripe-after-switch{display:none;margin-top:24px}
         .stripe-after-switch.visible{display:block}
+        #switchBackToBank:hover{text-decoration:underline;color:var(--text-secondary)}
 
         /* Error */
         .form-error{color:var(--danger);font-size:13px;margin-top:6px;display:none}
@@ -343,6 +344,7 @@
                 </div>
 
                 <div class="bank-detail-box">
+                    <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;text-align:center;color:var(--text-primary)">弊社振込先</h3>
                     <dl>
                         <div class="bank-detail-row">
                             <dt>銀行名</dt>
@@ -373,6 +375,8 @@
 
                 <div class="bank-after-note">
                     <p>ご入金確認後、ご契約時に記載いただいたメールアドレス宛に「BakuApo」ダウンロードリンクやマニュアル等一式をお送りさせていただきます。</p>
+                    <p>大変恐縮ですが、お振り込み手数料は貴社にてご負担いただきますようお願い申し上げます。</p>
+                    <p>お振り込みが完了しましたら、担当営業まで一言メッセージを頂けますと、スムーズにご案内が可能です。</p>
                     <p>入金後 <strong>3営業日（土日祝日を除く）</strong>を経過しても連絡が届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
                 </div>
 
@@ -407,6 +411,9 @@
                             <p>また、まれに迷惑メールなどに入ってしまう場合もございます。<br>決済後1時間経過しても届かない場合は、恐れ入りますが、<a href="mailto:info@chainsoda.world" style="color:var(--accent);font-weight:600">info@chainsoda.world</a> までお問い合わせください。</p>
                         </div>
                     </div>
+                    <p style="text-align:center;margin-top:16px">
+                        <a href="#" id="switchBackToBank" style="font-size:14px;color:var(--text-muted);text-decoration:none;transition:all .15s">銀行振込に戻す</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -707,6 +714,43 @@
             $('switchCreditSection').style.display = 'none';
             $('stripeAfterSwitch').classList.add('visible');
             $('stripeAfterSwitch').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 600);
+    });
+
+    // ===== Switch Back to Bank (from credit view) =====
+    $('switchBackToBank').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const link = $('switchBackToBank');
+        link.textContent = '切り替え中...';
+        link.style.pointerEvents = 'none';
+
+        const payload = {
+            action: 'switchToBank',
+            customerName: localStorage.getItem('checkoutName') || '',
+            submittedAt: new Date().toISOString()
+        };
+
+        if (CHECKOUT_ENDPOINT) {
+            try {
+                await fetch(CHECKOUT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    mode: 'no-cors'
+                });
+            } catch (err) {
+                console.error('Switch to bank error:', err);
+            }
+        }
+
+        setTimeout(() => {
+            $('stripeAfterSwitch').classList.remove('visible');
+            $('switchCreditSection').style.display = '';
+            $('switchCreditBtn').disabled = false;
+            $('switchCreditBtn').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> クレジットカードでの支払いに切り替える';
+            link.textContent = '銀行振込に戻す';
+            link.style.pointerEvents = '';
+            $('switchCreditSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 600);
     });
     </script>
