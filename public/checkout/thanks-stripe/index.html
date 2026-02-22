@@ -48,13 +48,17 @@
 
         /* Cursor click animation on OGP image */
         .qs-img-wrap{position:relative;overflow:visible}
-        .cursor-anim{position:absolute;bottom:18%;right:15%;width:32px;height:32px;opacity:0;pointer-events:none;z-index:10;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))}
+        .cursor-anim{position:absolute;top:50%;left:58%;transform:translate(-50%,-50%);width:36px;height:36px;opacity:0;pointer-events:none;z-index:10;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
         .cursor-anim.active{animation:cursorFadeIn .6s ease-out forwards}
-        .cursor-anim.clicking{animation:cursorClick .35s ease-in-out}
+        .cursor-anim.clicking{animation:cursorClick .4s ease-in-out forwards}
         .cursor-anim.fade-out{animation:cursorFadeOut .5s ease-in forwards}
-        @keyframes cursorFadeIn{0%{opacity:0;transform:translate(30px,30px)}100%{opacity:1;transform:translate(0,0)}}
-        @keyframes cursorClick{0%{transform:scale(1)}50%{transform:scale(.82)}100%{transform:scale(1)}}
-        @keyframes cursorFadeOut{0%{opacity:1}100%{opacity:0}}
+        @keyframes cursorFadeIn{0%{opacity:0;transform:translate(calc(-50% + 40px),calc(-50% + 40px))}100%{opacity:1;transform:translate(-50%,-50%)}}
+        @keyframes cursorClick{0%{transform:translate(-50%,-50%) scale(1)}30%{transform:translate(-50%,-50%) scale(.7)}60%{transform:translate(-50%,-50%) scale(.75)}100%{transform:translate(-50%,-50%) scale(1)}}
+        @keyframes cursorFadeOut{0%{opacity:1;transform:translate(-50%,-50%)}100%{opacity:0;transform:translate(-50%,-50%)}}
+        /* Click ripple */
+        .click-ripple{position:absolute;top:50%;left:58%;width:0;height:0;border-radius:50%;background:rgba(8,82,255,.25);transform:translate(-50%,-50%);pointer-events:none;z-index:9;opacity:0}
+        .click-ripple.burst{animation:rippleBurst .5s ease-out forwards}
+        @keyframes rippleBurst{0%{width:0;height:0;opacity:.6}100%{width:60px;height:60px;opacity:0}}
 
         .mail-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:left;margin-bottom:32px}
         .mail-card h3{font-size:18px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px}
@@ -115,6 +119,7 @@
             <p class="qs-label">クイックスタートガイド</p>
             <div class="qs-img-wrap" id="qsImgWrap">
                 <a href="/user-guide/quick-start/" class="qs-img-link"><img src="/quiq-start-ogp.webp" alt="BakuApo クイックスタートガイド" width="616" height="322"></a>
+                <div class="click-ripple" id="clickRipple"></div>
                 <svg class="cursor-anim" id="cursorAnim" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 2L5 19.5L9.5 15.5L13.5 23L16.5 21.5L12.5 14L18 13L5 2Z" fill="#fff" stroke="#111" stroke-width="1.5" stroke-linejoin="round"/></svg>
             </div>
             <a href="/user-guide/quick-start/" class="btn-qs">▶︎ クイックスタートガイドに進む</a>
@@ -139,25 +144,45 @@
     <script>
     // Cursor click animation on OGP image
     (function(){
-        const wrap = document.getElementById('qsImgWrap');
-        const cursor = document.getElementById('cursorAnim');
-        if(!wrap||!cursor) return;
-        let triggered = false;
-        const io = new IntersectionObserver(function(entries){
+        var wrap = document.getElementById('qsImgWrap');
+        var cursor = document.getElementById('cursorAnim');
+        var ripple = document.getElementById('clickRipple');
+        if(!wrap||!cursor||!ripple) return;
+        var triggered = false;
+
+        function doClick(delay){
+            setTimeout(function(){
+                // Reset cursor for click
+                cursor.classList.remove('active','clicking');
+                void cursor.offsetWidth;
+                cursor.classList.add('clicking');
+                // Ripple burst
+                ripple.classList.remove('burst');
+                void ripple.offsetWidth;
+                ripple.classList.add('burst');
+            }, delay);
+        }
+
+        var io = new IntersectionObserver(function(entries){
             entries.forEach(function(e){
                 if(e.isIntersecting && !triggered){
                     triggered = true;
                     io.disconnect();
-                    // Phase 1: fade-in from bottom-right (0-600ms)
+                    // Phase 1: fade-in (0 – 600ms)
                     cursor.classList.add('active');
-                    // Phase 2: click animation at 1.2s
-                    setTimeout(function(){ cursor.classList.remove('active'); cursor.classList.add('clicking'); }, 1200);
-                    // Phase 3: second click at 2.4s
-                    setTimeout(function(){ cursor.classList.remove('clicking'); void cursor.offsetWidth; cursor.classList.add('clicking'); }, 2400);
-                    // Phase 4: fade out at 3.5s
-                    setTimeout(function(){ cursor.classList.remove('clicking'); cursor.classList.add('fade-out'); }, 3500);
-                    // Phase 5: hide at 4s
-                    setTimeout(function(){ cursor.style.display='none'; }, 4000);
+                    // Phase 2: 1st click at 1.0s
+                    doClick(1000);
+                    // Phase 3: 2nd click at 2.0s
+                    doClick(2000);
+                    // Phase 4: 3rd click at 3.0s
+                    doClick(3000);
+                    // Phase 5: fade out at 4.0s
+                    setTimeout(function(){
+                        cursor.classList.remove('clicking');
+                        cursor.classList.add('fade-out');
+                    }, 4000);
+                    // Phase 6: hide at 4.5s
+                    setTimeout(function(){ cursor.style.display='none'; ripple.style.display='none'; }, 4500);
                 }
             });
         }, {threshold: 0.4});
