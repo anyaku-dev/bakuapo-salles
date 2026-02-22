@@ -615,7 +615,8 @@
 
         // Redirect to thanks page
         setTimeout(() => {
-            window.location.href = '/conversion-report/thanks/';
+            const pName = encodeURIComponent(partnerName.value.trim());
+            window.location.href = '/conversion-report/thanks/?name=' + pName;
         }, 800);
     });
 

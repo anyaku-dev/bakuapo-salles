@@ -112,8 +112,18 @@
         <!-- Message -->
         <div class="message">
             <p>
-                弊社の取り組みを共に広げていただき、BakuApoを通じて「営業」業界を変え、
-                社会をよりよくしていけることに、<strong>パートナー様と共にアプローチできることを、弊社は本当に幸せに思っています。</strong>
+                <strong id="partnerGreeting"></strong>
+            </p>
+            <p>
+                この度はご成約、本当におめでとうございます。<br>
+                そして、BakuApoの取り組みをお客様へ届けていただき、心より感謝いたします。
+            </p>
+            <p>
+                私たちは、アポ獲得の自動化を通じて営業のあり方を少しずつ前に進めていきたいと考えています。<br>
+                その一歩を、<strong id="partnerInline"></strong>と共に踏み出せたことをとても嬉しく思っています。
+            </p>
+            <p>
+                <strong>引き続き、安心してご提案いただけるよう全力でサポートいたします。</strong>
             </p>
 
             <div class="stats">
@@ -217,5 +227,13 @@
     <footer class="site-footer">
         <p>&copy; 2026 BakuApo &amp; CHAINSODA Co., Ltd. — All rights reserved.</p>
     </footer>
+    <script>
+    (() => {
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name') || 'パートナー';
+        document.getElementById('partnerGreeting').textContent = name + '様';
+        document.getElementById('partnerInline').textContent = name + '様';
+    })();
+    </script>
 </body>
 </html>
