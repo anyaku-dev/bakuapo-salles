@@ -37,8 +37,23 @@
         .qs-img-link{display:block;border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:box-shadow .2s,transform .2s}
         .qs-img-link:hover{box-shadow:0 8px 28px rgba(8,82,255,.12);transform:translateY(-2px)}
         .qs-img-link img{width:100%;display:block}
-        .btn-qs{display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;font-family:inherit;color:#fff;background:var(--accent);padding:16px 40px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(8,82,255,.2);text-decoration:none;margin-top:20px}
+        .btn-qs{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-size:16px;font-weight:700;font-family:inherit;color:#fff;background:var(--accent);padding:16px 40px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(8,82,255,.2);text-decoration:none;margin-top:20px}
         .btn-qs:hover{background:#063FCC;transform:translateY(-2px);box-shadow:0 8px 28px rgba(8,82,255,.3)}
+
+        /* Rainbow light animation */
+        .hero-area{position:relative;overflow:hidden}
+        .rainbow-overlay{pointer-events:none;position:absolute;top:-120%;left:-10%;width:120%;height:120%;background:linear-gradient(180deg,rgba(255,0,0,.12) 0%,rgba(255,154,0,.10) 14%,rgba(255,255,0,.10) 28%,rgba(0,210,80,.10) 42%,rgba(0,150,255,.12) 57%,rgba(100,80,255,.10) 71%,rgba(200,50,255,.10) 85%,transparent 100%);filter:blur(30px);opacity:0;animation:rainbowDrop 3s ease-out forwards}
+        @keyframes rainbowDrop{0%{top:-120%;opacity:.9}60%{opacity:.7}100%{top:100%;opacity:0}}
+
+        /* Cursor click animation on OGP image */
+        .qs-img-wrap{position:relative;overflow:visible}
+        .cursor-anim{position:absolute;bottom:18%;right:15%;width:32px;height:32px;opacity:0;pointer-events:none;z-index:10;filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))}
+        .cursor-anim.active{animation:cursorFadeIn .6s ease-out forwards}
+        .cursor-anim.clicking{animation:cursorClick .35s ease-in-out}
+        .cursor-anim.fade-out{animation:cursorFadeOut .5s ease-in forwards}
+        @keyframes cursorFadeIn{0%{opacity:0;transform:translate(30px,30px)}100%{opacity:1;transform:translate(0,0)}}
+        @keyframes cursorClick{0%{transform:scale(1)}50%{transform:scale(.82)}100%{transform:scale(1)}}
+        @keyframes cursorFadeOut{0%{opacity:1}100%{opacity:0}}
 
         .mail-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:left;margin-bottom:32px}
         .mail-card h3{font-size:18px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px}
@@ -71,13 +86,16 @@
     </header>
 
     <main class="main">
-        <div class="thanks-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-        </div>
+        <div class="hero-area">
+            <div class="rainbow-overlay"></div>
+            <div class="thanks-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
 
-        <h1>お支払いが完了しました</h1>
+            <h1>お支払いが完了しました</h1>
+        </div>
 
         <div class="status-badge">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
@@ -93,8 +111,11 @@
             <h2>BakuApoへようこそ！</h2>
             <p class="info-lead">早速BakuApo（バクアポ）のインストールを行いましょう。<br>フォーム営業の自動化はすぐそこです！</p>
             <p class="qs-label">クイックスタートガイド</p>
-            <a href="/user-guide/quick-start/" class="qs-img-link"><img src="/quiq-start-ogp.webp" alt="BakuApo クイックスタートガイド" width="616" height="322"></a>
-            <div style="text-align:center"><a href="/user-guide/quick-start/" class="btn-qs">▶︎ クイックスタートガイドに進む</a></div>
+            <div class="qs-img-wrap" id="qsImgWrap">
+                <a href="/user-guide/quick-start/" class="qs-img-link"><img src="/quiq-start-ogp.webp" alt="BakuApo クイックスタートガイド" width="616" height="322"></a>
+                <svg class="cursor-anim" id="cursorAnim" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 2L5 19.5L9.5 15.5L13.5 23L16.5 21.5L12.5 14L18 13L5 2Z" fill="#fff" stroke="#111" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+            <a href="/user-guide/quick-start/" class="btn-qs">▶︎ クイックスタートガイドに進む</a>
         </div>
 
         <div class="mail-card">
@@ -112,6 +133,35 @@
     <footer class="site-footer">
         <p>&copy; 2026 BakuApo &amp; CHAINSODA Co., Ltd. — All rights reserved.</p>
     </footer>
+
+    <script>
+    // Cursor click animation on OGP image
+    (function(){
+        const wrap = document.getElementById('qsImgWrap');
+        const cursor = document.getElementById('cursorAnim');
+        if(!wrap||!cursor) return;
+        let triggered = false;
+        const io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){
+                if(e.isIntersecting && !triggered){
+                    triggered = true;
+                    io.disconnect();
+                    // Phase 1: fade-in from bottom-right (0-600ms)
+                    cursor.classList.add('active');
+                    // Phase 2: click animation at 1.2s
+                    setTimeout(function(){ cursor.classList.remove('active'); cursor.classList.add('clicking'); }, 1200);
+                    // Phase 3: second click at 2.4s
+                    setTimeout(function(){ cursor.classList.remove('clicking'); void cursor.offsetWidth; cursor.classList.add('clicking'); }, 2400);
+                    // Phase 4: fade out at 3.5s
+                    setTimeout(function(){ cursor.classList.remove('clicking'); cursor.classList.add('fade-out'); }, 3500);
+                    // Phase 5: hide at 4s
+                    setTimeout(function(){ cursor.style.display='none'; }, 4000);
+                }
+            });
+        }, {threshold: 0.4});
+        io.observe(wrap);
+    })();
+    </script>
 
     <script>
     // Google Apps Script Web App URL
