@@ -37,13 +37,14 @@
         .qs-img-link{display:block;border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:box-shadow .2s,transform .2s}
         .qs-img-link:hover{box-shadow:0 8px 28px rgba(8,82,255,.12);transform:translateY(-2px)}
         .qs-img-link img{width:100%;display:block}
-        .btn-qs{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-size:16px;font-weight:700;font-family:inherit;color:#fff;background:var(--accent);padding:16px 40px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(8,82,255,.2);text-decoration:none;margin-top:20px}
+        .btn-qs{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-size:16px;font-weight:700;font-family:inherit;color:#fff !important;background:var(--accent);padding:16px 40px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(8,82,255,.2);text-decoration:none !important;margin-top:20px}
         .btn-qs:hover{background:#063FCC;transform:translateY(-2px);box-shadow:0 8px 28px rgba(8,82,255,.3)}
 
-        /* Rainbow light animation */
-        .hero-area{position:relative;overflow:hidden}
-        .rainbow-overlay{pointer-events:none;position:absolute;top:-120%;left:-10%;width:120%;height:120%;background:linear-gradient(180deg,rgba(255,0,0,.12) 0%,rgba(255,154,0,.10) 14%,rgba(255,255,0,.10) 28%,rgba(0,210,80,.10) 42%,rgba(0,150,255,.12) 57%,rgba(100,80,255,.10) 71%,rgba(200,50,255,.10) 85%,transparent 100%);filter:blur(30px);opacity:0;animation:rainbowDrop 3s ease-out forwards}
-        @keyframes rainbowDrop{0%{top:-120%;opacity:.9}60%{opacity:.7}100%{top:100%;opacity:0}}
+        /* Sunray light animation from header */
+        .sunray-overlay{pointer-events:none;position:fixed;top:0;left:0;width:100%;height:100vh;z-index:99;overflow:hidden;opacity:0;animation:sunrayLife 3s ease-out forwards}
+        .sunray-overlay::before{content:'';position:absolute;top:-60%;left:50%;transform:translateX(-50%);width:140%;height:100%;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,220,100,.28) 0%,rgba(255,180,60,.15) 20%,rgba(255,140,40,.08) 40%,transparent 70%);filter:blur(8px)}
+        .sunray-overlay::after{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:200%;height:80%;background:conic-gradient(from 250deg at 50% 0%,transparent 0deg,rgba(255,230,140,.12) 10deg,transparent 25deg,rgba(255,200,80,.10) 35deg,transparent 50deg,rgba(255,220,120,.08) 58deg,transparent 70deg,rgba(255,240,160,.10) 80deg,transparent 95deg,rgba(255,200,100,.08) 105deg,transparent 120deg,transparent 360deg);filter:blur(4px)}
+        @keyframes sunrayLife{0%{opacity:0}15%{opacity:1}70%{opacity:.8}100%{opacity:0}}
 
         /* Cursor click animation on OGP image */
         .qs-img-wrap{position:relative;overflow:visible}
@@ -85,9 +86,10 @@
         </div>
     </header>
 
+    <div class="sunray-overlay" id="sunrayOverlay"></div>
+
     <main class="main">
-        <div class="hero-area">
-            <div class="rainbow-overlay"></div>
+        <div>
             <div class="thanks-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="20 6 9 17 4 12"></polyline>
@@ -119,7 +121,7 @@
         </div>
 
         <div class="mail-card">
-            <h3><span class="mail-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,14 2,7"/></svg></span>ご利用開始メールを送信しております</h3>
+            <h3><span class="mail-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,14 2,7"/></svg></span>決済完了メールを送信しております</h3>
             <p>Stripe決済時にご登録いただいたメールアドレス宛に、「BakuApo」ダウンロードリンクやマニュアル等一式をお送りさせていただきます。</p>
             <p>通常、決済完了後 <strong>1時間以内</strong> にメールをお届けいたします。</p>
             <p>万が一、1時間経過してもメールが届かない場合は、迷惑メールフォルダをご確認のうえ、<a href="mailto:info@chainsoda.world">info@chainsoda.world</a> までお問い合わせください。</p>
