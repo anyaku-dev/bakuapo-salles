@@ -269,6 +269,11 @@
                             <label class="form-label">お客様氏名<span class="required">*</span></label>
                             <input type="text" class="form-input" id="bankCustomerName" placeholder="例：山田 太郎" required>
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">ご契約時にご登録のメールアドレス<span class="required">*</span></label>
+                            <input type="email" class="form-input" id="bankEmail" placeholder="例：taro@example.com" required>
+                            <p class="form-error" id="bankEmailError">正しいメールアドレスをご入力ください。</p>
+                        </div>
 
                         <hr style="border:none;border-top:1px solid var(--border);margin:8px 0 24px">
 
@@ -304,6 +309,10 @@
                         <div class="confirm-row">
                             <dt>お客様氏名</dt>
                             <dd id="confirmCustomerName">—</dd>
+                        </div>
+                        <div class="confirm-row">
+                            <dt>メールアドレス</dt>
+                            <dd id="confirmBankEmail">—</dd>
                         </div>
                         <div class="confirm-row">
                             <dt>銀行名</dt>
@@ -607,21 +616,32 @@
     // ===== Bank Save =====
     $('bankSaveBtn').addEventListener('click', () => {
         const cn = bankCustomerName.value.trim();
+        const em = $('bankEmail').value.trim();
         const bn = bankNameInput.value.trim();
         const bc = bankCodeInput.value;
         const brn = branchName.value.trim();
         const acHold = accountHolder.value.trim();
 
+        let hasError = false;
         if (!cn || !bn || !brn || !acHold) {
             $('bankError').classList.add('visible');
-            return;
+            hasError = true;
+        } else {
+            $('bankError').classList.remove('visible');
         }
-        $('bankError').classList.remove('visible');
+        if (!isValidEmail(em)) {
+            $('bankEmailError').classList.add('visible');
+            hasError = true;
+        } else {
+            $('bankEmailError').classList.remove('visible');
+        }
+        if (hasError) return;
 
-        savedBankData = { customerName: cn, bankName: bn, bankCode: bc, branchName: brn, accountHolder: acHold };
+        savedBankData = { customerName: cn, email: em, bankName: bn, bankCode: bc, branchName: brn, accountHolder: acHold };
 
         // Show confirmation
         $('confirmCustomerName').textContent = cn;
+        $('confirmBankEmail').textContent = em;
         $('confirmBankName').textContent = bn;
         $('confirmBranchName').textContent = brn;
         $('confirmHolder').textContent = acHold;
@@ -655,7 +675,7 @@
         const payload = {
             action: 'registerPayment',
             customerName: savedBankData.customerName,
-            email: '',
+            email: savedBankData.email,
             paymentMethod: '銀行振込',
             bankName: savedBankData.bankName,
             branchName: savedBankData.branchName,
@@ -679,8 +699,9 @@
             }
         }
 
-        // Save customer name for switch-to-credit
+        // Save customer name & email for switch-to-credit
         localStorage.setItem('checkoutName', savedBankData.customerName);
+        localStorage.setItem('checkoutEmail', savedBankData.email);
 
         // Show bank info view
         setTimeout(() => {
