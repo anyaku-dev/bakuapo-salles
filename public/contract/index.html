@@ -86,6 +86,8 @@
         /* Error */
         .form-error{color:var(--danger);font-size:13px;margin-top:6px;display:none}
         .form-error.visible{display:block}
+        .form-input.error{border-color:var(--danger)}
+        .form-input.error:focus{box-shadow:0 0 0 3px rgba(239,68,68,.15)}
 
         /* ===== Thanks View ===== */
         .thanks-view{display:none}
@@ -156,12 +158,12 @@
                     <div class="form-group">
                         <label class="form-label">氏名<span class="required">*</span></label>
                         <input type="text" class="form-input" id="fullName" placeholder="例：山田 太郎" required>
-                        <p class="form-error" id="nameError">氏名をご入力ください。</p>
+                        <p class="form-error" id="nameError">※ 氏名が未入力です。</p>
                     </div>
                     <div class="form-group">
                         <label class="form-label">メールアドレス<span class="required">*</span></label>
                         <input type="email" class="form-input" id="email" placeholder="例：taro@example.com" required>
-                        <p class="form-error" id="emailError">正しいメールアドレスをご入力ください。</p>
+                        <p class="form-error" id="emailError">※ 正しいメールアドレスをご入力ください。</p>
                     </div>
                     <div class="form-group">
                         <label class="form-label">ご紹介者名<span class="optional">（任意）</span></label>
@@ -278,7 +280,7 @@
                         <input type="checkbox" id="agreeCheck">
                         <span class="check-item-text">利用契約書の内容に同意します</span>
                     </label>
-                    <p class="form-error" id="agreeError">利用規約への同意が必要です。</p>
+                    <p class="form-error" id="agreeError">※ 利用規約への同意が必要です。</p>
                 </div>
 
                 <!-- Notes & Submit -->
@@ -392,8 +394,25 @@
         submitBtn.disabled = !(nameOk && emailOk && agreed);
     }
 
-    fullName.addEventListener('input', updateState);
-    email.addEventListener('input', updateState);
+    // ===== Field-level validation helper =====
+    function validateField(input, errorId, testFn) {
+        const ok = testFn(input.value);
+        const err = $(errorId);
+        if (err) err.classList.toggle('visible', !ok);
+        input.classList.toggle('error', !ok);
+        return ok;
+    }
+
+    fullName.addEventListener('input', () => { updateState(); if(fullName.dataset.touched) validateField(fullName, 'nameError', v => v.trim().length > 0); });
+    email.addEventListener('input', () => { updateState(); if(email.dataset.touched) validateField(email, 'emailError', v => isValidEmail(v.trim())); });
+    fullName.addEventListener('blur', () => { fullName.dataset.touched = '1'; validateField(fullName, 'nameError', v => v.trim().length > 0); });
+    email.addEventListener('blur', () => { email.dataset.touched = '1'; validateField(email, 'emailError', v => isValidEmail(v.trim())); });
+    agreeCheck.addEventListener('change', () => {
+        if(agreeCheck.dataset.touched) {
+            const err = $('agreeError');
+            err.classList.toggle('visible', !agreeCheck.checked);
+        }
+    });
 
     // ===== Submit =====
     $('contractForm').addEventListener('submit', async e => {
@@ -403,20 +422,20 @@
         // Validate
         let hasError = false;
         if (!fullName.value.trim()) {
-            $('nameError').classList.add('visible');
-            hasError = true;
+            $('nameError').classList.add('visible'); fullName.classList.add('error');
+            fullName.dataset.touched = '1'; hasError = true;
         } else {
-            $('nameError').classList.remove('visible');
+            $('nameError').classList.remove('visible'); fullName.classList.remove('error');
         }
         if (!isValidEmail(email.value.trim())) {
-            $('emailError').classList.add('visible');
-            hasError = true;
+            $('emailError').classList.add('visible'); email.classList.add('error');
+            email.dataset.touched = '1'; hasError = true;
         } else {
-            $('emailError').classList.remove('visible');
+            $('emailError').classList.remove('visible'); email.classList.remove('error');
         }
         if (!agreeCheck.checked) {
             $('agreeError').classList.add('visible');
-            hasError = true;
+            agreeCheck.dataset.touched = '1'; hasError = true;
         } else {
             $('agreeError').classList.remove('visible');
         }

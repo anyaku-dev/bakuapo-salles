@@ -123,6 +123,8 @@
         /* Error */
         .form-error{color:var(--danger);font-size:13px;margin-top:6px;display:none}
         .form-error.visible{display:block}
+        .form-input.error{border-color:var(--danger)}
+        .form-input.error:focus{box-shadow:0 0 0 3px rgba(239,68,68,.15)}
 
         .site-footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border)}
         .site-footer p{font-size:12px;color:var(--text-muted)}
@@ -202,10 +204,12 @@
                 <div class="form-group">
                     <label class="form-label">パートナー様（正規代理店）名<span class="required">*</span></label>
                     <input type="text" class="form-input" id="partnerName" placeholder="例：山田 太郎" required>
+                    <p class="form-error" id="partnerNameError">※ パートナー様名が未入力です。</p>
                 </div>
                 <div class="form-group">
                     <label class="form-label">お客様の氏名<span class="required">*</span></label>
                     <input type="text" class="form-input" id="customerName" placeholder="例：佐藤 花子" required>
+                    <p class="form-error" id="customerNameError">※ お客様の氏名が未入力です。</p>
                 </div>
             </div>
 
@@ -244,7 +248,7 @@
                     <a href="https://partner.bakuapo.com/contract" target="_blank">「契約フォーム」はこちら →</a>
                     <a href="https://partner.bakuapo.com/checkout" target="_blank">「決済フォーム」はこちら →</a>
                 </div>
-                <p class="form-error" id="condError">両方のチェックが必要です。</p>
+                <p class="form-error" id="condError">※ 両方のチェックが必要です。</p>
             </div>
 
             <!-- Section 4: 報酬額 -->
@@ -289,16 +293,19 @@
                             <input type="text" class="form-input" id="bankName" placeholder="銀行名を入力（例：みずほ銀行）" autocomplete="off">
                             <div class="autocomplete-list" id="bankAcList"></div>
                         </div>
+                        <p class="form-error" id="bankNameError">※ 銀行名が未入力です。</p>
                         <input type="hidden" id="bankCode">
                     </div>
                     <div class="bank-row">
                         <div class="form-group">
                             <label class="form-label">支店名<span class="required">*</span></label>
                             <input type="text" class="form-input" id="branchName" placeholder="例：新宿支店">
+                            <p class="form-error" id="branchNameError">※ 支店名が未入力です。</p>
                         </div>
                         <div class="form-group">
                             <label class="form-label">支店コード<span class="required">*</span></label>
                             <input type="text" class="form-input" id="branchCode" placeholder="3桁" maxlength="3" inputmode="numeric">
+                            <p class="form-error" id="branchCodeError">※ 支店コードが未入力です。</p>
                         </div>
                     </div>
                     <div class="form-group">
@@ -317,12 +324,14 @@
                     <div class="form-group">
                         <label class="form-label">口座番号<span class="required">*</span></label>
                         <input type="text" class="form-input" id="accountNumber" placeholder="7桁" maxlength="7" inputmode="numeric">
+                        <p class="form-error" id="accountNumberError">※ 口座番号が未入力です。</p>
                     </div>
                     <div class="form-group">
                         <label class="form-label">口座名義（カナ）<span class="required">*</span></label>
                         <input type="text" class="form-input" id="accountHolder" placeholder="例：ヤマダ タロウ">
+                        <p class="form-error" id="accountHolderError">※ 口座名義が未入力です。</p>
                     </div>
-                    <p class="form-error" id="bankError">すべての項目をご入力ください。</p>
+                    <p class="form-error" id="bankError">※ すべての項目をご入力ください。</p>
                     <button type="button" class="btn-save" id="bankSaveBtn">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                         保存する
@@ -370,6 +379,7 @@
                         <input type="checkbox" id="finalCheck">
                         <span class="check-item-text">送信内容が正しいことを確認しました。</span>
                     </label>
+                    <p class="form-error" id="finalCheckError">※ 送信内容の確認が必要です。</p>
                 </div>
 
                 <div class="submit-section">
@@ -448,6 +458,32 @@
     }
     $('confirmPayDate').textContent = getPaymentDate();
 
+    // ===== Field-level validation helper =====
+    function validateField(input, errorId, testFn) {
+        const ok = testFn(input.value);
+        const err = $(errorId);
+        if (err) err.classList.toggle('visible', !ok);
+        input.classList.toggle('error', !ok);
+        return ok;
+    }
+
+    // ===== Blur Validation =====
+    partnerName.addEventListener('blur', () => { partnerName.dataset.touched = '1'; validateField(partnerName, 'partnerNameError', v => v.trim().length > 0); });
+    partnerName.addEventListener('input', () => { if(partnerName.dataset.touched) validateField(partnerName, 'partnerNameError', v => v.trim().length > 0); });
+    customerName.addEventListener('blur', () => { customerName.dataset.touched = '1'; validateField(customerName, 'customerNameError', v => v.trim().length > 0); });
+    customerName.addEventListener('input', () => { if(customerName.dataset.touched) validateField(customerName, 'customerNameError', v => v.trim().length > 0); });
+
+    // Bank field blur validation
+    bankNameInput.addEventListener('blur', () => { if(bankFormEl.classList.contains('visible')) { bankNameInput.dataset.touched = '1'; validateField(bankNameInput, 'bankNameError', v => v.trim().length > 0); } });
+    branchName.addEventListener('blur', () => { if(bankFormEl.classList.contains('visible')) { branchName.dataset.touched = '1'; validateField(branchName, 'branchNameError', v => v.trim().length > 0); } });
+    branchName.addEventListener('input', () => { if(branchName.dataset.touched) validateField(branchName, 'branchNameError', v => v.trim().length > 0); });
+    branchCode.addEventListener('blur', () => { if(bankFormEl.classList.contains('visible')) { branchCode.dataset.touched = '1'; validateField(branchCode, 'branchCodeError', v => v.trim().length > 0); } });
+    branchCode.addEventListener('input', () => { if(branchCode.dataset.touched) validateField(branchCode, 'branchCodeError', v => v.trim().length > 0); });
+    accountNumber.addEventListener('blur', () => { if(bankFormEl.classList.contains('visible')) { accountNumber.dataset.touched = '1'; validateField(accountNumber, 'accountNumberError', v => v.trim().length > 0); } });
+    accountNumber.addEventListener('input', () => { if(accountNumber.dataset.touched) validateField(accountNumber, 'accountNumberError', v => v.trim().length > 0); });
+    accountHolder.addEventListener('blur', () => { if(bankFormEl.classList.contains('visible')) { accountHolder.dataset.touched = '1'; validateField(accountHolder, 'accountHolderError', v => v.trim().length > 0); } });
+    accountHolder.addEventListener('input', () => { if(accountHolder.dataset.touched) validateField(accountHolder, 'accountHolderError', v => v.trim().length > 0); });
+
     // ===== Checkbox UI =====
     document.querySelectorAll('.check-item input').forEach(inp => {
         inp.addEventListener('change', () => {
@@ -524,10 +560,22 @@
         const acHold = accountHolder.value.trim();
 
         if (!bn || !brn || !brc || !acNum || !acHold) {
+            if (!bn) { $('bankNameError').classList.add('visible'); bankNameInput.classList.add('error'); }
+            else { $('bankNameError').classList.remove('visible'); bankNameInput.classList.remove('error'); }
+            if (!brn) { $('branchNameError').classList.add('visible'); branchName.classList.add('error'); }
+            else { $('branchNameError').classList.remove('visible'); branchName.classList.remove('error'); }
+            if (!brc) { $('branchCodeError').classList.add('visible'); branchCode.classList.add('error'); }
+            else { $('branchCodeError').classList.remove('visible'); branchCode.classList.remove('error'); }
+            if (!acNum) { $('accountNumberError').classList.add('visible'); accountNumber.classList.add('error'); }
+            else { $('accountNumberError').classList.remove('visible'); accountNumber.classList.remove('error'); }
+            if (!acHold) { $('accountHolderError').classList.add('visible'); accountHolder.classList.add('error'); }
+            else { $('accountHolderError').classList.remove('visible'); accountHolder.classList.remove('error'); }
             $('bankError').classList.add('visible');
             return;
         }
         $('bankError').classList.remove('visible');
+        ['bankNameError','branchNameError','branchCodeError','accountNumberError','accountHolderError'].forEach(id => $(id).classList.remove('visible'));
+        [bankNameInput, branchName, branchCode, accountNumber, accountHolder].forEach(el => el.classList.remove('error'));
 
         savedBankData = { bankName: bn, bankCode: bc, branchName: brn, branchCode: brc, accountType: acType, accountNumber: acNum, accountHolder: acHold };
         bankInfoSaved = true;
@@ -570,6 +618,15 @@
         const s3 = cond1.checked && cond2.checked;
         const s4 = bankExisting.checked || (bankNew.checked && bankInfoSaved);
 
+        // Show/hide condition error when user interacts
+        if (cond1.dataset.touched || cond2.dataset.touched) {
+            $('condError').classList.toggle('visible', !s3);
+        }
+        // Show/hide finalCheck error when user interacts
+        if (finalCheck.dataset.touched) {
+            $('finalCheckError').classList.toggle('visible', !finalCheck.checked);
+        }
+
         $('prog1').className = 'progress-step ' + (s1 ? 'done' : 'active');
         $('prog2').className = 'progress-step ' + (s1 && s3 ? 'done' : (s1 ? 'active' : ''));
         $('prog3').className = 'progress-step ' + (s1 && s3 && s4 ? 'done' : (s1 && s3 ? 'active' : ''));
@@ -579,12 +636,19 @@
     }
 
     [partnerName, customerName].forEach(el => el.addEventListener('input', updateState));
-    [cond1, cond2, finalCheck].forEach(el => el.addEventListener('change', updateState));
+    [cond1, cond2, finalCheck].forEach(el => el.addEventListener('change', () => { el.dataset.touched = '1'; updateState(); }));
 
     // ===== Submit =====
     $('appForm').addEventListener('submit', async e => {
         e.preventDefault();
-        if (submitBtn.disabled) return;
+        if (submitBtn.disabled) {
+            // Show all errors for unfilled fields
+            if (!partnerName.value.trim()) { $('partnerNameError').classList.add('visible'); partnerName.classList.add('error'); partnerName.dataset.touched = '1'; }
+            if (!customerName.value.trim()) { $('customerNameError').classList.add('visible'); customerName.classList.add('error'); customerName.dataset.touched = '1'; }
+            if (!(cond1.checked && cond2.checked)) { $('condError').classList.add('visible'); cond1.dataset.touched = '1'; cond2.dataset.touched = '1'; }
+            if (!finalCheck.checked) { $('finalCheckError').classList.add('visible'); finalCheck.dataset.touched = '1'; }
+            return;
+        }
 
         const payload = {
             partnerName: partnerName.value.trim(),

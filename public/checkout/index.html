@@ -150,6 +150,8 @@
         /* Error */
         .form-error{color:var(--danger);font-size:13px;margin-top:6px;display:none}
         .form-error.visible{display:block}
+        .form-input.error{border-color:var(--danger)}
+        .form-input.error:focus{box-shadow:0 0 0 3px rgba(239,68,68,.15)}
 
         .site-footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border)}
         .site-footer p{font-size:12px;color:var(--text-muted)}
@@ -217,12 +219,12 @@
                         <div class="form-group">
                             <label class="form-label">お客様氏名<span class="required">*</span></label>
                             <input type="text" class="form-input" id="creditName" placeholder="例：山田 太郎" required>
-                            <p class="form-error" id="creditNameError">お客様氏名をご入力ください。</p>
+                            <p class="form-error" id="creditNameError">※ お客様氏名が未入力です。</p>
                         </div>
                         <div class="form-group">
                             <label class="form-label">ご契約時にご登録のメールアドレス<span class="required">*</span></label>
                             <input type="email" class="form-input" id="creditEmail" placeholder="例：taro@example.com" required>
-                            <p class="form-error" id="creditEmailError">正しいメールアドレスをご入力ください。</p>
+                            <p class="form-error" id="creditEmailError">※ 正しいメールアドレスをご入力ください。</p>
                         </div>
                         <div style="text-align:center">
                             <button type="button" class="btn-proceed" id="creditProceedBtn" disabled>
@@ -268,11 +270,12 @@
                         <div class="form-group">
                             <label class="form-label">お客様氏名<span class="required">*</span></label>
                             <input type="text" class="form-input" id="bankCustomerName" placeholder="例：山田 太郎" required>
+                            <p class="form-error" id="bankCustomerNameError">※ お客様氏名が未入力です。</p>
                         </div>
                         <div class="form-group">
                             <label class="form-label">ご契約時にご登録のメールアドレス<span class="required">*</span></label>
                             <input type="email" class="form-input" id="bankEmail" placeholder="例：taro@example.com" required>
-                            <p class="form-error" id="bankEmailError">正しいメールアドレスをご入力ください。</p>
+                            <p class="form-error" id="bankEmailError">※ 正しいメールアドレスをご入力ください。</p>
                         </div>
 
                         <hr style="border:none;border-top:1px solid var(--border);margin:8px 0 24px">
@@ -284,16 +287,18 @@
                                 <div class="autocomplete-list" id="bankAcList"></div>
                             </div>
                             <input type="hidden" id="bankCode">
+                            <p class="form-error" id="bankNameError">※ 銀行名が未入力です。</p>
                         </div>
                         <div class="form-group">
                             <label class="form-label">支店名<span class="required">*</span></label>
                             <input type="text" class="form-input" id="branchName" placeholder="例：新宿支店">
+                            <p class="form-error" id="branchNameError">※ 支店名が未入力です。</p>
                         </div>
                         <div class="form-group">
                             <label class="form-label">口座名義（カタカナ）<span class="required">*</span></label>
                             <input type="text" class="form-input" id="accountHolder" placeholder="例：ヤマダ タロウ">
+                            <p class="form-error" id="accountHolderError">※ 口座名義が未入力です。</p>
                         </div>
-                        <p class="form-error" id="bankError">すべての項目をご入力ください。</p>
                         <button type="button" class="btn-save" id="bankSaveBtn">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                             保存する
@@ -520,18 +525,29 @@
         const emailOk = isValidEmail(creditEmail.value.trim());
         creditProceedBtn.disabled = !(nameOk && emailOk);
     }
-    creditName.addEventListener('input', updateCreditState);
-    creditEmail.addEventListener('input', updateCreditState);
+    creditName.addEventListener('input', () => { updateCreditState(); if(creditName.dataset.touched) validateField(creditName, 'creditNameError', v => v.trim().length > 0); });
+    creditEmail.addEventListener('input', () => { updateCreditState(); if(creditEmail.dataset.touched) validateField(creditEmail, 'creditEmailError', v => isValidEmail(v.trim())); });
+    creditName.addEventListener('blur', () => { creditName.dataset.touched = '1'; validateField(creditName, 'creditNameError', v => v.trim().length > 0); });
+    creditEmail.addEventListener('blur', () => { creditEmail.dataset.touched = '1'; validateField(creditEmail, 'creditEmailError', v => isValidEmail(v.trim())); });
+
+    // Helper: validate a single field and toggle error
+    function validateField(input, errorId, testFn) {
+        const ok = testFn(input.value);
+        const err = $(errorId);
+        if (err) err.classList.toggle('visible', !ok);
+        input.classList.toggle('error', !ok);
+        return ok;
+    }
 
     creditProceedBtn.addEventListener('click', async () => {
         // Validate
         let hasError = false;
         if (!creditName.value.trim()) {
-            $('creditNameError').classList.add('visible'); hasError = true;
-        } else { $('creditNameError').classList.remove('visible'); }
+            $('creditNameError').classList.add('visible'); creditName.classList.add('error'); hasError = true;
+        } else { $('creditNameError').classList.remove('visible'); creditName.classList.remove('error'); }
         if (!isValidEmail(creditEmail.value.trim())) {
-            $('creditEmailError').classList.add('visible'); hasError = true;
-        } else { $('creditEmailError').classList.remove('visible'); }
+            $('creditEmailError').classList.add('visible'); creditEmail.classList.add('error'); hasError = true;
+        } else { $('creditEmailError').classList.remove('visible'); creditEmail.classList.remove('error'); }
         if (hasError) return;
 
         // Send to GAS: register payment info (credit card)
@@ -613,6 +629,17 @@
         if (!e.target.closest('.autocomplete-wrap')) acList.classList.remove('open');
     });
 
+    // ===== Bank Fields: Blur Validation =====
+    bankCustomerName.addEventListener('blur', () => { bankCustomerName.dataset.touched = '1'; validateField(bankCustomerName, 'bankCustomerNameError', v => v.trim().length > 0); });
+    bankCustomerName.addEventListener('input', () => { if(bankCustomerName.dataset.touched) validateField(bankCustomerName, 'bankCustomerNameError', v => v.trim().length > 0); });
+    $('bankEmail').addEventListener('blur', () => { $('bankEmail').dataset.touched = '1'; validateField($('bankEmail'), 'bankEmailError', v => isValidEmail(v.trim())); });
+    $('bankEmail').addEventListener('input', () => { if($('bankEmail').dataset.touched) validateField($('bankEmail'), 'bankEmailError', v => isValidEmail(v.trim())); });
+    bankNameInput.addEventListener('blur', () => { bankNameInput.dataset.touched = '1'; validateField(bankNameInput, 'bankNameError', v => v.trim().length > 0); });
+    branchName.addEventListener('blur', () => { branchName.dataset.touched = '1'; validateField(branchName, 'branchNameError', v => v.trim().length > 0); });
+    branchName.addEventListener('input', () => { if(branchName.dataset.touched) validateField(branchName, 'branchNameError', v => v.trim().length > 0); });
+    accountHolder.addEventListener('blur', () => { accountHolder.dataset.touched = '1'; validateField(accountHolder, 'accountHolderError', v => v.trim().length > 0); });
+    accountHolder.addEventListener('input', () => { if(accountHolder.dataset.touched) validateField(accountHolder, 'accountHolderError', v => v.trim().length > 0); });
+
     // ===== Bank Save =====
     $('bankSaveBtn').addEventListener('click', () => {
         const cn = bankCustomerName.value.trim();
@@ -623,18 +650,11 @@
         const acHold = accountHolder.value.trim();
 
         let hasError = false;
-        if (!cn || !bn || !brn || !acHold) {
-            $('bankError').classList.add('visible');
-            hasError = true;
-        } else {
-            $('bankError').classList.remove('visible');
-        }
-        if (!isValidEmail(em)) {
-            $('bankEmailError').classList.add('visible');
-            hasError = true;
-        } else {
-            $('bankEmailError').classList.remove('visible');
-        }
+        if (!cn) { $('bankCustomerNameError').classList.add('visible'); bankCustomerName.classList.add('error'); hasError = true; } else { $('bankCustomerNameError').classList.remove('visible'); bankCustomerName.classList.remove('error'); }
+        if (!isValidEmail(em)) { $('bankEmailError').classList.add('visible'); $('bankEmail').classList.add('error'); hasError = true; } else { $('bankEmailError').classList.remove('visible'); $('bankEmail').classList.remove('error'); }
+        if (!bn) { $('bankNameError').classList.add('visible'); bankNameInput.classList.add('error'); hasError = true; } else { $('bankNameError').classList.remove('visible'); bankNameInput.classList.remove('error'); }
+        if (!brn) { $('branchNameError').classList.add('visible'); branchName.classList.add('error'); hasError = true; } else { $('branchNameError').classList.remove('visible'); branchName.classList.remove('error'); }
+        if (!acHold) { $('accountHolderError').classList.add('visible'); accountHolder.classList.add('error'); hasError = true; } else { $('accountHolderError').classList.remove('visible'); accountHolder.classList.remove('error'); }
         if (hasError) return;
 
         savedBankData = { customerName: cn, email: em, bankName: bn, bankCode: bc, branchName: brn, accountHolder: acHold };
