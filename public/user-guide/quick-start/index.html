@@ -68,11 +68,35 @@
             justify-content: space-between;
         }
         .header-logo img { height: 58px; }
+        .header-logo a { display: flex; align-items: center; text-decoration: none; }
         .header-label {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-secondary);
             letter-spacing: -0.01em;
+        }
+
+        /* --- Breadcrumb --- */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb .sep {
+            color: var(--border);
+            user-select: none;
         }
 
         /* --- Article --- */
@@ -760,11 +784,19 @@
     <header class="site-header">
         <div class="header-inner">
             <div class="header-logo">
-                <img src="/bakuapo-logo-useer.svg" alt="BakuApo">
+                <a href="/user-guide/">
+                    <img src="/bakuapo-logo-useer.svg" alt="BakuApo">
+                </a>
             </div>
             <span class="header-label">BakuApoご購入者様専用｜クイックスタートガイド</span>
         </div>
     </header>
+
+    <nav class="breadcrumb">
+        <a href="/user-guide/">ユーザーガイド</a>
+        <span class="sep">›</span>
+        <span>クイックスタートガイド</span>
+    </nav>
 
     <div class="page-layout">
     <aside class="sidebar">
