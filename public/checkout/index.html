@@ -16,8 +16,23 @@
         .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
         .header-inner{max-width:1000px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
         .header-logo img{height:58px}
-        .header-label{font-size:13px;font-weight:600;color:var(--text-secondary)}
+        .header-label{font-size:13px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:color .15s;text-decoration:none}
+        .header-label:hover{color:var(--accent)}
         .main{max-width:680px;margin:0 auto;padding:48px 24px 100px}
+
+        /* Reset Confirm Modal */
+        .reset-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:24px}
+        .reset-overlay.open{display:flex}
+        .reset-modal{background:var(--bg-card);border-radius:20px;width:100%;max-width:440px;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.18);text-align:center}
+        .reset-modal .reset-icon{width:56px;height:56px;margin:0 auto 20px;background:rgba(239,68,68,.08);border-radius:50%;display:flex;align-items:center;justify-content:center}
+        .reset-modal .reset-icon svg{width:28px;height:28px;color:var(--danger)}
+        .reset-modal h3{font-size:18px;font-weight:700;margin-bottom:12px;letter-spacing:-.01em}
+        .reset-modal p{font-size:14px;color:var(--text-secondary);line-height:1.8;margin-bottom:24px}
+        .reset-modal .reset-actions{display:flex;gap:12px}
+        .reset-modal .btn-reset-cancel{flex:1;padding:14px 20px;border-radius:12px;border:1px solid var(--border);background:var(--bg-card);font-size:15px;font-weight:600;font-family:inherit;color:var(--text-primary);cursor:pointer;transition:all .15s}
+        .reset-modal .btn-reset-cancel:hover{background:var(--bg-alt)}
+        .reset-modal .btn-reset-confirm{flex:1;padding:14px 20px;border-radius:12px;border:none;background:var(--danger);font-size:15px;font-weight:600;font-family:inherit;color:#fff;cursor:pointer;transition:all .15s}
+        .reset-modal .btn-reset-confirm:hover{background:#DC2626}
 
         /* Page Title */
         .page-top{margin-bottom:40px}
@@ -172,7 +187,7 @@
     <header class="site-header">
         <div class="header-inner">
             <div class="header-logo"><img src="/bakuapo-logo-useer.svg" alt="BakuApo"></div>
-            <span class="header-label">決済フォーム</span>
+            <a class="header-label" id="resetFormLink">決済フォーム</a>
         </div>
     </header>
 
@@ -436,6 +451,25 @@
             </div>
         </div>
     </main>
+
+    <!-- Reset Confirmation Modal -->
+    <div class="reset-overlay" id="resetOverlay">
+        <div class="reset-modal">
+            <div class="reset-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+            </div>
+            <h3>決済フォーム入力をはじめからやり直しますか？</h3>
+            <p>これまでに入力した情報は削除されます。</p>
+            <div class="reset-actions">
+                <button type="button" class="btn-reset-cancel" id="resetCancelBtn">キャンセル</button>
+                <button type="button" class="btn-reset-confirm" id="resetConfirmBtn">やり直す</button>
+            </div>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <p>&copy; 2026 BakuApo &amp; CHAINSODA Co., Ltd. — All rights reserved.</p>
@@ -855,6 +889,54 @@
             link.style.pointerEvents = '';
             $('switchCreditSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 600);
+    });
+
+    // ===== Reset Form =====
+    $('resetFormLink').addEventListener('click', e => {
+        e.preventDefault();
+        $('resetOverlay').classList.add('open');
+    });
+    $('resetCancelBtn').addEventListener('click', () => {
+        $('resetOverlay').classList.remove('open');
+    });
+    $('resetOverlay').addEventListener('click', e => {
+        if (e.target === e.currentTarget) $('resetOverlay').classList.remove('open');
+    });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && $('resetOverlay').classList.contains('open')) $('resetOverlay').classList.remove('open');
+    });
+    $('resetConfirmBtn').addEventListener('click', async () => {
+        const btn = $('resetConfirmBtn');
+        btn.disabled = true;
+        btn.textContent = '処理中...';
+
+        // Send cancel status to GAS
+        const name = localStorage.getItem('checkoutName') || creditName.value.trim() || bankCustomerName.value.trim();
+        const em = localStorage.getItem('checkoutEmail') || creditEmail.value.trim() || $('bankEmail').value.trim();
+        if (CHECKOUT_ENDPOINT && (name || em)) {
+            try {
+                await fetch(CHECKOUT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'cancelPayment',
+                        customerName: name,
+                        email: em,
+                        submittedAt: new Date().toISOString()
+                    }),
+                    mode: 'no-cors'
+                });
+            } catch (err) {
+                console.error('Cancel error:', err);
+            }
+        }
+
+        // Clear localStorage
+        localStorage.removeItem('checkoutName');
+        localStorage.removeItem('checkoutEmail');
+
+        // Reload page to reset all state
+        location.reload();
     });
 
     // ===== Auto-fill from contract page =====
