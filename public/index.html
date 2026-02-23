@@ -65,8 +65,8 @@
         .fv-cta{display:inline-flex;align-items:center;gap:10px;font-size:17px;font-weight:800;color:#fff;background:#0852FF;padding:18px 44px;border-radius:16px;border:none;box-shadow:0 6px 24px rgba(8,82,255,.25);transition:all .25s;text-decoration:none;cursor:pointer}
         .fv-cta:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(8,82,255,.35)}
         .fv-cta svg{width:18px;height:18px}
-        .fv-vis{display:flex;align-items:flex-end;justify-content:flex-end;overflow:visible;margin-right:-160px}
-        .fv-vis img{width:800px;max-width:none;filter:drop-shadow(0 20px 60px rgba(0,0,0,.12))}
+        .fv-vis{display:flex;align-items:flex-end;justify-content:flex-end;overflow:visible;margin-right:-300px}
+        .fv-vis img{width:clamp(500px,55vw,800px);max-width:none;filter:drop-shadow(0 20px 60px rgba(0,0,0,.12))}
 
         .concept{padding:80px 24px;text-align:center;background:#fff}
         .concept img{max-width:700px;width:100%;margin:0 auto}
@@ -104,7 +104,8 @@
         @media(max-width:768px){
             .fv-in{grid-template-columns:1fr;text-align:center}
             .fv-copy{padding-bottom:28px}
-            .fv-vis img{width:100%;max-width:400px;margin:0 auto}
+            .fv-vis{justify-content:center;margin-right:0;overflow:hidden}
+            .fv-vis img{width:90%;max-width:400px;margin:0 auto}
             .fg{grid-template-columns:1fr}
             .hdr-cta{padding:8px 14px;font-size:12px}
             .fv-cta{font-size:15px;padding:16px 32px}
