@@ -266,16 +266,11 @@
             <div class="form-section">
                 <span class="form-section-label">Step 5</span>
                 <h2>報酬お振込先</h2>
-                <div class="check-group">
-                    <label class="check-item" id="bankExistWrap">
-                        <input type="radio" name="bankStatus" value="existing" id="bankExisting" checked>
-                        <span class="check-item-text">既にお振込先が指定済み<small>以前の申請で登録済みの方はこちら</small></span>
-                    </label>
-                    <label class="check-item" id="bankNewWrap">
-                        <input type="radio" name="bankStatus" value="new" id="bankNew">
-                        <span class="check-item-text">お振込先未指定（初回申請）<small>初めて成約申請される方はこちら</small></span>
-                    </label>
-                </div>
+
+                <label class="check-item" id="bankRegisteredWrap" style="margin-bottom:20px">
+                    <input type="checkbox" id="bankRegistered">
+                    <span class="check-item-text">既に振込先を登録済みです<small>以前の申請で登録済みの方はチェックを入れてください</small></span>
+                </label>
 
                 <!-- Bank Saved Display -->
                 <div class="bank-saved" id="bankSaved">
@@ -285,7 +280,7 @@
                 </div>
 
                 <!-- Bank Registration Form -->
-                <div class="bank-form" id="bankForm">
+                <div class="bank-form visible" id="bankForm">
                     <h3 style="font-size:14px;font-weight:700;margin-bottom:16px">お振込先登録（初回のみ）</h3>
                     <div class="form-group">
                         <label class="form-label">銀行名<span class="required">*</span></label>
@@ -438,7 +433,7 @@
     const partnerName = $('partnerName');
     const customerName = $('customerName');
     const cond1 = $('cond1'), cond2 = $('cond2');
-    const bankExisting = $('bankExisting'), bankNew = $('bankNew');
+    const bankRegistered = $('bankRegistered');
     const bankFormEl = $('bankForm'), bankSavedEl = $('bankSaved');
     const bankNameInput = $('bankName'), bankCodeInput = $('bankCode');
     const branchName = $('branchName'), branchCode = $('branchCode');
@@ -501,10 +496,18 @@
         if (inp.checked) inp.closest('.check-item').classList.add('checked');
     });
 
-    // ===== Bank Status Toggle =====
-    bankExisting.addEventListener('change', () => { bankFormEl.classList.remove('visible'); updateState(); });
-    bankNew.addEventListener('change', () => {
-        if (!bankInfoSaved) { bankFormEl.classList.add('visible'); bankSavedEl.classList.remove('visible'); }
+    // ===== Bank Registered Toggle =====
+    bankRegistered.addEventListener('change', () => {
+        if (bankRegistered.checked) {
+            bankFormEl.classList.remove('visible');
+            bankSavedEl.classList.remove('visible');
+        } else {
+            if (bankInfoSaved) {
+                bankSavedEl.classList.add('visible');
+            } else {
+                bankFormEl.classList.add('visible');
+            }
+        }
         updateState();
     });
 
@@ -598,9 +601,9 @@
     function updateConfirmation() {
         $('confirmPartner').textContent = partnerName.value.trim() || '—';
         $('confirmCustomer').textContent = customerName.value.trim() || '—';
-        if (bankNew.checked && bankInfoSaved && savedBankData) {
+        if (bankInfoSaved && savedBankData) {
             $('confirmBank').innerHTML = `${savedBankData.bankName} ${savedBankData.branchName}<br>${savedBankData.accountType} ${savedBankData.accountNumber}`;
-        } else if (bankExisting.checked) {
+        } else if (bankRegistered.checked) {
             $('confirmBank').textContent = '既に設定済み（入力不要）';
         } else {
             $('confirmBank').textContent = '未設定';
@@ -616,7 +619,7 @@
         const s1 = partnerName.value.trim() && customerName.value.trim();
         const s2 = true; // product always selected
         const s3 = cond1.checked && cond2.checked;
-        const s4 = bankExisting.checked || (bankNew.checked && bankInfoSaved);
+        const s4 = bankRegistered.checked || bankInfoSaved;
 
         // Show/hide condition error when user interacts
         if (cond1.dataset.touched || cond2.dataset.touched) {
@@ -655,7 +658,7 @@
             customerName: customerName.value.trim(),
             product: 'BakuApo（バクアポ）税込55万円',
             commission: 275000,
-            bankStatus: bankExisting.checked ? 'existing' : 'new',
+            bankStatus: bankRegistered.checked ? 'existing' : 'new',
             bankInfo: savedBankData || null,
             paymentDate: getPaymentDate(),
             submittedAt: new Date().toISOString()
