@@ -28,11 +28,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BakuApo&#65288;&#12496;&#12463;&#12450;&#12509;&#65289;&#20844;&#24335; | &#36023;&#12356;&#20999;&#12426;&#12501;&#12457;&#12540;&#12512;&#21942;&#26989;&#33258;&#21205;&#21270;&#12484;&#12540;&#12523;</title>
-    <meta name="description" content="BakuApo&#65288;&#12496;&#12463;&#12450;&#12509;&#65289;&#12399;&#36023;&#12356;&#20999;&#12426;&#22411;&#12398;&#12501;&#12457;&#12540;&#12512;&#21942;&#26989;&#33258;&#21205;&#21270;&#12484;&#12540;&#12523;&#12290;">
-    <meta property="og:title" content="BakuApo&#65288;&#12496;&#12463;&#12450;&#12509;&#65289;&#20844;&#24335; | &#36023;&#12356;&#20999;&#12426;&#12501;&#12457;&#12540;&#12512;&#21942;&#26989;&#33258;&#21205;&#21270;&#12484;&#12540;&#12523;">
+    <meta name="description" content="BakuApo（バクアポ）は買い切り型のフォーム営業自動化ツール。一度購入すれば追加費用ゼロで、50万社以上のリストに自動でフォーム営業を実行します。Windows・Mac両対応。">
+    <meta property="og:title" content="BakuApo（バクアポ）公式 | 買い切りフォーム営業自動化ツール">
+    <meta property="og:description" content="買い切り型のフォーム営業自動化ツール。一度購入すれば追加費用ゼロで、50万社以上のリストに自動でフォーム営業を実行します。">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bakuapo.com/">
+    <meta property="og:image" content="https://bakuapo.com/bakuapo-monitor-pc.webp">
     <meta property="og:locale" content="ja_JP">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BakuApo（バクアポ）公式 | 買い切りフォーム営業自動化ツール">
+    <meta name="twitter:description" content="買い切り型のフォーム営業自動化ツール。一度購入すれば追加費用ゼロで、50万社以上のリストに自動でフォーム営業を実行。">
     <link rel="icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,27 +60,29 @@
         .rv{opacity:0;transform:translateY(36px);transition:opacity .7s ease-out,transform .7s ease-out}
         .rv.vis{opacity:1;transform:translateY(0)}
 
-        .fv{position:relative;background:linear-gradient(160deg,#f8faff 0%,#eef3ff 50%,#e8efff 100%);overflow:hidden;padding:60px 24px 0}
-        .fv-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+        .fv{position:relative;background:linear-gradient(160deg,#f8faff 0%,#eef3ff 50%,#e8efff 100%);overflow:hidden;padding:72px 24px 0}
+        .fv-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.2fr 0.8fr;gap:40px;align-items:center}
         .fv-copy{padding-bottom:60px}
-        .fv-badge{display:inline-block;font-size:13px;font-weight:700;color:var(--accent);background:rgba(8,82,255,.08);padding:6px 16px;border-radius:100px;margin-bottom:20px;letter-spacing:.03em}
-        .fv-h{font-size:clamp(26px,4vw,46px);font-weight:900;line-height:1.35;letter-spacing:-.03em;margin-bottom:14px}
+        .fv-badge{display:inline-block;font-size:13px;font-weight:700;color:var(--accent);background:rgba(8,82,255,.08);padding:6px 16px;border-radius:100px;margin-bottom:24px;letter-spacing:.03em}
+        .fv-h{font-size:clamp(24px,3.2vw,38px);font-weight:900;line-height:1.4;letter-spacing:-.02em;margin-bottom:20px}
         .fv-h .hl{background:linear-gradient(180deg,transparent 60%,rgba(255,220,40,.45) 60%)}
-        .fv-sub{font-size:16px;color:var(--sub);line-height:1.9;margin-bottom:32px}
+        .fv-sub{font-size:15px;color:var(--sub);line-height:1.9;margin-bottom:36px}
         .fv-cta{display:inline-flex;align-items:center;gap:10px;font-size:17px;font-weight:800;color:#fff;background:linear-gradient(135deg,#0852FF,#3B82F6);padding:18px 44px;border-radius:16px;border:none;box-shadow:0 6px 24px rgba(8,82,255,.25);transition:all .25s;text-decoration:none;cursor:pointer}
         .fv-cta:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(8,82,255,.35)}
         .fv-cta svg{width:18px;height:18px}
+        @keyframes ctaPulse{0%,100%{box-shadow:0 6px 24px rgba(8,82,255,.25)}50%{box-shadow:0 6px 32px rgba(8,82,255,.45)}}
+        .fv-cta{animation:ctaPulse 2.5s ease-in-out infinite}
         .fv-vis{display:flex;align-items:flex-end;justify-content:center}
         .fv-vis img{width:100%;max-width:580px;filter:drop-shadow(0 20px 60px rgba(0,0,0,.12))}
 
-        .concept{padding:80px 24px;text-align:center;background:#fff}
+        .concept{padding:100px 24px;text-align:center;background:#fff}
         .concept img{max-width:700px;width:100%;margin:0 auto}
 
         .sec{padding:80px 24px}
         .sec-in{max-width:1000px;margin:0 auto;text-align:center}
         .sec-lbl{display:inline-block;font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
-        .sec-ttl{font-size:clamp(24px,3.5vw,36px);font-weight:800;letter-spacing:-.02em;margin-bottom:16px}
-        .sec-lead{font-size:16px;color:var(--sub);line-height:1.9;max-width:640px;margin:0 auto 48px}
+        .sec-ttl{font-size:clamp(24px,3.5vw,36px);font-weight:800;letter-spacing:-.02em;margin-bottom:20px}
+        .sec-lead{font-size:16px;color:var(--sub);line-height:1.9;max-width:740px;margin:0 auto 48px}
         .sec--alt{background:#f4f6fa}
 
         .fg{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
@@ -87,27 +94,23 @@
         .fc-ico{width:100%;max-width:220px;height:140px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
 
         .vid-sec{padding:80px 24px;text-align:center;background:#fff}
-        .vid-wrap{position:relative;max-width:800px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,.1);cursor:pointer;aspect-ratio:16/9;background:#000}
-        .vid-wrap img{width:100%;height:100%;object-fit:cover;transition:opacity .3s}
-        .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s}
-        .vid-wrap:hover .play-btn{transform:translate(-50%,-50%) scale(1.08);box-shadow:0 6px 28px rgba(0,0,0,.3)}
-        .play-btn svg{width:32px;height:32px;fill:var(--accent);margin-left:4px}
+        .vid-wrap{position:relative;max-width:800px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,.1);aspect-ratio:16/9;background:#000}
         .vid-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-        .vid-wrap.on img,.vid-wrap.on .play-btn{opacity:0;pointer-events:none}
 
-        .cta-sec{padding:80px 24px;text-align:center;background:linear-gradient(135deg,#0852FF,#3B82F6);color:#fff}
+        .cta-sec{padding:100px 24px;text-align:center;background:linear-gradient(135deg,#0852FF,#3B82F6);color:#fff}
         .cta-sec .sec-ttl{color:#fff}
         .cta-sec .sec-lead{color:rgba(255,255,255,.8)}
         .cta-btn{display:inline-flex;align-items:center;gap:10px;font-size:18px;font-weight:800;color:var(--accent);background:#fff;padding:20px 52px;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.15);transition:all .25s;text-decoration:none}
         .cta-btn:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(0,0,0,.25)}
         .cta-btn svg{width:18px;height:18px}
 
-        .ft{text-align:center;padding:40px 24px;border-top:1px solid var(--border)}
+        .ft{text-align:center;padding:48px 24px;border-top:1px solid var(--border)}
         .ft .fl img{height:36px;margin:0 auto 12px}
         .ft p{font-size:12px;color:var(--muted)}
 
         @media(max-width:768px){
             .fv-in{grid-template-columns:1fr;text-align:center}
+            .fv-h{font-size:clamp(22px,6vw,32px)}
             .fv-copy{padding-bottom:28px}
             .fv-vis img{max-width:360px;margin:0 auto}
             .fg{grid-template-columns:1fr}
@@ -178,7 +181,7 @@
             </div>
             <div class="fc rv">
                 <div class="fc-ico" style="background:linear-gradient(135deg,#0852FF,#3B82F6);">
-                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
                 </div>
                 <h3>50&#19975;&#31038;&#20197;&#19978;&#12398;&#36865;&#20449;&#20808;&#12522;&#12473;&#12488;</h3>
                 <p>&#29420;&#33258;&#12395;&#21454;&#38598;&#12375;&#12383;50&#19975;&#31038;&#20197;&#19978;&#12398;&#20225;&#26989;&#12522;&#12473;&#12488;&#12395;&#12450;&#12463;&#12475;&#12473;&#21487;&#33021;&#12290;&#26989;&#31278;&#12539;&#22320;&#22495;&#12391;&#32094;&#12426;&#36796;&#12415;&#12289;&#12479;&#12540;&#12466;&#12483;&#12488;&#12395;&#26368;&#36969;&#21270;&#12375;&#12383;&#12501;&#12457;&#12540;&#12512;&#21942;&#26989;&#12434;&#23455;&#29694;&#12375;&#12414;&#12377;&#12290;</p>
@@ -200,10 +203,7 @@
         <h2 class="sec-ttl rv">&#25805;&#20316;&#12452;&#12513;&#12540;&#12472;&#21205;&#30011;</h2>
         <p class="sec-lead rv">&#23455;&#38555;&#12398;BakuApo&#12398;&#25805;&#20316;&#30011;&#38754;&#12434;&#12372;&#35239;&#12367;&#12384;&#12373;&#12356;&#12290;&#30452;&#24863;&#30340;&#12394;UI&#12391;&#12289;&#35504;&#12391;&#12418;&#12363;&#12435;&#12383;&#12435;&#12395;&#20351;&#12360;&#12414;&#12377;&#12290;</p>
         <div class="vid-wrap rv" id="vw">
-            <img src="/movie-thumbnail.webp" alt="BakuApo Demo" id="vt">
-            <div class="play-btn" id="pb">
-                <svg viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21"/></svg>
-            </div>
+            <iframe src="https://drive.google.com/file/d/1UCWTX2PeAaDZ98nGNKrmr0j66wBXUKes/preview?autoplay=1&loop=1&mute=1" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
         </div>
     </div>
 </section>
@@ -235,19 +235,7 @@
     },{threshold:.15,rootMargin:'0px 0px -40px 0px'});
     els.forEach(function(el){ob.observe(el);});
 })();
-(function(){
-    var w=document.getElementById('vw');
-    if(!w)return;
-    w.addEventListener('click',function(){
-        if(w.classList.contains('on'))return;
-        w.classList.add('on');
-        var f=document.createElement('iframe');
-        f.src='https://drive.google.com/file/d/1UCWTX2PeAaDZ98nGNKrmr0j66wBXUKes/preview?autoplay=1';
-        f.allow='autoplay; encrypted-media';
-        f.allowFullscreen=true;
-        w.appendChild(f);
-    });
-})();
+
 </script>
 </body>
 </html>
