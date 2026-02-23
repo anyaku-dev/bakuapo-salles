@@ -491,6 +491,14 @@
             background-color: #000; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 14px;
         }
         .video-embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-duration-chip {
+            position: absolute; top: 8px; left: 8px; z-index: 2;
+            background: rgba(0,0,0,.7); color: #fff;
+            font-size: 11px; font-weight: 600; line-height: 1;
+            padding: 4px 8px; border-radius: 4px;
+            pointer-events: none; backdrop-filter: blur(4px);
+            font-variant-numeric: tabular-nums;
+        }
         .description { font-size: 14px; white-space: pre-wrap; margin-bottom: 14px; word-wrap: break-word; color: var(--text-sub); line-height: 1.7; }
         .material-btn {
             display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-sub);
@@ -870,6 +878,65 @@
         return arr;
     }
 
+    // YouTube IFrame Player API で動画の分数を取得してチップに表示
+    let ytApiReady = false;
+    let ytApiCallbacks = [];
+    function loadYTApi() {
+        if (window.YT && window.YT.Player) { ytApiReady = true; return; }
+        if (document.getElementById('yt-iframe-api')) return;
+        const tag = document.createElement('script');
+        tag.id = 'yt-iframe-api';
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+    }
+    window.onYouTubeIframeAPIReady = function() {
+        ytApiReady = true;
+        ytApiCallbacks.forEach(fn => fn());
+        ytApiCallbacks = [];
+    };
+    function whenYTReady(fn) {
+        if (ytApiReady) fn(); else ytApiCallbacks.push(fn);
+    }
+    function formatDuration(seconds) {
+        const s = Math.round(seconds);
+        const m = Math.floor(s / 60);
+        const sec = s % 60;
+        if (m >= 60) {
+            const h = Math.floor(m / 60);
+            const rm = m % 60;
+            return `${h}:${String(rm).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+        }
+        return `${m}:${String(sec).padStart(2,'0')}`;
+    }
+    function fetchVideoDurations() {
+        loadYTApi();
+        whenYTReady(function() {
+            document.querySelectorAll('.video-embed-container[data-vid]').forEach(container => {
+                const vidId = container.dataset.vid;
+                const chip = document.getElementById('dur-' + vidId);
+                if (!chip) return;
+                const iframe = container.querySelector('iframe');
+                if (!iframe) return;
+                try {
+                    const player = new YT.Player(iframe, {
+                        events: {
+                            onReady: function(e) {
+                                const dur = e.target.getDuration();
+                                if (dur > 0) {
+                                    chip.textContent = formatDuration(dur);
+                                } else {
+                                    chip.style.display = 'none';
+                                }
+                            }
+                        }
+                    });
+                } catch(ex) {
+                    chip.style.display = 'none';
+                }
+            });
+        });
+    }
+
     function extractYoutubeId(url) {
         if (!url) return null;
         const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
@@ -1031,7 +1098,7 @@
             card.appendChild(h3);
             const vidId = extractYoutubeId(item.youtubeUrl);
             if (vidId) {
-                card.innerHTML += `<div class="video-embed-container"><iframe src="https://www.youtube.com/embed/${vidId}" loading="lazy" allowfullscreen></iframe></div>`;
+                card.innerHTML += `<div class="video-embed-container" data-vid="${vidId}"><span class="video-duration-chip" id="dur-${vidId}"></span><iframe src="https://www.youtube.com/embed/${vidId}?enablejsapi=1" loading="lazy" allowfullscreen></iframe></div>`;
             }
             if (item.desc) card.innerHTML += `<div class="description">${item.desc}</div>`;
             if (item.materialUrl) {
@@ -1040,6 +1107,8 @@
             container.appendChild(card);
         });
         renderNav(categories, catMap);
+        // 各動画の分数をYouTube IFrame Player APIで取得
+        fetchVideoDurations();
     }
 
     function renderQAList(items, container) {
