@@ -492,17 +492,6 @@
             background-color: #000; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 14px;
         }
         .video-embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        /* YouTube上部UI（タイトル・チャンネル・後で見る・共有・ロゴ）を隠す */
-        .video-embed-container::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 60px; z-index: 1;
-            background: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%);
-            pointer-events: none;
-        }
-        .video-embed-container::after {
-            content: ''; position: absolute; bottom: 0; left: 0; right: 60px; height: 36px; z-index: 1;
-            background: linear-gradient(to top, #000 0%, #000 30%, transparent 100%);
-            pointer-events: none;
-        }
         .video-duration-chip {
             display: none; /* JS取得後にinline-blockへ */
             font-size: 11px; font-weight: 600; line-height: 1;
@@ -1116,7 +1105,7 @@
             h3.textContent = item.title;
             card.appendChild(h3);
             if (vidId) {
-                card.innerHTML += `<div class="video-embed-container" data-vid="${vidId}"><iframe src="https://www.youtube.com/embed/${vidId}?enablejsapi=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=0" loading="lazy" allowfullscreen></iframe></div>`;
+                card.innerHTML += `<div class="video-embed-container" data-vid="${vidId}"><iframe src="https://www.youtube.com/embed/${vidId}?enablejsapi=1" loading="lazy" allowfullscreen></iframe></div>`;
             }
             if (item.desc) card.innerHTML += `<div class="description">${item.desc}</div>`;
             if (item.materialUrl) {
