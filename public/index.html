@@ -59,14 +59,14 @@
         .fv-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
         .fv-copy{padding-bottom:60px}
         .fv-badge{display:inline-block;font-size:13px;font-weight:700;color:var(--accent);background:rgba(8,82,255,.08);padding:6px 16px;border-radius:100px;margin-bottom:20px;letter-spacing:.03em}
-        .fv-h{font-size:clamp(26px,4vw,46px);font-weight:900;line-height:1.35;letter-spacing:-.03em;margin-bottom:14px}
+        .fv-h{font-size:clamp(26px,4vw,46px);font-weight:900;line-height:1.35;letter-spacing:-.03em;margin-bottom:14px;word-break:keep-all;overflow-wrap:normal}
         .fv-h .hl{background:linear-gradient(180deg,transparent 60%,rgba(255,220,40,.45) 60%)}
         .fv-sub{font-size:16px;color:var(--sub);line-height:1.9;margin-bottom:32px}
         .fv-cta{display:inline-flex;align-items:center;gap:10px;font-size:17px;font-weight:800;color:#fff;background:linear-gradient(135deg,#0852FF,#3B82F6);padding:18px 44px;border-radius:16px;border:none;box-shadow:0 6px 24px rgba(8,82,255,.25);transition:all .25s;text-decoration:none;cursor:pointer}
         .fv-cta:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(8,82,255,.35)}
         .fv-cta svg{width:18px;height:18px}
-        .fv-vis{display:flex;align-items:flex-end;justify-content:center}
-        .fv-vis img{width:100%;max-width:580px;filter:drop-shadow(0 20px 60px rgba(0,0,0,.12))}
+        .fv-vis{display:flex;align-items:flex-end;justify-content:flex-end;overflow:visible}
+        .fv-vis img{width:940px;max-width:none;filter:drop-shadow(0 20px 60px rgba(0,0,0,.12))}
 
         .concept{padding:80px 24px;text-align:center;background:#fff}
         .concept img{max-width:700px;width:100%;margin:0 auto}
@@ -109,7 +109,7 @@
         @media(max-width:768px){
             .fv-in{grid-template-columns:1fr;text-align:center}
             .fv-copy{padding-bottom:28px}
-            .fv-vis img{max-width:360px;margin:0 auto}
+            .fv-vis img{width:100%;max-width:400px;margin:0 auto}
             .fg{grid-template-columns:1fr}
             .hdr-cta{padding:8px 14px;font-size:12px}
             .fv-cta{font-size:15px;padding:16px 32px}
