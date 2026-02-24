@@ -746,7 +746,7 @@
 
 <script>
     const CONFIG = {
-        geminiApiKey: "AIzaSyBxxrrp9_VZaToi63RHLij2xGg8Aov1vWo", 
+        geminiProxyUrl: "/api/gemini-proxy", 
         // 表示用データソース
         videoSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBVuXb-cTydLU-CMFwHyYnsJfg9e2AsTEa4TU1G9nYQlShkZHv3wGM2a1X5ww81o5v8HZNS9IXUI1b/pub?gid=396280088&single=true&output=csv",
         driveSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBVuXb-cTydLU-CMFwHyYnsJfg9e2AsTEa4TU1G9nYQlShkZHv3wGM2a1X5ww81o5v8HZNS9IXUI1b/pub?gid=380310918&single=true&output=csv",
@@ -1533,7 +1533,6 @@
             return;
         }
 
-        if (!CONFIG.geminiApiKey) { alert("APIキーが設定されていません。"); return; }
         state.messageTimestamps.push(now);
         addMessage(text, 'user');
         els.chatInput.value = '';
@@ -1559,8 +1558,7 @@
                 prompt = `あなたは営業パートナー支援AIです。関連資料は見当たりませんでしたが、ルールに従って回答してください。業務的な質問で答えられない場合は謝罪してください。\n\n[ユーザーの質問]\n${text}\n${commonInstruction}`;
             }
 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${CONFIG.geminiApiKey}`;
-            const response = await fetch(apiUrl, {
+            const response = await fetch(CONFIG.geminiProxyUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })

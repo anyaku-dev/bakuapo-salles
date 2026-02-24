@@ -553,7 +553,7 @@
     </footer>
 
     <script>
-        const GEMINI_API_KEY = 'AIzaSyBxxrrp9_VZaToi63RHLij2xGg8Aov1vWo';
+        const GEMINI_PROXY_URL = '/api/gemini-proxy';
         const GDOC_PROXY_URL = '/api/gdoc-proxy';
 
         // --- URL分類・タグ・色の自動推定 ---
@@ -708,7 +708,7 @@
             try {
                 const prompt = `以下のリンクについて、代理店の営業担当者向けに1文（40〜60文字）で簡潔な説明文を生成してください。敬語で、「〜ください」「〜いただけます」のような語尾にしてください。余計な前置きや記号は不要で、説明文のみ返してください。\n\nタイトル: ${title}\nURL: ${url}`;
 
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                const res = await fetch(GEMINI_PROXY_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
