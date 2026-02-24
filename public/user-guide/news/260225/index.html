@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>販売価格30%OFFキャンペーン開始のお知らせ — BakuApo</title>
+    <meta name="description" content="BakuApoの販売価格30%OFFキャンペーンを数量限定で開始いたしました。通常価格50万円が35万円（税抜）にて販売可能です。パートナー報酬は25万円（税抜）で維持されます。">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:title" content="販売価格30%OFFキャンペーン開始のお知らせ — BakuApo">
+    <meta property="og:description" content="BakuApoの販売価格30%OFFキャンペーンを数量限定で開始。通常価格50万円が35万円（税抜）に。パートナー報酬は25万円で維持。">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="BakuApo">
+    <meta property="og:locale" content="ja_JP">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAFA;
+            --bg-card: #FFFFFF;
+            --bg-alt: #F3F4F6;
+            --border: #E5E7EB;
+            --border-hover: #D1D5DB;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --accent: #0852FF;
+            --accent-light: rgba(8,82,255,0.08);
+            --accent-subtle: rgba(8,82,255,0.04);
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+
+        /* --- Header --- */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .header-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-logo a { display: flex; align-items: center; text-decoration: none; }
+        .header-logo img { height: 58px; }
+        .header-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        /* --- Breadcrumb --- */
+        .breadcrumb {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 20px 24px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb .sep {
+            color: var(--border);
+            user-select: none;
+        }
+
+        /* --- Article --- */
+        .article {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 32px 24px 100px;
+        }
+
+        /* --- Article Header --- */
+        .article-header {
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .article-date {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            font-family: 'Inter', monospace;
+        }
+        .article-tag {
+            display: inline-flex;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            padding: 4px 12px;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+        .article-tag.bug {
+            background: rgba(239,68,68,0.08);
+            color: #EF4444;
+        }
+        .article-tag.update {
+            background: rgba(8,82,255,0.08);
+            color: #0852FF;
+        }
+        .article-tag.info {
+            background: rgba(16,185,129,0.08);
+            color: #10B981;
+        }
+        .article-tag.maintenance {
+            background: rgba(245,158,11,0.08);
+            color: #D97706;
+        }
+        .article-tag.campaign {
+            background: rgba(239,68,68,0.08);
+            color: #EF4444;
+        }
+
+        .article-header h1 {
+            font-size: clamp(24px, 4vw, 32px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.3;
+            color: var(--text-primary);
+        }
+
+        /* --- Article Body --- */
+        .article-body h2 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin: 48px 0 16px;
+            padding-left: 16px;
+            border-left: 3px solid var(--accent);
+        }
+        .article-body h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 32px 0 12px;
+        }
+        .article-body p {
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            line-height: 1.9;
+        }
+        .article-body ul, .article-body ol {
+            margin: 12px 0 20px 24px;
+            color: var(--text-primary);
+        }
+        .article-body li {
+            margin-bottom: 8px;
+            line-height: 1.8;
+        }
+        .article-body a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .article-body a:hover {
+            text-decoration-thickness: 2px;
+        }
+        .article-body img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        /* --- Callout --- */
+        .callout {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px 28px;
+            margin: 24px 0;
+        }
+        .callout.danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.03);
+        }
+        .callout.warning {
+            border-left: 4px solid var(--warning);
+            background: rgba(245,158,11,0.03);
+        }
+        .callout.info {
+            border-left: 4px solid var(--accent);
+            background: rgba(8,82,255,0.03);
+        }
+        .callout.success {
+            border-left: 4px solid var(--success);
+            background: rgba(16,185,129,0.03);
+        }
+        .callout-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .callout-title svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+        .callout p {
+            font-size: 14px;
+            margin-bottom: 0;
+            color: var(--text-secondary);
+        }
+        .callout p + p {
+            margin-top: 8px;
+        }
+
+        /* --- Highlight Box --- */
+        .highlight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px 28px;
+            margin: 24px 0;
+        }
+        .highlight-box .highlight-row {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        .highlight-box .highlight-row:last-child {
+            margin-bottom: 0;
+        }
+        .highlight-box .highlight-label {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .highlight-box .highlight-value {
+            font-weight: 700;
+        }
+        .highlight-box .highlight-value.price {
+            font-size: 20px;
+            color: #EF4444;
+        }
+        .highlight-box .highlight-value.reward {
+            font-size: 18px;
+            color: var(--accent);
+        }
+        .highlight-note {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-left: 4px;
+            font-weight: 400;
+        }
+
+        /* --- CTA Link --- */
+        .dl-cta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0;
+            padding: 20px 24px;
+            background: var(--accent-light);
+            border: 1px solid rgba(8,82,255,0.15);
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .dl-cta:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px rgba(8,82,255,0.12);
+            transform: translateY(-1px);
+        }
+        .dl-cta-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .dl-cta-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .dl-cta-text {
+            flex: 1;
+        }
+        .dl-cta-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1.4;
+        }
+        .dl-cta-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .dl-cta-arrow {
+            width: 20px;
+            height: 20px;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+        .dl-cta:hover .dl-cta-arrow {
+            transform: translateX(3px);
+        }
+        .article-body .dl-cta {
+            text-decoration: none;
+        }
+        .article-body .dl-cta:hover {
+            text-decoration: none;
+        }
+
+        /* --- Blockquote / Message --- */
+        .message-block {
+            background: var(--bg-alt);
+            border-radius: 14px;
+            padding: 28px 32px;
+            margin: 32px 0;
+            border-left: 4px solid var(--text-primary);
+        }
+        .message-block p {
+            font-size: 15px;
+            line-height: 2;
+            color: var(--text-primary);
+            margin-bottom: 0;
+        }
+        .message-block p + p {
+            margin-top: 12px;
+        }
+        .message-block .message-highlight {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* --- Details list --- */
+        .details-list {
+            list-style: none;
+            margin: 16px 0 24px;
+            padding: 0;
+        }
+        .details-list li {
+            position: relative;
+            padding: 10px 0 10px 20px;
+            font-size: 15px;
+            line-height: 1.8;
+            border-bottom: 1px solid var(--border);
+        }
+        .details-list li:last-child {
+            border-bottom: none;
+        }
+        .details-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 18px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        /* --- Divider --- */
+        .article-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        /* --- Back link --- */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 48px;
+            padding: 12px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .back-link:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(8,82,255,0.08);
+            transform: translateY(-1px);
+        }
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.2s ease;
+        }
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            text-align: center;
+            padding: 32px 24px;
+            border-top: 1px solid var(--border);
+        }
+        .site-footer p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .article { padding: 24px 16px 60px; }
+            .breadcrumb { padding: 16px 16px 0; }
+            .header-inner { padding: 14px 16px; }
+            .callout { padding: 20px; }
+            .dl-cta { padding: 16px 18px; flex-wrap: wrap; }
+            .message-block { padding: 20px 24px; }
+        }
+        @media (max-width: 480px) {
+            .header-logo img { height: 40px; }
+            .article-header h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ======== Header ======== -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-logo">
+                <a href="/user-guide/">
+                    <img src="/bakuapo-logo-useer.svg" alt="BakuApo">
+                </a>
+            </div>
+            <span class="header-label">ご利用ユーザー様専用ページ</span>
+        </div>
+    </header>
+
+    <!-- ======== Breadcrumb ======== -->
+    <nav class="breadcrumb">
+        <a href="/user-guide/">ユーザーガイド</a>
+        <span class="sep">›</span>
+        <a href="/user-guide/">最新情報</a>
+        <span class="sep">›</span>
+        <span>販売価格30%OFFキャンペーン開始のお知らせ</span>
+    </nav>
+
+    <!-- ======== Article ======== -->
+    <article class="article">
+
+        <!-- Header -->
+        <header class="article-header">
+            <div class="article-meta">
+                <span class="article-date">2026.02.25</span>
+                <span class="article-tag campaign">キャンペーン</span>
+            </div>
+            <h1>販売価格30%OFFキャンペーン開始のお知らせ</h1>
+        </header>
+
+        <!-- Body -->
+        <div class="article-body">
+
+            <p>パートナー様（正規代理店）の皆様<br>いつもBakuApoを販売いただき、誠にありがとうございます。<br>BakuApo事務局です。</p>
+
+            <p>販売を一気に加速させる<br>重要なキャンペーン内容の詳細をご案内いたします。</p>
+
+            <hr class="article-divider">
+
+            <!-- ───── 30%OFF ───── -->
+            <h2>30％OFFキャンペーン実施中</h2>
+
+            <img src="/campaign-30off.png" alt="30%OFFキャンペーン">
+
+            <p>通常価格「50万円」のBakuApoが<br>『<strong>本日意思決定をして頂いた方限定</strong>』で<br>【<strong>30％OFF</strong>】＝<strong>35万円（税抜）</strong>にて販売可能なキャンペーンを、販売数量限定にて開始いたします。</p>
+
+            <div class="highlight-box">
+                <div class="highlight-row">
+                    <span class="highlight-label">▶ 販売価格：</span>
+                    <span class="highlight-value price">35万円（税抜）</span>
+                </div>
+                <div class="highlight-row">
+                    <span class="highlight-label">▶ パートナー報酬：</span>
+                    <span class="highlight-value reward">25万円（税抜）</span>
+                    <span class="highlight-note">※維持</span>
+                </div>
+            </div>
+
+            <p>価格ハードルが下がることで、<br>これまで検討止まりだった見込み顧客にも<br>強いご提案が可能になります。</p>
+
+            <hr class="article-divider">
+
+            <!-- ───── 詳細 ───── -->
+            <h2>キャンペーン詳細</h2>
+
+            <ul class="details-list">
+                <li>2月25日（水）から数量限定で実施</li>
+                <li>キャンペーン終了の<strong>【15日前】</strong>には本LINEグループで事前告知</li>
+                <li>すでに通常価格でご購入いただいたお客様には差額返金のご連絡を順次実施</li>
+            </ul>
+
+            <div class="callout info">
+                <div class="callout-title" style="color:var(--accent);">
+                    <svg stroke="var(--accent)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    資料・決済ページについて
+                </div>
+                <p>資料や決済ページの金額は<strong>更新済み</strong>でございます。</p>
+            </div>
+
+            <hr class="article-divider">
+
+            <!-- ───── 想い ───── -->
+
+            <img src="/campaign-partner.png" alt="パートナーキャンペーン">
+
+            <div class="message-block">
+                <p>BakuApoは、開発・改善に継続的な投資を行っているサービスです。<br>本来、値引きを前提とした設計ではありません。</p>
+                <p>それでも今回30％OFFを実施しているのは、</p>
+                <p class="message-highlight">BakuApoを通して<br>「世の中の無駄な営業活動をなくす」</p>
+                <p>消耗する営業ではなく、本質的な営業に集中できる社会をつくる。<br>良い商品が、正しく届く世界をつくる。</p>
+                <p><strong>この世界を本気で実現するためです。</strong></p>
+            </div>
+
+            <p>自社だけの力では限界があります。<br>だからこそ私たちは、正規代理店制度という形で拡大を選びました。</p>
+
+            <p>現場を知っている皆様と共に利益を出しながら広げること。<br>地域・業界ごとのリアルな営業力を掛け合わせること。</p>
+
+            <p>それが最も健全で、最も速い拡大方法だと考えています。</p>
+
+            <hr class="article-divider">
+
+            <!-- ───── 還元 ───── -->
+            <h2>だからこそ、還元する</h2>
+
+            <p>パートナー様が成果を出さなければ、<br>この世界観は広がりません。</p>
+
+            <p>だからこそ私たちは、</p>
+
+            <ul class="details-list">
+                <li>販売しやすい価格設計、良い商品作り</li>
+                <li>高いインセンティブ維持</li>
+                <li>本部利益をギリギリまで抑えたキャンペーン</li>
+            </ul>
+
+            <p>という形で、まずパートナー様に還元しています。</p>
+
+            <p>弊社の利益を限界まで削り、<br>販売価格を抑えながらも、<br>パートナー様の報酬は変えない。</p>
+
+            <p><strong>このサービスに本気だからこそ、<br>骨身を削る覚悟で実施しているキャンペーンです。</strong></p>
+
+            <hr class="article-divider">
+
+            <!-- ───── 相談会 ───── -->
+            <h2>販売サポート相談会 実施中</h2>
+
+            <ul class="details-list">
+                <li>商談の組み立て方</li>
+                <li>価格提示のタイミング</li>
+                <li>クロージングのポイント</li>
+            </ul>
+
+            <p>個別にオンラインでサポートいたします。</p>
+
+            <a href="https://timerex.net/s/zerocost/a1766bdf/" target="_blank" rel="noopener noreferrer" class="dl-cta">
+                <div class="dl-cta-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div class="dl-cta-text">
+                    <div class="dl-cta-title">日程調整はこちら</div>
+                    <div class="dl-cta-sub">個別オンラインサポートのご予約</div>
+                </div>
+                <svg class="dl-cta-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </a>
+
+            <p>ぜひ、次の成約を一緒に作っていきましょう。<br><strong>私たちは本気です。</strong></p>
+
+            <p>引き続きよろしくお願いいたします。</p>
+
+            <!-- Back link -->
+            <a href="/user-guide/" class="back-link">
+                <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                ユーザーガイドに戻る
+            </a>
+
+        </div>
+    </article>
+
+    <!-- ======== Footer ======== -->
+    <footer class="site-footer">
+        <p>&copy; 2026 BakuApo — All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
