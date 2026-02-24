@@ -1199,28 +1199,65 @@
             }
         })();
 
-        // --- Smooth scroll ---
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', e => {
+        // --- Smooth scroll with header offset ---
+        var _scrollingTo = null;
+        var _scrollTimer = null;
+        var HEADER_OFFSET = 90;
+
+        document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var href = link.getAttribute('href');
+                var target = document.querySelector(href);
+                if (!target) return;
                 e.preventDefault();
-                const target = document.querySelector(link.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                var sectionId = href.substring(1);
+                _scrollingTo = sectionId;
+
+                // Calculate exact scroll position accounting for sticky header
+                var top = target.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET;
+                window.scrollTo({ top: top, behavior: 'smooth' });
+
+                // Immediately update sidebar active state
+                document.querySelectorAll('.sidebar-link[data-section]').forEach(function(sLink) {
+                    sLink.classList.toggle('active', sLink.dataset.section === sectionId);
+                });
+
+                // Re-enable scroll spy after animation completes
+                clearTimeout(_scrollTimer);
+                _scrollTimer = setTimeout(function() { _scrollingTo = null; }, 1000);
             });
         });
 
         // --- Scroll spy for sidebar ---
         (function() {
-            const sections = document.querySelectorAll('.guide-section[id]');
-            const links = document.querySelectorAll('.sidebar-link[data-section]');
+            var sections = document.querySelectorAll('.guide-section[id]');
+            var links = document.querySelectorAll('.sidebar-link[data-section]');
             if (!links.length) return;
+
             function updateActive() {
-                let current = '';
-                sections.forEach(sec => {
-                    const top = sec.getBoundingClientRect().top;
-                    if (top <= 120) current = sec.id;
-                });
+                // Skip during programmatic scroll to prevent flickering
+                if (_scrollingTo) return;
+
+                var current = '';
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                var windowHeight = window.innerHeight;
+                var docHeight = document.documentElement.scrollHeight;
+
+                // If near bottom of page, activate the last section
+                if (scrollTop + windowHeight >= docHeight - 60) {
+                    current = sections[sections.length - 1].id;
+                } else {
+                    // Find the last section whose top has scrolled past the threshold
+                    for (var i = 0; i < sections.length; i++) {
+                        if (sections[i].getBoundingClientRect().top <= HEADER_OFFSET + 30) {
+                            current = sections[i].id;
+                        }
+                    }
+                }
                 if (!current && sections.length) current = sections[0].id;
-                links.forEach(link => {
+
+                links.forEach(function(link) {
                     link.classList.toggle('active', link.dataset.section === current);
                 });
             }
