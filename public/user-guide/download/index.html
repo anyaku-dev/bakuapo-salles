@@ -14,6 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         :root {
             --bg: #FAFAFA;
@@ -283,9 +284,11 @@
         }
         .callout-icon {
             flex-shrink: 0;
+            font-size: 20px;
             width: 22px;
-            height: 22px;
+            text-align: center;
             margin-top: 2px;
+            line-height: 1;
         }
         .callout-info {
             background: var(--accent-light);
@@ -482,7 +485,7 @@
 
         <!-- Callout -->
         <div class="callout callout-warning">
-            <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <i class="fa-solid fa-triangle-exclamation callout-icon" style="color:var(--warning);"></i>
             <div>
                 ダウンロード後のインストール時に、WindowsやmacOSのセキュリティ警告が表示される場合があります。<br>
                 詳しい対処方法は、下記の<strong>クイックスタートガイド</strong>をご参照ください。
@@ -490,9 +493,9 @@
         </div>
 
         <div class="callout callout-info">
-            <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <i class="fa-solid fa-circle-info callout-icon" style="color:var(--accent);"></i>
             <div>
-                ご不明な点がございましたら、担当者までお気軽にお問い合わせくださいませ。
+                ご不明な点がございましたら、<a href="/user-guide/contact-chat/">こちら</a>にて、解決をお手伝いいたします。
             </div>
         </div>
 

@@ -19,6 +19,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         :root {
             --bg: #FAFAFA;
@@ -335,9 +336,11 @@
         }
         .callout-icon {
             flex-shrink: 0;
+            font-size: 20px;
             width: 22px;
-            height: 22px;
+            text-align: center;
             margin-top: 2px;
+            line-height: 1;
         }
         .callout-info {
             background: var(--accent-light);
@@ -832,9 +835,9 @@
                 それぞれ数分程度で完了いたしますので、以下の手順に沿ってお進めくださいませ。
             </p>
             <div class="callout callout-info">
-                <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                <i class="fa-solid fa-circle-info callout-icon" style="color:var(--accent);"></i>
                 <div>
-                    ご不明な点がございましたら、担当者までお気軽にお問い合わせくださいませ。
+                    ご不明な点がございましたら、<a href="/user-guide/contact-chat/">こちら</a>にて、解決をお手伝いいたします。
                 </div>
             </div>
         </section>
@@ -914,7 +917,7 @@
             </div>
 
             <div class="callout callout-info">
-                <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                <i class="fa-solid fa-circle-info callout-icon" style="color:var(--accent);"></i>
                 <div>
                     ダウンロード完了後は、お使いのOSに合わせて<a href="#setup-windows">Windows版</a>または<a href="#setup-mac">Mac版</a>のセットアップ手順にお進みください。
                 </div>
@@ -940,7 +943,7 @@
                 <p>ダウンロードした「<strong>BakuApo_1.2.0.exe</strong>」をダブルクリックして実行してください。<br>
                 ブラウザの下部やダウンロードフォルダからお開きいただけます。</p>
                 <div class="callout callout-warning">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>
+                    <i class="fa-solid fa-triangle-exclamation callout-icon" style="color:var(--warning);"></i>
                     <div>
                         Windows SmartScreenの警告が表示される場合がございます。<br>
                         「<strong>詳細情報</strong>」をクリックし、「<strong>実行</strong>」を選択してください。安全にインストールいただけます。
@@ -958,7 +961,7 @@
                 <img class="step-img" src="/error-01.webp" alt="Edge ダウンロード警告" loading="lazy">
                 <p>クリック後の操作手順は、以下のリンク先にすべて記載されておりますので、同じように作業をお進めください。</p>
                 <div class="callout callout-info">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/></svg>
+                    <i class="fa-solid fa-circle-info callout-icon" style="color:var(--accent);"></i>
                     <div>
                         詳しい手順はこちら → <a href="https://www.systemgear.com/spt/info/info_dl_edge.html" target="_blank" rel="noopener">Microsoft Edge でダウンロードできない場合の対処法</a>
                     </div>
@@ -973,7 +976,7 @@
                 以下のような画面が表示されましたら、BakuApoが正常にインストールされています。</p>
                 <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUdXN9wIPPo5CtjlyBILRDh60hS5j2YQRqWpx3WmjT-HywRSJyn1sGLLMTZKNpCwJmA0gl7qohm0Nj-59ye3miAkl-tcYGOMw7pRLQC1XuldlYPXGlI3r6Acgtm5QOka5GXwv9XB_VF2sxJN=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="BakuApo起動成功画面" loading="lazy">
                 <div class="callout callout-success">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <i class="fa-solid fa-circle-check callout-icon" style="color:var(--success);"></i>
                     <div>セットアップ完了です！BakuApoをご活用くださいませ。</div>
                 </div>
             </div>
@@ -1011,7 +1014,7 @@
                 <p>ダウンロードした「<strong>BakuApo_1.2.0.dmg</strong>」をダブルクリックして開いてください。<br>
                 以下のような画面が表示されます。</p>
                 <div class="callout callout-info">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    <i class="fa-solid fa-circle-info callout-icon" style="color:var(--accent);"></i>
                     <div>ファイルの展開に少しお時間がかかる場合がございます。焦らずお待ちくださいませ。</div>
                 </div>
             </div>
@@ -1034,7 +1037,7 @@
                 「<strong>BakuApo Simple</strong>」が表示されていればインストール完了です。ダブルクリックでBakuApoが起動します。</p>
                 <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUeqMfVdtwwVTYUjFUi3XThpQXHhzRY9wBstG7OGbZfY0OOxejc9d406_6HpptruYgqcYH-z8Lp0eOTbA3C6ErvNAv8IRRpyNettx-MZCm4kQ8uytXw6UKrcSsotbbl-20Tclo0oOxG-joXo=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="Finderでアプリケーション確認" loading="lazy">
                 <div class="callout callout-warning">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>
+                    <i class="fa-solid fa-triangle-exclamation callout-icon" style="color:var(--warning);"></i>
                     <div>起動時にエラーが表示される場合は、以下の「エラーが出た場合」の手順をご参照ください。</div>
                 </div>
             </div>
@@ -1047,7 +1050,7 @@
                 マークの見た目が異なっていても、すべて同じ原因ですのでご安心ください。</p>
                 <img class="step-img" src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUckvBSa00cZ8bNLxEfPo_H_QoWwtWMfZboyPDoxwIFy51Aaz5fp9TWe_wvyxF2Po9J3f1lGLglZe-URt68Y26lR_sQhpNorvkeL1FfcQNO7gXcIPQRgP0GFRqclClaNGQH-WurFO0sT0tc=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="壊れているため開けませんエラー" loading="lazy">
                 <div class="callout callout-danger">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    <i class="fa-solid fa-circle-xmark callout-icon" style="color:var(--danger);"></i>
                     <div>
                         <strong>「ゴミ箱に入れる」は押さないでください。</strong><br>
                         まずは「<strong>キャンセル</strong>」を押してください。「ゴミ箱に入れる」を押すとアプリが削除されてしまいます。
@@ -1090,7 +1093,7 @@
                     <img src="https://lh7-rt.googleusercontent.com/slidesz/AGV_vUcg6JBjcHz7MYjjUHCZBY47Q2EDgvieNDivnVS38MvwvKgHOJ1qJwzJCvWlAFrk3S4AC4ET6VaCel-OnoVLURulzCBAWD8UKn_OifluebiuUQ3vGLIw8g_eARL5asNH59pgqRNdMrCf_1Y=s2048?key=ZaCEKR0s8BNmrUGtKyTnUA" alt="BakuApoメイン画面" loading="lazy">
                 </div>
                 <div class="callout callout-success">
-                    <svg class="callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <i class="fa-solid fa-circle-check callout-icon" style="color:var(--success);"></i>
                     <div>セットアップ完了です！BakuApoをご活用くださいませ。</div>
                 </div>
             </div>
