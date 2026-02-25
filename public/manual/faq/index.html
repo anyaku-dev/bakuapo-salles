@@ -78,6 +78,7 @@
         .filter-btn { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-main); transition: all 0.2s; user-select: none; width: 100%; }
         .filter-btn:hover { background: #F0F0EF; }
         .filter-icon { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+        i.filter-icon { width: auto; height: auto; font-size: 14px; color: currentColor; fill: none; }
         .filter-btn.active-star { background: #FFF9E6; border-color: var(--star-color-on); color: #946F00; }
         .filter-btn.active-star .filter-icon { fill: var(--star-color-on); }
         .filter-btn.active-unwatched { background: #E8F5E9; border-color: var(--check-color-on); color: #1E8449; }
@@ -182,7 +183,7 @@
                     <span>スター付きのみ</span>
                 </div>
                 <div class="filter-btn" id="unwatchedFilterBtn" onclick="toggleUnwatchedFilter()">
-                    <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    <i class="fa-regular fa-eye filter-icon"></i>
                     <span>未確認のみ表示</span>
                 </div>
             </div>
@@ -286,14 +287,28 @@
         requestAnimationFrame(updateLayoutMetrics);
     }
 
+    function loadCachedData() {
+        try {
+            const cached = sessionStorage.getItem('manual_cache_v1');
+            if (cached) { const obj = JSON.parse(cached); state.data = obj.data; state.isLoaded = obj.isLoaded; renderView(); return true; }
+        } catch (e) {}
+        return false;
+    }
+    function saveCacheData() {
+        try { sessionStorage.setItem('manual_cache_v1', JSON.stringify({ data: state.data, isLoaded: state.isLoaded })); } catch (e) {}
+    }
+
     async function fetchAllData() {
-        els.loading.classList.add('active'); els.errorContainer.style.display = 'none';
+        const isFirstLoad = !state.isLoaded[CURRENT_TAB];
+        if (isFirstLoad) { els.loading.classList.add('active'); }
+        els.errorContainer.style.display = 'none';
         try {
             const vRes = await fetch(`${CONFIG.videoSheetUrl}&t=${Date.now()}`); if (vRes.ok) { const t = await vRes.text(); const rows = parseCSV(t).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON'); state.data.video = rows.map(r => ({ sourceType: 'manual', id: r[2] || r[3], category: r[1] || '未分類', youtubeUrl: r[2], title: r[3], desc: r[4], materialUrl: r[5] })); state.isLoaded.video = true; }
             const dRes = await fetch(`${CONFIG.driveSheetUrl}&t=${Date.now()}`); if (dRes.ok) { const t = await dRes.text(); const rows = parseCSV(t).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON'); state.data.drive = rows.map(r => ({ sourceType: 'material', id: r[5] || '#', large: r[1] || 'その他', medium: r[2] || '', small: r[3] || '', detail: r[4] || '', url: r[5] || '#', desc: r[6] || '' })); state.isLoaded.drive = true; }
             const qRes = await fetch(`${CONFIG.qaSheetUrl}&t=${Date.now()}`); if (qRes.ok) { const t = await qRes.text(); const rows = parseCSV(t).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON'); state.data.qa = rows.map((r, i) => ({ sourceType: 'qa', id: `qa-${r[2] || i}`, category: r[1] || '未分類', question: r[2] || '', answer: r[3] || '' })); state.isLoaded.qa = true; }
             const rRes = await fetch(`${CONFIG.rebuttalSheetUrl}&t=${Date.now()}`); if (rRes.ok) { const t = await rRes.text(); const rows = parseCSV(t).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON'); state.data.rebuttal = rows.map((r, i) => ({ sourceType: 'qa', id: `rebuttal-${r[2] || i}`, category: r[1] || '未分類', question: r[2] || '', answer: r[3] || '' })); state.isLoaded.rebuttal = true; }
         } catch (e) { console.error(e); state.hasError = true; els.errorContainer.style.display = 'flex'; els.errorContainer.innerHTML = `<div class="error-message">データの更新に失敗しました。</div>`; }
+        saveCacheData();
         renderView(); els.loading.classList.remove('active');
     }
 
@@ -351,7 +366,7 @@
             }
         } catch (err) { loadingDiv.remove(); console.error(err); addMessage("通信エラーが発生しました。", 'system'); }
     }
-    function init() { loadUserPreferences(); els.input.addEventListener('input', (e) => { state.searchText = e.target.value; renderView(); }); window.addEventListener('resize', updateLayoutMetrics); fetchAllData(); setInterval(fetchAllData, CONFIG.refreshInterval); }
+    function init() { loadUserPreferences(); els.input.addEventListener('input', (e) => { state.searchText = e.target.value; renderView(); }); window.addEventListener('resize', updateLayoutMetrics); loadCachedData(); fetchAllData(); setInterval(fetchAllData, CONFIG.refreshInterval); }
     document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>

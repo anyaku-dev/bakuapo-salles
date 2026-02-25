@@ -110,6 +110,7 @@
         }
         .filter-btn:hover { background: #F0F0EF; }
         .filter-icon { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+        i.filter-icon { width: auto; height: auto; font-size: 14px; color: currentColor; fill: none; }
         .filter-btn.active-star { background: #FFF9E6; border-color: var(--star-color-on); color: #946F00; }
         .filter-btn.active-star .filter-icon { fill: var(--star-color-on); }
         .filter-btn.active-unwatched { background: #E8F5E9; border-color: var(--check-color-on); color: #1E8449; }
@@ -313,7 +314,7 @@
                     <span>スター付きのみ</span>
                 </div>
                 <div class="filter-btn" id="unwatchedFilterBtn" onclick="toggleUnwatchedFilter()">
-                    <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    <i class="fa-regular fa-eye filter-icon"></i>
                     <span>未確認のみ表示</span>
                 </div>
             </div>
@@ -602,8 +603,21 @@
         requestAnimationFrame(updateLayoutMetrics);
     }
 
+    function loadCachedData() {
+        try {
+            const cached = sessionStorage.getItem('manual_cache_v1');
+            if (cached) { const obj = JSON.parse(cached); state.data = obj.data; state.isLoaded = obj.isLoaded; renderView(); return true; }
+        } catch (e) {}
+        return false;
+    }
+    function saveCacheData() {
+        try { sessionStorage.setItem('manual_cache_v1', JSON.stringify({ data: state.data, isLoaded: state.isLoaded })); } catch (e) {}
+    }
+
     async function fetchAllData() {
-        els.loading.classList.add('active'); els.errorContainer.style.display = 'none';
+        const isFirstLoad = !state.isLoaded[CURRENT_TAB];
+        if (isFirstLoad) { els.loading.classList.add('active'); }
+        els.errorContainer.style.display = 'none';
         try {
             const vRes = await fetch(`${CONFIG.videoSheetUrl}&t=${Date.now()}`);
             if (vRes.ok) { const vText = await vRes.text(); const vRows = parseCSV(vText).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON'); state.data.video = vRows.map(r => ({ sourceType: 'manual', id: r[2] || r[3], category: r[1] || '未分類', youtubeUrl: r[2], title: r[3], desc: r[4], materialUrl: r[5] })); state.isLoaded.video = true; }
@@ -614,6 +628,7 @@
             const rRes = await fetch(`${CONFIG.rebuttalSheetUrl}&t=${Date.now()}`);
             if (rRes.ok) { const rText = await rRes.text(); const rRows = parseCSV(rText).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON'); state.data.rebuttal = rRows.map((r, i) => ({ sourceType: 'qa', id: `rebuttal-${r[2] || i}`, category: r[1] || '未分類', question: r[2] || '', answer: r[3] || '' })); state.isLoaded.rebuttal = true; }
         } catch (e) { console.error(e); state.hasError = true; els.errorContainer.style.display = 'flex'; els.errorContainer.innerHTML = `<div class="error-message">データの更新に失敗しました。</div>`; }
+        saveCacheData();
         renderView(); els.loading.classList.remove('active');
     }
 
@@ -720,6 +735,7 @@
         loadUserPreferences();
         els.input.addEventListener('input', (e) => { state.searchText = e.target.value; renderView(); });
         window.addEventListener('resize', updateLayoutMetrics);
+        loadCachedData();
         fetchAllData(); setInterval(fetchAllData, CONFIG.refreshInterval);
     }
     document.addEventListener('DOMContentLoaded', init);
