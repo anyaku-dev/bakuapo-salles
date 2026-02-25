@@ -840,6 +840,11 @@
         setTimeout(() => {
             // Show bank panel with form, hide credit panel
             $('creditStep2').style.display = 'none';
+            // Restore creditStep1 so switching back to credit via radio works
+            $('creditStep1').style.display = '';
+            creditProceedBtn.disabled = false;
+            creditProceedBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg> クレジットカードでのお支払いに進む';
+            updateCreditState();
             panelCredit.classList.remove('visible');
             panelBank.classList.add('visible');
             // Show payment method radios again, switch to bank
