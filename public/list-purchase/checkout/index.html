@@ -242,6 +242,7 @@
         const payload = {
             action: 'registerPayment',
             product: 'BakuApoリスト',
+            price: 55000,
             customerName: creditName.value.trim(),
             email: creditEmail.value.trim(),
             paymentMethod: 'クレジットカード',
@@ -305,6 +306,7 @@
                     body: JSON.stringify({
                         action: 'cancelPayment',
                         product: 'BakuApoリスト',
+                        price: 55000,
                         customerName: name,
                         email: em,
                         submittedAt: new Date().toISOString()

@@ -84,6 +84,7 @@
         .badge-drive { background: #D1FAE5; color: #065F46; }
         .badge-qa { background: #FEF3C7; color: #92400E; }
         .badge-rebuttal { background: #FCE7F3; color: #9D174D; }
+        .badge-site { background: #E0E7FF; color: #3730A3; }
 
         /* --- Loading Overlay & Skeleton --- */
         .initial-loading { display: flex; flex-direction: column; align-items: center; padding: 48px 0; gap: 16px; }
@@ -465,7 +466,21 @@
         driveSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBVuXb-cTydLU-CMFwHyYnsJfg9e2AsTEa4TU1G9nYQlShkZHv3wGM2a1X5ww81o5v8HZNS9IXUI1b/pub?gid=380310918&single=true&output=csv",
         qaSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBVuXb-cTydLU-CMFwHyYnsJfg9e2AsTEa4TU1G9nYQlShkZHv3wGM2a1X5ww81o5v8HZNS9IXUI1b/pub?gid=1192474135&single=true&output=csv",
         rebuttalSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBVuXb-cTydLU-CMFwHyYnsJfg9e2AsTEa4TU1G9nYQlShkZHv3wGM2a1X5ww81o5v8HZNS9IXUI1b/pub?gid=1328585848&single=true&output=csv",
-        refreshInterval: 60000
+        refreshInterval: 60000,
+        sitePages: [
+            { url: '/', label: 'BakuApoトップページ', section: 'サービス紹介' },
+            { url: '/001/', label: 'キャンペーン記事（トーク力）', section: 'キャンペーン' },
+            { url: '/002/', label: 'キャンペーン記事（フォーム営業）', section: 'キャンペーン' },
+            { url: '/user-guide/', label: 'ユーザーガイド', section: 'ユーザーガイド' },
+            { url: '/user-guide/quick-start/', label: 'クイックスタートガイド', section: 'ユーザーガイド' },
+            { url: '/checkout/', label: 'BakuApo決済・料金情報', section: '料金・購入' },
+            { url: '/contract/', label: 'BakuApo利用契約書', section: '契約' },
+            { url: '/conversion-report/', label: '成果レポート', section: 'レポート' },
+            { url: '/links/', label: 'リンク集', section: 'リンク' },
+            { url: '/list-purchase/contract/', label: 'BakuApoリスト購入契約', section: '料金・購入' },
+            { url: '/list-purchase/checkout/', label: 'BakuApoリスト決済情報', section: '料金・購入' },
+            { url: '/feedback/', label: 'フィードバック', section: 'サポート' }
+        ]
     };
 
     const THRESHOLDS = { CONFIDENCE: 0.6, SUGGESTION: 0.25 };
@@ -482,7 +497,8 @@
         hasError: false,
         chatHistory: [],
         messageTimestamps: [],
-        lockedUntil: 0
+        lockedUntil: 0,
+        siteContent: []
     };
 
     const els = {
@@ -868,16 +884,40 @@
         return (2.0 * intersection) / (bg1.length + bg2.length);
     }
 
+    async function fetchSiteContent() {
+        const results = [];
+        const fetches = CONFIG.sitePages.map(async (page) => {
+            try {
+                const res = await fetch(page.url, { cache: 'force-cache' });
+                if (!res.ok) return;
+                const html = await res.text();
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                doc.querySelectorAll('script,style,noscript,nav,footer,header').forEach(el => el.remove());
+                let text = (doc.body?.innerText || doc.body?.textContent || '').replace(/\s+/g, ' ').trim();
+                if (text.length > 1500) text = text.substring(0, 1500);
+                if (text.length > 50) results.push({ label: page.label, section: page.section, url: page.url, text: text });
+            } catch(e) { /* skip */ }
+        });
+        await Promise.allSettled(fetches);
+        state.siteContent = results;
+        console.log(`[AI] サイトコンテンツ ${results.length}ページ取得完了`);
+    }
+
     function findRelevantContents(query, maxResults = 5) {
         const taggedItems = [
             ...state.data.video.map((item, i) => ({ ...item, _tab: 'video', _index: i })),
             ...state.data.drive.map((item, i) => ({ ...item, _tab: 'drive', _index: i })),
             ...state.data.qa.map((item, i) => ({ ...item, _tab: 'qa', _index: i })),
-            ...state.data.rebuttal.map((item, i) => ({ ...item, _tab: 'rebuttal', _index: i }))
+            ...state.data.rebuttal.map((item, i) => ({ ...item, _tab: 'rebuttal', _index: i })),
+            ...state.siteContent.map((item, i) => ({ ...item, sourceType: 'site', _tab: 'site', _index: i }))
         ];
         const scored = taggedItems.map(item => {
             let targetText = '', displayText = '', refLabel = '';
-            if (item.sourceType === 'manual') {
+            if (item.sourceType === 'site') {
+                targetText = `${item.label} ${item.section} ${item.text}`;
+                displayText = `[サイト: ${item.label}] ${item.text.substring(0, 300)}`;
+                refLabel = item.label;
+            } else if (item.sourceType === 'manual') {
                 targetText = `${item.category} ${item.title} ${item.desc || ''}`;
                 displayText = `[動画: ${item.title}] 内容: ${item.desc}`;
                 refLabel = item.title;
@@ -926,8 +966,8 @@
             const relevantResults = findRelevantContents(text, 5);
             const topScore = relevantResults.length > 0 ? relevantResults[0].score : 0;
             let prompt = '';
-            const commonInstruction = `\n[AIの振る舞い・回答ルール]\n1. 機能に関する質問: 「パートナーQA、商談切り返し、動画・資料マニュアルの案内が可能です」と回答。\n2. 挨拶: 端的に返す。\n3. 不適切: 拒否する。\n4. フォーマット: **太字**使用。外部URLリンクは[こちら](URL)形式。\n5. 関連する参考情報がある場合は、回答内で「こちらの動画」「こちらのQ&A」「こちらの資料」「こちらの切り返し集」などの言葉で言及してください。具体的なリンクボタンは回答の後にシステムが自動で付与するため、回答文内にREF_LINKタグは書かないでください。`;
-            const tabLabelMap = { video: '動画カリキュラム', drive: '資料ドライブ', qa: 'Q&A', rebuttal: '切り返し集' };
+            const commonInstruction = `\n[AIの振る舞い・回答ルール]\n1. 機能に関する質問: 「パートナーQA、商談切り返し、動画・資料マニュアル、およびBakuApoサイト全体の情報を参照して案内が可能です」と回答。\n2. 挨拶: 端的に返す。\n3. 不適切: 拒否する。\n4. フォーマット: **太字**使用。外部URLリンクは[こちら](URL)形式。\n5. 関連する参考情報がある場合は、回答内で「こちらの動画」「こちらのQ&A」「こちらの資料」「こちらの切り返し集」「こちらのページ」などの言葉で言及してください。具体的なリンクボタンは回答の後にシステムが自動で付与するため、回答文内にREF_LINKタグは書かないでください。\n6. サイトコンテンツの情報源がある場合は、該当ページの内容を活用して正確に回答してください。`;
+            const tabLabelMap = { video: '動画カリキュラム', drive: '資料ドライブ', qa: 'Q&A', rebuttal: '切り返し集', site: 'サイトページ' };
             const contextText = relevantResults.map((r, i) => `${i+1}. [${tabLabelMap[r.tab]}] ${r.displayText}`).join('\n');
             if (topScore >= THRESHOLDS.CONFIDENCE) {
                 prompt = `あなたは営業パートナー支援AIです。以下の[参考情報]を元に質問に回答してください。複数の参考情報がある場合は、関連するものすべてに言及してください。\n\n[参考情報]\n${contextText}\n\n[ユーザーの質問]\n${text}\n${commonInstruction}`;
@@ -948,19 +988,22 @@
                 let answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'すみません、回答を生成できませんでした。';
                 let refLinksHtml = '';
                 if (relevantResults.length > 0 && topScore >= THRESHOLDS.SUGGESTION) {
-                    const badgeClassMap = { video: 'badge-video', drive: 'badge-drive', qa: 'badge-qa', rebuttal: 'badge-rebuttal' };
+                    const badgeClassMap = { video: 'badge-video', drive: 'badge-drive', qa: 'badge-qa', rebuttal: 'badge-rebuttal', site: 'badge-site' };
                     const iconMap = {
                         video: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
                         drive: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
                         qa: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-                        rebuttal: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+                        rebuttal: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+                        site: '<svg class="ref-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
                     };
                     refLinksHtml = '<div class="chat-ref-links">';
                     relevantResults.forEach(r => {
                         const label = r.refLabel.length > 30 ? r.refLabel.substring(0, 30) + '…' : r.refLabel;
                         const badge = `<span class="ref-badge ${badgeClassMap[r.tab]}">${tabLabelMap[r.tab]}</span>`;
                         const icon = iconMap[r.tab];
-                        if (r.tab === 'drive' && r.item.url && r.item.url !== '#') {
+                        if (r.tab === 'site') {
+                            refLinksHtml += `<a class="chat-ref-btn" href="${r.item.url}" target="_blank" rel="noopener noreferrer">${icon}${badge}<span>${label}</span></a>`;
+                        } else if (r.tab === 'drive' && r.item.url && r.item.url !== '#') {
                             refLinksHtml += `<a class="chat-ref-btn" href="${r.item.url}" target="_blank" rel="noopener noreferrer">${icon}${badge}<span>${label}</span></a>`;
                         } else {
                             refLinksHtml += `<a class="chat-ref-btn" onclick="navigateToItem('${r.tab}', ${r.index})">${icon}${badge}<span>${label}</span></a>`;
@@ -983,6 +1026,7 @@
         els.input.addEventListener('input', (e) => { state.searchText = e.target.value; renderView(); });
         window.addEventListener('resize', updateLayoutMetrics);
         fetchAllData();
+        fetchSiteContent();
         setInterval(fetchAllData, CONFIG.refreshInterval);
     }
 

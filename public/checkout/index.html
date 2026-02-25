@@ -590,6 +590,8 @@
         // Send to GAS: register payment info (credit card)
         const payload = {
             action: 'registerPayment',
+            product: 'BakuApo',
+            price: 385000,
             customerName: creditName.value.trim(),
             email: creditEmail.value.trim(),
             paymentMethod: 'クレジットカード',
@@ -731,6 +733,8 @@
 
         const payload = {
             action: 'registerPayment',
+            product: 'BakuApo',
+            price: 385000,
             customerName: savedBankData.customerName,
             email: savedBankData.email,
             paymentMethod: '銀行振込',
@@ -777,6 +781,8 @@
         // Send GAS request to update payment method
         const payload = {
             action: 'switchToCredit',
+            product: 'BakuApo',
+            price: 385000,
             customerName: localStorage.getItem('checkoutName') || '',
             email: localStorage.getItem('checkoutEmail') || '',
             submittedAt: new Date().toISOString()
@@ -811,6 +817,8 @@
 
         const payload = {
             action: 'switchToBank',
+            product: 'BakuApo',
+            price: 385000,
             customerName: localStorage.getItem('checkoutName') || '',
             email: localStorage.getItem('checkoutEmail') || '',
             submittedAt: new Date().toISOString()
@@ -865,6 +873,8 @@
 
         const payload = {
             action: 'switchToBank',
+            product: 'BakuApo',
+            price: 385000,
             customerName: localStorage.getItem('checkoutName') || '',
             email: localStorage.getItem('checkoutEmail') || '',
             submittedAt: new Date().toISOString()
@@ -923,6 +933,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'cancelPayment',
+                        product: 'BakuApo',
+                        price: 385000,
                         customerName: name,
                         email: em,
                         submittedAt: new Date().toISOString()
