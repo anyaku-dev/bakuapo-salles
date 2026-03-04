@@ -763,12 +763,23 @@
         try { sessionStorage.setItem('manual_cache_v1', JSON.stringify({ data: state.data, isLoaded: state.isLoaded })); } catch (e) {}
     }
 
+    function dataFingerprint() {
+        try { return JSON.stringify(state.data); } catch(e) { return ''; }
+    }
+
     async function fetchAllData() {
         const isFirstLoad = !state.isLoaded[CURRENT_TAB];
+        const prevFingerprint = isFirstLoad ? null : dataFingerprint();
         if (isFirstLoad) { els.loading.classList.add('active'); }
         els.errorContainer.style.display = 'none';
         try {
-            const vRes = await fetch(`${CONFIG.videoSheetUrl}&t=${Date.now()}`);
+            const ts = Date.now();
+            const [vRes, dRes, qRes, rRes] = await Promise.all([
+                fetch(`${CONFIG.videoSheetUrl}&t=${ts}`),
+                fetch(`${CONFIG.driveSheetUrl}&t=${ts}`),
+                fetch(`${CONFIG.qaSheetUrl}&t=${ts}`),
+                fetch(`${CONFIG.rebuttalSheetUrl}&t=${ts}`)
+            ]);
             if (vRes.ok) {
                 const vText = await vRes.text();
                 const vRows = parseCSV(vText).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON');
@@ -778,7 +789,6 @@
                 }));
                 state.isLoaded.video = true;
             }
-            const dRes = await fetch(`${CONFIG.driveSheetUrl}&t=${Date.now()}`);
             if (dRes.ok) {
                 const dText = await dRes.text();
                 const dRows = parseCSV(dText).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON');
@@ -789,7 +799,6 @@
                 }));
                 state.isLoaded.drive = true;
             }
-            const qRes = await fetch(`${CONFIG.qaSheetUrl}&t=${Date.now()}`);
             if (qRes.ok) {
                 const qText = await qRes.text();
                 const qRows = parseCSV(qText).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON');
@@ -799,7 +808,6 @@
                 }));
                 state.isLoaded.qa = true;
             }
-            const rRes = await fetch(`${CONFIG.rebuttalSheetUrl}&t=${Date.now()}`);
             if (rRes.ok) {
                 const rText = await rRes.text();
                 const rRows = parseCSV(rText).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON');
@@ -816,7 +824,10 @@
             els.errorContainer.innerHTML = `<div class="error-message">データの更新に失敗しました。</div>`;
         }
         saveCacheData();
-        renderView();
+        const dataChanged = isFirstLoad || prevFingerprint !== dataFingerprint();
+        if (dataChanged) {
+            renderView();
+        }
         els.loading.classList.remove('active');
     }
 
