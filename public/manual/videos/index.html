@@ -498,7 +498,9 @@
         chatHistory: [],
         messageTimestamps: [],
         lockedUntil: 0,
-        siteContent: []
+        siteContent: [],
+        pendingRender: false,
+        ytPlayerMap: {}
     };
 
     const els = {
@@ -617,7 +619,43 @@
         }
         return `${m}:${String(sec).padStart(2,'0')}`;
     }
+    /* --- 動画再生中の再描画防止 --- */
+    function isAnyVideoPlaying() {
+        for (const id in state.ytPlayerMap) {
+            try {
+                const ps = state.ytPlayerMap[id].getPlayerState();
+                if (ps === YT.PlayerState.PLAYING || ps === YT.PlayerState.BUFFERING) return true;
+            } catch(e) {}
+        }
+        return false;
+    }
+
+    function onVideoStateChange() {
+        if (state.pendingRender && !isAnyVideoPlaying()) {
+            state.pendingRender = false;
+            renderView();
+        }
+    }
+
+    /* --- 動画データ日次キャッシュ --- */
+    const VIDEO_DAILY_CACHE_KEY = 'manual_video_daily_cache';
+    function getVideoDailyCache() {
+        try {
+            const raw = localStorage.getItem(VIDEO_DAILY_CACHE_KEY);
+            if (!raw) return null;
+            const cached = JSON.parse(raw);
+            if (cached.date === new Date().toDateString() && Array.isArray(cached.data)) return cached.data;
+        } catch(e) {}
+        return null;
+    }
+    function saveVideoDailyCache(videoData) {
+        try {
+            localStorage.setItem(VIDEO_DAILY_CACHE_KEY, JSON.stringify({ date: new Date().toDateString(), data: videoData }));
+        } catch(e) {}
+    }
+
     function fetchVideoDurations() {
+        state.ytPlayerMap = {};
         loadYTApi();
         whenYTReady(function() {
             document.querySelectorAll('.video-embed-container[data-vid]').forEach(container => {
@@ -637,9 +675,11 @@
                                 } else {
                                     chip.style.display = 'none';
                                 }
-                            }
+                            },
+                            onStateChange: onVideoStateChange
                         }
                     });
+                    state.ytPlayerMap[vidId] = player;
                 } catch(ex) {
                     chip.style.display = 'none';
                 }
@@ -772,15 +812,24 @@
         const prevFingerprint = isFirstLoad ? null : dataFingerprint();
         if (isFirstLoad) { els.loading.classList.add('active'); }
         els.errorContainer.style.display = 'none';
+
+        /* 動画データ: 日次キャッシュが有効なら再フェッチしない */
+        const videoDailyCache = getVideoDailyCache();
+        const needVideoFetch = !videoDailyCache;
+        if (videoDailyCache && !state.isLoaded.video) {
+            state.data.video = videoDailyCache;
+            state.isLoaded.video = true;
+        }
+
         try {
             const ts = Date.now();
             const [vRes, dRes, qRes, rRes] = await Promise.all([
-                fetch(`${CONFIG.videoSheetUrl}&t=${ts}`),
+                needVideoFetch ? fetch(`${CONFIG.videoSheetUrl}&t=${ts}`) : Promise.resolve(null),
                 fetch(`${CONFIG.driveSheetUrl}&t=${ts}`),
                 fetch(`${CONFIG.qaSheetUrl}&t=${ts}`),
                 fetch(`${CONFIG.rebuttalSheetUrl}&t=${ts}`)
             ]);
-            if (vRes.ok) {
+            if (needVideoFetch && vRes && vRes.ok) {
                 const vText = await vRes.text();
                 const vRows = parseCSV(vText).slice(1).filter(r => (r[0]||'').toUpperCase() === 'ON');
                 state.data.video = vRows.map(r => ({
@@ -788,6 +837,7 @@
                     youtubeUrl: r[2], title: r[3], desc: r[4], materialUrl: r[5]
                 }));
                 state.isLoaded.video = true;
+                saveVideoDailyCache(state.data.video);
             }
             if (dRes.ok) {
                 const dText = await dRes.text();
@@ -826,7 +876,14 @@
         saveCacheData();
         const dataChanged = isFirstLoad || prevFingerprint !== dataFingerprint();
         if (dataChanged) {
-            renderView();
+            /* 動画再生中なら再描画を延期 */
+            if (!isFirstLoad && isAnyVideoPlaying()) {
+                state.pendingRender = true;
+                console.log('[Manual] 動画再生中のため再描画を延期');
+            } else {
+                state.pendingRender = false;
+                renderView();
+            }
         }
         els.loading.classList.remove('active');
     }
